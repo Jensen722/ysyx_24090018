@@ -7,7 +7,7 @@ all:
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	verilator --cc --exe --trace -Wall -j 0 $(VSRC) $(CSRC)
-	make -C obj_dir -f Vswitch.mk Vswitch
+	make -C obj_dir -f Vswitch.mk Vswitch   #also can use --build to make itself
 	./obj_dir/Vswitch
 	#gtkwave wave.vcd
 
