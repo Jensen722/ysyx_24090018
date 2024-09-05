@@ -53,7 +53,7 @@ static int cmd_q(char *args) {
 }
 
 //add new command: s  ->single-step execution
-static int cmd_s(char *args) {
+static int cmd_si(char *args) {
  int n = 0;
  char *arg = args;
 
@@ -69,6 +69,20 @@ static int cmd_s(char *args) {
 };
 
 
+//add new command: info  ->display information about register or watchpoint
+static int cmd_info(char *args) {
+  char *arg = args;
+  if(strcmp(arg, "r") == 0){
+    isa_reg_display();
+  } else if(strcmp(arg, "w") == 0){
+    /*TODO:add watchpoint */
+  } else{
+    printf("Unknown argument '%s', please input argument 'r' or 'w'\n", arg);
+  }
+
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -79,7 +93,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "s", "Single-step execution", cmd_s},
+  { "si", "Single-step execution", cmd_si},
+  { "info", "Display information about registers or watchpoint", cmd_info},
   /* TODO: Add more commands */
 
 };
