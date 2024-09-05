@@ -102,8 +102,8 @@ static int cmd_x(char *args) {
   printf("%-9s %9s\n", "ADDR", "HEX VALUE");
   printf("---------------------\n");
   for(int i = 0; i < N; i++){
-    printf("%08X:  0x%08X\n", expr, vaddr_read(expr, 8));
-    expr = expr + 8;
+    printf("%08X:  0x%08X\n", expr, vaddr_read(expr, 4));
+    expr = expr + 4;
   }
   printf("---------------------\n");
 
