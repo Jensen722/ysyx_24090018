@@ -18,11 +18,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/vaddr.h>
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+word_t pmem_read(paddr_t addr, int len);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -86,6 +88,24 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+//add new command: x  ->scan memory from starting address
+static int cmd_x(char *args) {
+  /* extract the first argument */
+  char *arg1 = strtok(NULL, " ");
+  /* extract the second argument */
+  char *arg2 = strtok(NULL, " ");
+
+  unsigned long N = strtoul(arg1, NULL, 10);
+  vaddr_t expr = strtoul(arg2, NULL, 16);
+
+  for(int i = 0; i < N; i++){
+    printf("%08X: %08X", expr, vaddr_read(expr, 4));
+    expr = expr + 4;
+  }
+
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -98,6 +118,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single-step execution", cmd_si},
   { "info", "Display information about registers or watchpoint", cmd_info},
+  { "x", "Memory scanning", cmd_x},
   /* TODO: Add more commands */
 
 };
