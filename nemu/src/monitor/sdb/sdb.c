@@ -95,11 +95,11 @@ static int cmd_x(char *args) {
   /* extract the second argument */
   char *arg2 = strtok(NULL, " ");
 
-  unsigned long N = strtoul(arg1, NULL, 10);
+  uint32_t N = strtoul(arg1, NULL, 10);
   vaddr_t expr = strtoul(arg2, NULL, 16);
 
   for(int i = 0; i < N; i++){
-    printf("%08X: %08X", expr, vaddr_read(expr, 4));
+    printf("%08X: %08X\n", expr, vaddr_read(expr, 4));
     expr = expr + 4;
   }
 
