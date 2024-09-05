@@ -30,7 +30,7 @@ void isa_reg_display() {
   printf("%-10s | %-10s | %-10s\n", "Register", "Hex Value", "Dec Value");
   printf("--------------------------------------\n");
   for(i = 0; i < 32; i++){
-    printf("%-10s | 0x%08X | %-10u\n", regs[i], cpu.gpr[i],cpu.gpr[i]);
+    printf("%-10s | 0x%08X | %-10u\n", regs[i], cpu.gpr[i], cpu.gpr[i]);
   }
   printf("--------------------------------------\n");
   
