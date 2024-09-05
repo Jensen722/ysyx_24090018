@@ -26,6 +26,7 @@ const char *regs[] = {
 void isa_reg_display() {
   int i;
 
+  printf("-------------------------------------------\n");
   printf("%-10s | %-10s | %-10s\n", "Register", "Hex Value", "Dec Value");
   printf("-------------------------------------------\n");
   for(i = 0; i < 32; i++){
