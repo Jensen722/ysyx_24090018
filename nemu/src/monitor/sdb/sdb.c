@@ -99,7 +99,7 @@ static int cmd_x(char *args) {
   vaddr_t expr = strtoul(arg2, NULL, 16);
 
   printf("---------------------\n");
-  printf("%-6s %9s\n", "ADDR", "HEX VALUE");
+  printf("%-9s %9s\n", "ADDR", "HEX VALUE");
   printf("---------------------\n");
   for(int i = 0; i < N; i++){
     printf("%08X: 0x%08X\n", expr, vaddr_read(expr, 4));
