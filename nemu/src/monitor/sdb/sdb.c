@@ -55,7 +55,8 @@ static int cmd_q(char *args) {
 //add new command: s  ->single-step execution
 static int cmd_si(char *args) {
  int n = 0;
- char *arg = args;
+ /* extract the first argument */
+ char *arg = strtok(NULL, " ");
 
  if(arg == NULL){
   n = 1;
@@ -63,15 +64,17 @@ static int cmd_si(char *args) {
   n = atoi(arg);
  } 
 
-
  cpu_exec(n);
+
  return 0;
 };
 
 
 //add new command: info  ->display information about register or watchpoint
 static int cmd_info(char *args) {
-  char *arg = args;
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+
   if(strcmp(arg, "r") == 0){
     isa_reg_display();
   } else if(strcmp(arg, "w") == 0){
