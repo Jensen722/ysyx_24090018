@@ -52,6 +52,23 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+//add new command: s  ->single-step execution
+static int cmd_s(char *args) {
+ int n = 0;
+ char *arg = args;
+
+ if(arg == NULL){
+  n = 1;
+ } else{
+  n = atoi(arg);
+ } 
+
+
+ cpu_exec(n);
+ return 0;
+};
+
+
 static int cmd_help(char *args);
 
 static struct {
@@ -62,7 +79,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "s", "Single-step execution", cmd_s},
   /* TODO: Add more commands */
 
 };
