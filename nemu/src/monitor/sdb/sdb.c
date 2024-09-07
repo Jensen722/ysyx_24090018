@@ -96,14 +96,14 @@ static int cmd_x(char *args) {
   char *arg2 = strtok(NULL, " ");
 
   if(arg1 == NULL || arg2 == NULL){
-    printf("Usage: x N expr example: x 10 0x80000000");
+    printf("Usage: x N expr //example: x 10 0x80000000");
   }
 
   uint32_t N = strtoul(arg1, NULL, 10);
   vaddr_t expr = strtoul(arg2, NULL, 16);
 
   printf("+-------------------------+\n");
-  printf("%-11s %11s\n", "ADDR", "HEX VALUE");
+  printf("%-10s %10s\n", "ADDR", "HEX VALUE");
   printf("+-------------------------+\n");
   for(int i = 0; i < N; i++){
     printf("0x%08X:  0x%08X\n", expr, vaddr_read(expr, 4));
