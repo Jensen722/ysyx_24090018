@@ -95,6 +95,10 @@ static int cmd_x(char *args) {
   /* extract the second argument */
   char *arg2 = strtok(NULL, " ");
 
+  if(arg1 == NULL || arg2 == NULL){
+    printf("Usage: x N expr example: x 10 0x80000000");
+  }
+
   uint32_t N = strtoul(arg1, NULL, 10);
   vaddr_t expr = strtoul(arg2, NULL, 16);
 
@@ -102,7 +106,7 @@ static int cmd_x(char *args) {
   printf("%-9s %9s\n", "ADDR", "HEX VALUE");
   printf("---------------------\n");
   for(int i = 0; i < N; i++){
-    printf("%08X:  0x%08X\n", expr, vaddr_read(expr, 4));
+    printf("0x%08X:  0x%08X\n", expr, vaddr_read(expr, 4));
     expr = expr + 4;
   }
   printf("---------------------\n");
