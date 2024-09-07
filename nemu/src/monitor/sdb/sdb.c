@@ -56,17 +56,17 @@ static int cmd_q(char *args) {
 
 //add new command: si  ->single-step execution
 static int cmd_si(char *args) {
- uint32_t n = 0;
+ uint32_t N = 0;
  /* extract the first argument */
  char *arg = strtok(NULL, " ");
 
  if(arg == NULL){
-  n = 1;
+  N = 1;
  } else{
-  n = strtoul(arg, NULL, 10);
+  N = strtoul(arg, NULL, 10);
  } 
 
- cpu_exec(n);
+ cpu_exec(N);
 
  return 0;
 };
