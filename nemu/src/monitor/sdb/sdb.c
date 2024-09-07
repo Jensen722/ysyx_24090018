@@ -54,16 +54,16 @@ static int cmd_q(char *args) {
   return -1;
 }
 
-//add new command: s  ->single-step execution
+//add new command: si  ->single-step execution
 static int cmd_si(char *args) {
- int n = 0;
+ uint32_t n = 0;
  /* extract the first argument */
  char *arg = strtok(NULL, " ");
 
  if(arg == NULL){
   n = 1;
  } else{
-  n = atoi(arg);
+  n = strtoul(arg, NULL, 10);
  } 
 
  cpu_exec(n);
