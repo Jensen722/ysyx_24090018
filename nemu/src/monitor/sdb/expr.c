@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, PLUS, SUB, MUL, DIV, L_PAR, R_PAR, NUM,
 
   /* TODO: Add more token types */
 
@@ -37,11 +37,18 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"[0-9]+", NUM},      //number
+  {"\\+", PLUS},         // plus
   {"==", TK_EQ},        // equal
+  {"-", SUB},           //sub
+  {"\\*", MUL},         //multiply
+  {"/", DIV},           //divide
+  {"\\(", L_PAR},       //left parenthesis (
+  {"\\)", R_PAR},       //left parenthesis )
 };
 
 #define NR_REGEX ARRLEN(rules)
+#define INT_MAX 2147473647
 
 static regex_t re[NR_REGEX] = {};
 
@@ -89,13 +96,26 @@ static bool make_token(char *e) {
 
         position += substr_len;
 
+        if(rules[i].token_type == TK_NOTYPE) {break;}
+
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
+        tokens[nr_token].type = rules[i].token_type;
+        nr_token += 1;
+
         switch (rules[i].token_type) {
-          default: TODO();
+          case NUM:
+             if(substr_len > 32){
+                printf("the sub string is too long.\n");
+                assert(0);
+              } else{
+                for(int j = 0; j < substr_len; j++){
+                  tokens[nr_token].str[j] = *(substr_start + j);
+              }
+              } 
         }
 
         break;
@@ -111,6 +131,11 @@ static bool make_token(char *e) {
   return true;
 }
 
+word_t eval(int, int);
+bool check_parentheses(int, int);
+int get_main_operator_position(int, int);
+int is_operator(int);
+int precedence(int);
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -118,8 +143,103 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  word_t result = eval(0, nr_token-1);
+  *success = true;
 
-  return 0;
+  return result;
 }
+
+word_t eval(int p, int q){
+   if(p > q) {
+      assert(0);
+   } else if (p == q){
+     return strtoul(tokens[p].str, NULL, 10);
+   } else if (check_parentheses(p, q) == true) {
+      // The expression is surrounded by a matched pair of parentheses.
+     // If that is the case, just throw away the parentheses. //
+     return eval(p + 1, q - 1);
+   } else {
+     int op = get_main_operator_position(p, q);
+     word_t val1 = eval(p, op - 1);
+     word_t val2 = eval(op + 1, q);
+
+     switch(tokens[op].type){
+       case '+': return val1 + val2;
+       case '-': return val1 - val2;
+       case '*': return val1 * val2;
+       case '/': return val1 / val2;
+       default: assert(0);
+     }
+   }
+ }
+
+bool check_parentheses(int p, int q){
+  int par_count = 0;
+  if((tokens[0].type == L_PAR) && (tokens[nr_token - 1].type == R_PAR)){
+     for(int i = 1; i < nr_token - 1; i++){
+        if(tokens[i].type == L_PAR) {
+          par_count++;
+        } else if(tokens[i].type == R_PAR){
+             par_count--;
+             if(par_count < 0){
+                printf("error experssion\n");
+                return false;
+            }
+          }  //)2 + 3( may set right
+      } 
+     if(par_count == 0) {return true;}
+   }
+
+  return false;
+  
+}
+
+
+
+int get_main_operator_position(int p, int q){
+  int op = 0;
+  int min_precedence = INT_MAX;
+  int parentheses_count = 0;
+
+  for(int i = 0; i < nr_token; i++){
+    int type = tokens[i].type; 
+
+    if(type == L_PAR){
+      parentheses_count++;
+    } else if(type == R_PAR){
+        parentheses_count--;
+        if(parentheses_count < 0){
+          printf("error experssion\n");
+          assert(0);
+        }
+    } else if(is_operator(type) && (parentheses_count == 0)){
+        int current_precedence = precedence(type);
+        if(current_precedence < min_precedence){
+          min_precedence = current_precedence;
+          op = i;
+        } else if (current_precedence == min_precedence){
+            op = i;
+          }
+      }
+  }
+  
+  assert(op);  //test
+
+  return op;
+}
+
+int is_operator(int type){
+  int is_operator = ((type == PLUS) || (type == SUB) || (type == MUL) || (type == DIV));
+  return is_operator;
+}
+
+int precedence(int type){
+  switch(type){
+    case PLUS: return 1;
+    case SUB:  return 1;
+    case MUL:  return 2;
+    case DIV:  return 2;
+    default: return INT_MAX;
+   }
+}
+
