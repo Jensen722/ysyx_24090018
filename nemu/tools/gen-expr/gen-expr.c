@@ -30,9 +30,66 @@ static char *code_format =
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
+static int buf_pos;
+
+static uint32_t choose(uint32_t n){
+  return rand() % n;
+}
+
+static void gen_rand_op(){
+  int char_len;
+  const char op[] = "+-*/";
+  char_len = 1;
+  if((buf_pos + char_len) == 65535){
+    printf("ERROR: buffer overflow.\n");
+    assert(0);
+  } 
+  buf[buf_pos] =  op[(rand() % (sizeof(op) - 1))];
+  buf_pos += char_len;
+}
+
+static void gen(char c){
+  int char_len;
+  char_len = 1;
+  if((buf_pos + char_len) >= 65535) {
+    if(c == '('){
+      printf("ERROR: buffer overflow.\n");
+      assert(0);
+     }
+  }
+  buf[buf_pos] = c;
+  buf_pos += char_len;
+}
+
+#define MAX_NUM 1000000
+static void gen_num(){
+  int char_len;
+  int rand_num = rand() % MAX_NUM;
+  char num_str[12];
+  snprintf(num_str, sizeof(num_str), "%d", num);
+  if((buf_pos + char_len) > 65535){
+    printf("ERROR:buffer overflow.\n");
+    assert(0);
+  }
+
+  char_len = sizeof(num_str);
+  for(int i = 0; i < char_len; i++){
+    buf[buf_pos] = num_str[i];
+    buf_pos++;
+  }
+
+  
+}
+
 
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  switch(choose(3)){
+    case 0: gen_num();break;
+    case 1: gen('('); gen_rand_expr(); gen(')');break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr();break;
+  }
+
+  //buf[0] = '\0';
 }
 
 int main(int argc, char *argv[]) {
