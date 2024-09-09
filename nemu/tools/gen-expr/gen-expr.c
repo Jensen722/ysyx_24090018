@@ -36,7 +36,19 @@ static uint32_t choose(uint32_t n){
   return rand() % n;
 }
 
-static void gen_rand_op(){
+/*void put_char_to_buf(const char *str){
+  int str_len = sizeof(str);
+  if((buf_pos + str_len) > 65535){
+    printf("ERROR: buf overflow.\n");
+    assert(0);
+  }
+  for(int i = 0; i < str_len; i++){
+    buf[buf_pos] = str[i];
+    buf_pos++;
+  }
+}*/
+
+void gen_rand_op(){
   int char_len;
   const char op[] = "+-*/";
   char_len = 1;
@@ -44,13 +56,13 @@ static void gen_rand_op(){
     printf("ERROR: buffer overflow.\n");
     assert(0);
   } 
-  buf[buf_pos] =  op[(rand() % (sizeof(op) - 1))];
+  buf[buf_pos] =  op[(rand() % 4)];
   buf_pos += char_len;
 }
 
-static void gen(char c){
-  int char_len;
-  char_len = 1;
+void gen(const char c){
+  int char_len = 1;
+  
   if((buf_pos + char_len) >= 65535) {
     if(c == '('){
       printf("ERROR: buffer overflow.\n");
@@ -61,35 +73,33 @@ static void gen(char c){
   buf_pos += char_len;
 }
 
-#define MAX_NUM 1000000
-static void gen_num(){
-  int char_len;
+#define MAX_NUM 100
+void gen_num(){
+  int char_len = 0;
   int rand_num = rand() % MAX_NUM;
   char num_str[12];
-  snprintf(num_str, sizeof(num_str), "%d", num);
+  snprintf(num_str, sizeof(num_str), "%d", rand_num);
   if((buf_pos + char_len) > 65535){
     printf("ERROR:buffer overflow.\n");
     assert(0);
   }
-
   char_len = sizeof(num_str);
-  for(int i = 0; i < char_len; i++){
+  for(int i = 0; num_str[i] != '\0'; i++){
     buf[buf_pos] = num_str[i];
-    buf_pos++;
+    buf_pos = buf_pos + 1;
   }
 
   
 }
 
-
-static void gen_rand_expr() {
+void gen_rand_expr() {
   switch(choose(3)){
     case 0: gen_num();break;
     case 1: gen('('); gen_rand_expr(); gen(')');break;
     default: gen_rand_expr(); gen_rand_op(); gen_rand_expr();break;
   }
 
-  //buf[0] = '\0';
+  buf[65535] = '\0';
 }
 
 int main(int argc, char *argv[]) {
@@ -101,6 +111,8 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    memset(buf, '\0', sizeof(buf));
+    buf_pos = 0;
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);
