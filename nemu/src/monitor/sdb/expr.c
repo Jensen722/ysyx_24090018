@@ -179,9 +179,9 @@ bool check_parentheses(int p, int q){
   if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
      for(int i = p; i <= q; i++){
         if(tokens[i].type == L_PAR) {
-          par_count++;printf("Left parenthesis found, par_count = %d\n", par_count);
+          par_count++;//printf("Left parenthesis found, par_count = %d\n", par_count);
         } else if(tokens[i].type == R_PAR){
-             par_count--;printf("Left parenthesis found, par_count = %d\n", par_count);
+             par_count--;//printf("Left parenthesis found, par_count = %d\n", par_count);
              /*if(par_count < 0){
                 printf("Error: unmatched right parenthesis at index %d\n", p + i);
                 return false;
