@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   assert(fp);
 
   char str[65536];
-  bool *success = false;
+  bool success = true;
   word_t result_under_test = 0;
   uint32_t result = 1;
   for(; fgets(str, sizeof(str), fp);){
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
    for(int i = 0; str[i] != '\n'; i++){
      e[i] = str[i];
    }
-   result_under_test = expr(e, success);
+   result_under_test = expr(e, &success);
    result = eval(0, 0);
    if(success){
     if(result == result_under_test)
