@@ -177,19 +177,18 @@ assert(q >= 0 && q < nr_token);
 bool check_parentheses(int p, int q){
   int par_count = 0;
   if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
-     for(int i = p + 1; i <= q - 1; i++){
+     for(int i = p; i <= q; i++){
         if(tokens[i].type == L_PAR) {
           par_count++;printf("Left parenthesis found, par_count = %d\n", par_count);
         } else if(tokens[i].type == R_PAR){
              par_count--;printf("Left parenthesis found, par_count = %d\n", par_count);
-             if(par_count < 0){
+             /*if(par_count < 0){
                 printf("Error: unmatched right parenthesis at index %d\n", p + i);
                 return false;
-            }
+            }*/
           }  //)2 + 3( may set right
+     if(par_count == 0) {return i==q;}
       } 
-     if(par_count == 0) {return true;}
-     else{return false;}
    }
 
   return false;
