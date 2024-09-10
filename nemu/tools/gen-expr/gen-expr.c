@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <string.h>
 
+#define MAX_NUM 100
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
@@ -36,8 +37,7 @@ static uint32_t choose(uint32_t n){
   return rand() % n;
 }
 
-/*void put_char_to_buf(const char *str){
-  int str_len = sizeof(str);
+void put_str_to_buf(const char *str, const int str_len){
   if((buf_pos + str_len) > 65535){
     printf("ERROR: buf overflow.\n");
     assert(0);
@@ -46,60 +46,55 @@ static uint32_t choose(uint32_t n){
     buf[buf_pos] = str[i];
     buf_pos++;
   }
-}*/
+}
+
+void put_char_to_buf(const char c){
+  if((buf_pos + 1) > 65535){
+    printf("ERROR: buf overflow.\n");
+    assert(0);
+  }
+  buf[buf_pos] = c;
+  buf_pos += 1;
+}
+
+void gen_space(){
+  int space_len = rand() % 2 + 1;
+  char space[3];
+  for(int i = 0; i < space_len; i++){
+    space[i] = ' ';
+  }
+  put_str_to_buf(space, space_len);
+}
 
 void gen_rand_op(){
-  int char_len;
   const char op[] = "+-*/";
-  char_len = 1;
-  if((buf_pos + char_len) == 65535){
-    printf("ERROR: buffer overflow.\n");
-    assert(0);
-  } 
-  buf[buf_pos] =  op[(rand() % 4)];
-  buf_pos += char_len;
+  char c =  op[(rand() % 4)];
+  put_char_to_buf(c);
 }
 
 void gen(const char c){
-  int char_len = 1;
-  
-  if((buf_pos + char_len) >= 65535) {
-    if(c == '('){
-      printf("ERROR: buffer overflow.\n");
-      assert(0);
-     }
-  }
-  buf[buf_pos] = c;
-  buf_pos += char_len;
+  put_char_to_buf(c);
 }
 
-#define MAX_NUM 100
 void gen_num(){
-  int char_len = 0;
   int rand_num = rand() % MAX_NUM;
   char num_str[12];
+  int str_len = 0;
+
   snprintf(num_str, sizeof(num_str), "%d", rand_num);
-  if((buf_pos + char_len) > 65535){
-    printf("ERROR:buffer overflow.\n");
-    assert(0);
-  }
-  char_len = sizeof(num_str);
   for(int i = 0; num_str[i] != '\0'; i++){
-    buf[buf_pos] = num_str[i];
-    buf_pos = buf_pos + 1;
+     str_len = i + 1;
   }
 
-  
+  put_str_to_buf(num_str, str_len);
 }
 
 void gen_rand_expr() {
   switch(choose(3)){
-    case 0: gen_num();break;
+    case 0: gen_num();gen_space();break;
     case 1: gen('('); gen_rand_expr(); gen(')');break;
-    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr();break;
+    default: gen_rand_expr(); gen_space(); gen_rand_op(); gen_space(); gen_rand_expr();break;
   }
-
-  buf[65535] = '\0';
 }
 
 int main(int argc, char *argv[]) {
@@ -111,8 +106,8 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    memset(buf, '\0', sizeof(buf));
-    buf_pos = 0;
+    memset(buf, '\0', sizeof(buf));  //reset buf
+    buf_pos = 0; //reset buf_pos
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);

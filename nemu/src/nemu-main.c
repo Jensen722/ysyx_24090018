@@ -14,11 +14,14 @@
 ***************************************************************************************/
 
 #include <common.h>
+#include <stdio.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
+word_t eval(int, int);
+word_t expr(char *, bool *);
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
@@ -28,8 +31,30 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
+  FILE *fp = fopen("$NEMU_HOME/tools/gen-expr/build/input", "r");
+  assert(fp);
+
+  char str[65536];
+  bool *success = false;
+  word_t result_under_test = 0;
+  uint32_t result = 1;
+  for(; fgets(str, sizeof(str), fp);){
+   result_under_test = expr(str, success);
+   result = eval(0, 0);
+   if(success){
+    if(result == result_under_test)
+    {
+      printf("PASS!\n");
+    }
+   }
+  }
+
+
+  fclose(fp);
+
   /* Start engine. */
   engine_start();
+
   
   return is_exit_status_bad();
 }
