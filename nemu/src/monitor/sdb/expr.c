@@ -182,10 +182,10 @@ bool check_parentheses(int p, int q){
           par_count++;
         } else if(tokens[i].type == R_PAR){
              par_count--;
-             if(par_count < 0){
+             /*if(par_count < 0){
                 printf("Error: unmatched right parenthesis at index %d\n", p + i);
                 return false;
-            }
+            }*/
           }  //)2 + 3( may set right
       } 
      if(par_count == 0) {return true;}
