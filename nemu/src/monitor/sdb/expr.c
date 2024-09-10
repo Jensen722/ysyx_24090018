@@ -158,6 +158,8 @@ word_t eval(int p, int q){
      // If that is the case, just throw away the parentheses. //
      return eval(p + 1, q - 1);
    } else {
+assert(p >= 0 && p < nr_token);
+assert(q >= 0 && q < nr_token);
      int op = get_main_operator_position(p, q);
      word_t val1 = eval(p, op - 1);
      word_t val2 = eval(op + 1, q);
