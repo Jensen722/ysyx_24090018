@@ -39,7 +39,11 @@ int main(int argc, char *argv[]) {
   word_t result_under_test = 0;
   uint32_t result = 1;
   for(; fgets(str, sizeof(str), fp);){
-   result_under_test = expr(str, success);
+   char *e = NULL;
+   for(int i = 0; str[i] != '\0'; i++){
+     *(e + i) = str[i];
+   }
+   result_under_test = expr(e, success);
    result = eval(0, 0);
    if(success){
     if(result == result_under_test)
