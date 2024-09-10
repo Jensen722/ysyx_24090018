@@ -183,12 +183,13 @@ bool check_parentheses(int p, int q){
         } else if(tokens[i].type == R_PAR){
              par_count--;
              if(par_count < 0){
-                printf("error experssion\n");
+                printf("Error: unmatched right parenthesis at index %d\n", i);
                 return false;
             }
           }  //)2 + 3( may set right
       } 
      if(par_count == 0) {return true;}
+     else{return false;}
    }
 
   return false;
@@ -209,10 +210,10 @@ int get_main_operator_position(int p, int q){
       parentheses_count++;
     } else if(type == R_PAR){
         parentheses_count--;
-        /*if(parentheses_count < 0){
+        if(parentheses_count < 0){
           printf("error parentheses.\n");
           assert(0);
-        }*/
+        }
     } else if(is_operator(type) && (parentheses_count == 0)){
         int current_precedence = precedence(type);
         if(current_precedence < min_precedence){
