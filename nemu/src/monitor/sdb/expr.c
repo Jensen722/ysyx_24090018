@@ -208,10 +208,10 @@ int get_main_operator_position(int p, int q){
 
     if(type == L_PAR){
       parentheses_count++;
-      printf("left pars = %d\n",parentheses_count);
+      //printf("left pars = %d\n",parentheses_count);
     } else if(type == R_PAR){
         parentheses_count--;
-        printf("right pars = %d\n", parentheses_count);
+        // printf("right pars = %d\n", parentheses_count);
         if(parentheses_count < 0){
           printf("error parentheses.\n");
           assert(0);
