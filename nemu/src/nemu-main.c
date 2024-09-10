@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
   uint32_t result = 1;
   for(; fgets(str, sizeof(str), fp);){
    char e[65536];
-   for(int i = 0; str[i] != '\0'; i++){
+   for(int i = 0; str[i] != '\n'; i++){
      e[i] = str[i];
    }
    result_under_test = expr(e, success);
