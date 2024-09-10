@@ -38,8 +38,9 @@ int main(int argc, char *argv[]) {
   bool success = true;
   word_t result_under_test = 0;
   uint32_t result = 1;
+  char e[65536];
   for(; fgets(str, sizeof(str), fp);){
-   char e[65536];
+   memset(e, '\0', sizeof(e));
    for(int i = 0; str[i] != '\n'; i++){
      e[i] = str[i];
    }
