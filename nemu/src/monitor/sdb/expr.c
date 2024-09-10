@@ -177,7 +177,7 @@ assert(q >= 0 && q < nr_token);
 bool check_parentheses(int p, int q){
   int par_count = 0;
   if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
-     for(int i = p + 1; i < q - 1; i++){
+     for(int i = p + 1; i <= q - 1; i++){
         if(tokens[i].type == L_PAR) {
           par_count++;
         } else if(tokens[i].type == R_PAR){
