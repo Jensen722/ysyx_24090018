@@ -39,9 +39,9 @@ int main(int argc, char *argv[]) {
   word_t result_under_test = 0;
   uint32_t result = 1;
   for(; fgets(str, sizeof(str), fp);){
-   char *e = NULL;
+   char e[65536];
    for(int i = 0; str[i] != '\0'; i++){
-     *(e + i) = str[i];
+     e[i] = str[i];
    }
    result_under_test = expr(e, success);
    result = eval(0, 0);
