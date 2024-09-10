@@ -175,8 +175,8 @@ word_t eval(int p, int q){
 
 bool check_parentheses(int p, int q){
   int par_count = 0;
-  if((tokens[0].type == L_PAR) && (tokens[nr_token - 1].type == R_PAR)){
-     for(int i = 1; i < nr_token - 1; i++){
+  if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
+     for(int i = p + 1; i < q ; i++){
         if(tokens[i].type == L_PAR) {
           par_count++;
         } else if(tokens[i].type == R_PAR){
@@ -197,7 +197,7 @@ bool check_parentheses(int p, int q){
 
 
 int get_main_operator_position(int p, int q){
-  int op = 0;
+  int op = p;
   int min_precedence = INT_MAX;
   int parentheses_count = 0;
 
