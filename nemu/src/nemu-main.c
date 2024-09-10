@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-  FILE *fp = fopen("$NEMU_HOME/tools/gen-expr/build/input", "r");
+  FILE *fp = fopen("./tools/gen-expr/build/input", "r");
   assert(fp);
 
   char str[65536];
