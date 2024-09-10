@@ -202,7 +202,7 @@ int get_main_operator_position(int p, int q){
   int min_precedence = INT_MAX;
   int parentheses_count = 0;
 
-  for(int i = 0; i < nr_token; i++){
+  for(int i = p; i <= q; i++){
     int type = tokens[i].type; 
 
     if(type == L_PAR){
