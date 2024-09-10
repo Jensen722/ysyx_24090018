@@ -210,7 +210,7 @@ int get_main_operator_position(int p, int q){
     } else if(type == R_PAR){
         parentheses_count--;
         if(parentheses_count < 0){
-          printf("error experssion\n");
+          printf("error parentheses.\n");
           assert(0);
         }
     } else if(is_operator(type) && (parentheses_count == 0)){
