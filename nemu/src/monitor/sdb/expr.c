@@ -163,10 +163,10 @@ word_t eval(int p, int q){
      word_t val2 = eval(op + 1, q);
 
      switch(tokens[op].type){
-       case '+': return val1 + val2;
-       case '-': return val1 - val2;
-       case '*': return val1 * val2;
-       case '/': return val1 / val2;
+       case PLUS: return val1 + val2;
+       case SUB: return val1 - val2;
+       case MUL: return val1 * val2;
+       case DIV: return val1 / val2;
        default: assert(0);
      }
    }
