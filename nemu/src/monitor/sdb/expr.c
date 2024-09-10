@@ -143,7 +143,7 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  word_t result = eval(0, nr_token-1);
+  word_t result = eval(1, nr_token-1);
   *success = true;
 
   return result;
@@ -223,7 +223,7 @@ int get_main_operator_position(int p, int q){
       }
   }
   
-  assert(op);  //test
+  //assert(op);  //test
 
   return op;
 }
