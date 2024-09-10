@@ -168,7 +168,13 @@ assert(q >= 0 && q < nr_token);
        case PLUS: return val1 + val2;
        case SUB: return val1 - val2;
        case MUL: return val1 * val2;
-       case DIV: return val1 / val2;
+       case DIV: {
+        if(val2 == 0){
+          printf("div 0.\n");
+          return -1;
+        }
+        return val1 / val2;
+       }
        default: assert(0);
      }
    }
