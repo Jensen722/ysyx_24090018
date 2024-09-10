@@ -212,7 +212,7 @@ int get_main_operator_position(int p, int q){
         parentheses_count--;
         if(parentheses_count < 0){
           printf("error parentheses.\n");
-          assert(0);
+          //assert(0);
         }
     } else if(is_operator(type) && (parentheses_count == 0)){
         int current_precedence = precedence(type);
