@@ -130,7 +130,7 @@ static bool make_token(char *e) {
   return true;
 }
 
-word_t eval(int, int);
+static word_t eval(int, int);
 bool check_parentheses(int, int);
 int get_main_operator_position(int, int);
 int is_operator(int);
@@ -142,13 +142,13 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  word_t result = eval(1, nr_token-1);
+  word_t result = eval(1, nr_token - 1);
   *success = true;
 
   return result;
 }
 
-word_t eval(int p, int q){
+static word_t eval(int p, int q){
    if(p > q) {
       assert(0);
    } else if (p == q){
@@ -181,18 +181,17 @@ word_t eval(int p, int q){
 bool check_parentheses(int p, int q){
   int par_count = 0;
   if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
-     for(int i = p; i <= q; i++){
+     for(int i = p + 1; i <= q - 1; i++){
         if(tokens[i].type == L_PAR) {
           par_count++;//printf("Left parenthesis found, par_count = %d\n", par_count);
         } else if(tokens[i].type == R_PAR){
              par_count--;//printf("Left parenthesis found, par_count = %d\n", par_count);
-             /*if(par_count < 0){
-                printf("Error: unmatched right parenthesis at index %d\n", p + i);
+             if(par_count < 0){
                 return false;
-            }*/
+            }
           }  //)2 + 3( may set right
-     if(par_count == 0) {return i==q;}
       } 
+     if(par_count == 0) {return true;}
    }
 
   return false;
@@ -213,10 +212,10 @@ int get_main_operator_position(int p, int q){
       parentheses_count++;
     } else if(type == R_PAR){
         parentheses_count--;
-        if(parentheses_count < 0){
+        /*if(parentheses_count < 0){
           printf("error parentheses.\n");
           assert(0);
-        }
+        }*/
     } else if(is_operator(type) && (parentheses_count == 0)){
         int current_precedence = precedence(type);
         if(current_precedence < min_precedence){
