@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
    result_under_test = expr(e, &success);
    printf("result_under_test: %u\n", result_under_test);
    result = eval(0, 0);
-   printf("result: %d\n", result);
+   printf("result: %u\n", result);
    if(success){
     if(result == result_under_test)
     {
