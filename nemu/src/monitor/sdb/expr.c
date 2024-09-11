@@ -110,7 +110,7 @@ static bool make_token(char *e) {
                 printf("the sub string is too long.\n");
                 assert(0);
               } else{
-                printf("substr_len: %d\n", substr_len);
+                printf("tokens[%d].str: %s\n", nr_token, tokens[nr_token].str);
                 for(int j = 0; j < substr_len; j++){
                   tokens[nr_token].str[j] = *(substr_start + j);
               }
