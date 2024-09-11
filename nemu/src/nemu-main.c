@@ -53,9 +53,9 @@ int main(int argc, char *argv[]) {
     if(result == result_under_test)
     {
      // printf("PASS!\n");
-     printf(GREEN "PASS!\n" "\e[0m");
+     printf("\e[1;32m" "PASS!\n" "\e[0m");
     }
-    else {printf("NOT PASS!\n");}
+    else {printf("\e[1;31m" "NOT PASS!\n" "\e[0m");}
    }
   }
 
