@@ -51,7 +51,8 @@ int main(int argc, char *argv[]) {
    if(success){
     if(result == result_under_test)
     {
-      printf("PASS!\n");
+     // printf("PASS!\n");
+     Log("PASS!");
     }
     else {printf("NOT PASS!\n");}
    }
