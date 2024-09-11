@@ -186,9 +186,9 @@ bool check_parentheses(int p, int q){
           par_count++;//printf("Left parenthesis found, par_count = %d\n", par_count);
         } else if(tokens[i].type == R_PAR){
              par_count--;//printf("Left parenthesis found, par_count = %d\n", par_count);
-             if(par_count < 0){
+             /*if(par_count < 0){
                 return false;
-            }
+            }*/
           }  //)2 + 3( may set right
       } 
      if(par_count == 0) {return true;}
