@@ -169,7 +169,7 @@ word_t eval(int p, int q){
        case MUL: return val1 * val2;
        case DIV: {
         if(val2 == 0){
-          printf("\e[1;35m" "warning:" "\e[0m" "division by zero" "\e[1;35m" "[-Wdiv-by-zero]\n" "\e[0m");
+          printf("\e[1;35m" "warning: " "\e[0m" "division by zero " "\e[1;35m" "[-Wdiv-by-zero]\n" "\e[0m");
           return -1;
         }
         return val1 / val2;
@@ -184,13 +184,13 @@ bool check_parentheses(int p, int q){
   if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
      for(int i = p + 1; i <= q - 1; i++){
         if(tokens[i].type == L_PAR) {
-          par_count++;//printf("Left parenthesis found, par_count = %d\n", par_count);
+          par_count++;
         } else if(tokens[i].type == R_PAR){
-             par_count--;//printf("Left parenthesis found, par_count = %d\n", par_count);
+             par_count--;
              if(par_count < 0){
                 return false;
             }
-          }  //)2 + 3( may set right
+          }
       } 
      if(par_count == 0) {return true;}
    }
@@ -213,10 +213,6 @@ int get_main_operator_position(int p, int q){
       parentheses_count++;
     } else if(type == R_PAR){
         parentheses_count--;
-        /*if(parentheses_count < 0){
-          printf("error parentheses.\n");
-          assert(0);
-        }*/
     } else if(is_operator(type) && (parentheses_count == 0)){
         int current_precedence = precedence(type);
         if(current_precedence < min_precedence){
@@ -227,8 +223,6 @@ int get_main_operator_position(int p, int q){
           }
       }
   }
-  
-  //assert(op);  //test
 
   return op;
 }
