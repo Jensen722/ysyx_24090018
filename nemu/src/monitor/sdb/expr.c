@@ -133,7 +133,7 @@ static bool make_token(char *e) {
   return true;
 }
 
-static word_t eval(int, int);
+word_t eval(int, int);
 bool check_parentheses(int, int);
 int get_main_operator_position(int, int);
 int is_operator(int);
@@ -151,7 +151,7 @@ word_t expr(char *e, bool *success) {
   return result;
 }
 
-static word_t eval(int p, int q){
+word_t eval(int p, int q){
    if(p > q) {
       assert(0);
    } else if (p == q){

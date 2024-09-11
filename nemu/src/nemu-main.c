@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
   char str[65536];
   bool success = true;
   word_t result_under_test = 0;
-  //uint32_t result = 1;
+  uint32_t result = 1;
   char e[65536];
   for(; fgets(str, sizeof(str), fp);){
    memset(e, '\0', sizeof(e));  //important!
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
    }
    result_under_test = expr(e, &success);
    printf("result_under_test: %u\n", result_under_test);
-  /* result = eval(0, 0);
+   result = eval(0, 0);
    printf("result: %d\n", result);
    if(success){
     if(result == result_under_test)
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
       printf("PASS!\n");
     }
     else {printf("NOT PASS!\n");}
-   }*/
+   }
   }
 
 
