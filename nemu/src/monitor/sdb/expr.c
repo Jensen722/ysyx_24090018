@@ -152,6 +152,7 @@ static word_t eval(int p, int q){
    if(p > q) {
       assert(0);
    } else if (p == q){
+     printf("str: %s\n",tokens[p].str);
      return strtoul(tokens[p].str, NULL, 10);
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
