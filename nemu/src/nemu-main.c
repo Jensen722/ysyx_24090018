@@ -15,6 +15,7 @@
 
 #include <common.h>
 #include <stdio.h>
+#define GREEN  "\e[0;32m"
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
     if(result == result_under_test)
     {
      // printf("PASS!\n");
-     Log("PASS!");
+     printf(GREEN "PASS!");
     }
     else {printf("NOT PASS!\n");}
    }

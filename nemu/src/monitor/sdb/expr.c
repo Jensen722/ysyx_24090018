@@ -107,7 +107,7 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case NUM:
              if(substr_len > 32){
-                printf("the sub string is too long.\n");
+                printf("warning: the sub string is too long [-Woverflow]\n");
                 assert(0);
               } else{
                 memset(tokens[nr_token].str, '\0', 32); //important!reset str! or you will get wrong str.
@@ -169,7 +169,7 @@ word_t eval(int p, int q){
        case MUL: return val1 * val2;
        case DIV: {
         if(val2 == 0){
-          printf("div 0.\n");
+          printf("warning: division by zero [-Wdiv-by-zero]\n");
           return -1;
         }
         return val1 / val2;
