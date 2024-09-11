@@ -19,7 +19,6 @@
 #include <time.h>
 #include <assert.h>
 #include <string.h>
-#include <colour.h>
 
 #define MAX_NUM 100
 // this should be enough
@@ -40,7 +39,7 @@ static uint32_t choose(uint32_t n){
 
 void put_str_to_buf(const char *str, const int str_len){
   if((buf_pos + str_len) > 65535){
-    printf(L_RED "ERROR:" NONE " buf overflow.\n");
+    printf("ERROR: buf overflow.\n");
     assert(0);
   }
   for(int i = 0; i < str_len; i++){
@@ -90,7 +89,6 @@ void gen_num(){
   }
 
   put_str_to_buf(num_str, str_len);
-  gen_space();
 }
 
 void gen_rand_expr() {
