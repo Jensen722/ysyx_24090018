@@ -91,8 +91,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        //Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+          //  i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
@@ -110,13 +110,11 @@ static bool make_token(char *e) {
                 printf("the sub string is too long.\n");
                 assert(0);
               } else{
-                memset(tokens[nr_token].str, '\0', 32);
-                //printf("tokens[%d].str: %s\n", nr_token, tokens[nr_token].str);
+                memset(tokens[nr_token].str, '\0', 32); //important!reset str! or you will get wrong str.
                 for(int j = 0; j < substr_len; j++){
                   tokens[nr_token].str[j] = *(substr_start + j);
               }
               } 
-        //printf("tokens[%d].str: %s\n",nr_token,tokens[nr_token].str);
         }
         nr_token += 1;
 
