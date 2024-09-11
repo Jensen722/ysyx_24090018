@@ -15,7 +15,7 @@
 
 #include <common.h>
 #include <stdio.h>
-#define GREEN  "\e[0;32m"
+#include <colour.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
    if(success){
     if(result == result_under_test)
     {
-     printf("\e[1;32m" "PASS!\n" "\e[0m");
+     printf(L_GREEN "PASS!\n" NONE);
     }
     else {printf("\e[1;31m" "NOT PASS!\n" "\e[0m");}
    }
