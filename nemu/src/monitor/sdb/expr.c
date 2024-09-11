@@ -77,6 +77,7 @@ typedef struct token {
 static Token tokens[65536] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
+/*recognize token and put token into tokens[] */
 static bool make_token(char *e) {
   int position = 0;
   int i;
@@ -91,14 +92,14 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        //Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-          //  i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+            i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
         if(rules[i].token_type == TK_NOTYPE) {break;}
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
+        /* Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
@@ -137,6 +138,7 @@ int get_main_operator_position(int, int);
 int is_operator(int);
 int precedence(int);
 
+/*calculate the result of experssion*/
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -149,6 +151,7 @@ word_t expr(char *e, bool *success) {
   return result;
 }
 
+/*calculate the result of experssion through recursion*/
 word_t eval(int p, int q){
    if(p > q) {
       assert(0);
@@ -179,6 +182,7 @@ word_t eval(int p, int q){
    }
  }
 
+/*Parentheses Matching Check*/
 bool check_parentheses(int p, int q){
   int par_count = 0;
   if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
@@ -187,7 +191,7 @@ bool check_parentheses(int p, int q){
           par_count++;
         } else if(tokens[i].type == R_PAR){
              par_count--;
-             if(par_count < 0){
+             if(par_count < 0){  //to exclude situation ) ( 
                 return false;
             }
           }
@@ -213,9 +217,9 @@ int get_main_operator_position(int p, int q){
       parentheses_count++;
     } else if(type == R_PAR){
         parentheses_count--;
-    } else if(is_operator(type) && (parentheses_count == 0)){
+    } else if(is_operator(type) && (parentheses_count == 0)){  //only operator and operator not in parentheses(parentheses == 0) can be main operator
         int current_precedence = precedence(type);
-        if(current_precedence < min_precedence){
+        if(current_precedence < min_precedence){  //compare precedence of operator
           min_precedence = current_precedence;
           op = i;
         } else if (current_precedence == min_precedence){

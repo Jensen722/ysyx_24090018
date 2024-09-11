@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
+  /*test experssion*/
   FILE *fp = fopen("./tools/gen-expr/build/input", "r");
   assert(fp);
 
@@ -52,14 +53,11 @@ int main(int argc, char *argv[]) {
    if(success){
     if(result == result_under_test)
     {
-     // printf("PASS!\n");
      printf("\e[1;32m" "PASS!\n" "\e[0m");
     }
     else {printf("\e[1;31m" "NOT PASS!\n" "\e[0m");}
    }
   }
-
-
   fclose(fp);
 
   /* Start engine. */
