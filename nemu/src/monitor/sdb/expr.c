@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <colour.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ, PLUS, SUB, MUL, DIV, L_PAR, R_PAR, NUM,
@@ -92,8 +93,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+       // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+           // i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
@@ -172,7 +173,7 @@ word_t eval(int p, int q){
        case MUL: return val1 * val2;
        case DIV: {
         if(val2 == 0){
-          printf("\e[1;35m" "warning: " "\e[0m" "division by zero " "\e[1;35m" "[-Wdiv-by-zero]\n" "\e[0m");
+          printf(L_PURPLE "warning: " NONE "division by zero " L_PURPLE "[-Wdiv-by-zero]\n" NONE);
           return -1;
         }
         return val1 / val2;
