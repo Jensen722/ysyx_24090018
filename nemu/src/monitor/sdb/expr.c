@@ -112,6 +112,7 @@ static bool make_token(char *e) {
               } else{
                 for(int j = 0; j < substr_len; j++){
                   tokens[nr_token].str[j] = *(substr_start + j);
+     printf("str[%d]: %c\n",j,tokens[nr_token].str[j]);
               }
               } 
         }
@@ -152,7 +153,6 @@ static word_t eval(int p, int q){
    if(p > q) {
       assert(0);
    } else if (p == q){
-     printf("str: %s\n",tokens[p].str);
      return strtoul(tokens[p].str, NULL, 10);
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
