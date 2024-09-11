@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     {
      printf(L_GREEN "PASS!\n" NONE);
     }
-    else {printf("\e[1;31m" "NOT PASS!\n" "\e[0m");}
+    else {printf(L_RED "NOT PASS!\n" NONE);}
    }
   }
   fclose(fp);

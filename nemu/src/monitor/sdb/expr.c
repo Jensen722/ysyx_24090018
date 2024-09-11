@@ -21,6 +21,8 @@
 #include <regex.h>
 #include <colour.h>
 
+#define NR_REGEX ARRLEN(rules)
+#define INT_MAX 2147473647
 enum {
   TK_NOTYPE = 256, TK_EQ, PLUS, SUB, MUL, DIV, L_PAR, R_PAR, NUM,
 
@@ -47,9 +49,6 @@ static struct rule {
   {"\\(", L_PAR},       //left parenthesis (
   {"\\)", R_PAR},       //left parenthesis )
 };
-
-#define NR_REGEX ARRLEN(rules)
-#define INT_MAX 2147473647
 
 static regex_t re[NR_REGEX] = {};
 
