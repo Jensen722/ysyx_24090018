@@ -112,9 +112,9 @@ static bool make_token(char *e) {
               } else{
                 for(int j = 0; j < substr_len; j++){
                   tokens[nr_token].str[j] = *(substr_start + j);
-     printf("str[%d]: %c\n",j,tokens[nr_token].str[j]);
               }
               } 
+        printf("str: %s\n",tokens[nr_token].str);
         }
         nr_token += 1;
 
