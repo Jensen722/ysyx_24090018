@@ -169,7 +169,7 @@ word_t eval(int p, int q){
        case MUL: return val1 * val2;
        case DIV: {
         if(val2 == 0){
-          printf("warning: division by zero [-Wdiv-by-zero]\n");
+          printf("\e[1;35m" "warning:" "\e[0m" "division by zero" "\e[1;35m" "[-Wdiv-by-zero]\n" "\e[0m");
           return -1;
         }
         return val1 / val2;
