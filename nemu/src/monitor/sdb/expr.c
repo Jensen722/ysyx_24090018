@@ -24,7 +24,7 @@
 #define NR_REGEX ARRLEN(rules)
 #define INT_MAX 2147473647
 enum {
-  TK_NOTYPE = 256, TK_EQ, PLUS, SUB, MUL, DIV, L_PAR, R_PAR, NUM,
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_SUB, TK_MUL, TK_DIV, TK_LPAR, TK_RPAR, TK_DNUM, TK_HNUM, TK_REG, TK_NEQ, TK_AND, 
 
   /* TODO: Add more token types */
 
@@ -40,14 +40,14 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"[0-9]+", NUM},      //number
-  {"\\+", PLUS},         // plus
-  {"==", TK_EQ},        // equal
-  {"-", SUB},           //sub
-  {"\\*", MUL},         //multiply
-  {"/", DIV},           //divide
-  {"\\(", L_PAR},       //left parenthesis (
-  {"\\)", R_PAR},       //left parenthesis )
+  {"[0-9]+", TK_DNUM},      //number
+  {"\\+", TK_PLUS},        //TK_PLUS
+  {"==", TK_EQ},        //equal
+  {"-", TK_SUB},           //sub
+  {"\\*", TK_MUL},         //multiply
+  {"/", TK_DIV},           //divide
+  {"\\(", TK_LPAR},       //left parenthesis (
+  {"\\)", TK_RPAR},       //left parenthesis )
 };
 
 static regex_t re[NR_REGEX] = {};
@@ -89,13 +89,13 @@ static bool make_token(char *e) {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
+        char *TK_SUBstr_start = e + position;
+        int TK_SUBstr_len = pmatch.rm_eo;
 
        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-           // i, rules[i].regex, position, substr_len, substr_len, substr_start);
+           // i, rules[i].regex, position, TK_SUBstr_len, substr_len, substr_start);
 
-        position += substr_len;
+        position += TK_SUBstr_len;
 
         if(rules[i].token_type == TK_NOTYPE) {break;}
 
@@ -106,14 +106,14 @@ static bool make_token(char *e) {
 
         tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-          case NUM:
-             if(substr_len > 32){
-                printf("warning: the sub string is too long [-Woverflow]\n");
+          case TK_DNUM:
+             if(TK_SUBstr_len > 32){
+                printf("warning: the TK_SUB string is too long [-Woverflow]\n");
                 assert(0);
               } else{
                 memset(tokens[nr_token].str, '\0', 32); //important!reset str! or you will get wrong str.
-                for(int j = 0; j < substr_len; j++){
-                  tokens[nr_token].str[j] = *(substr_start + j);
+                for(int j = 0; j < TK_SUBstr_len; j++){
+                  tokens[nr_token].str[j] = *(TK_SUBstr_start + j);
               }
               } 
         }
@@ -167,12 +167,12 @@ word_t eval(int p, int q){
      word_t val2 = eval(op + 1, q);
 
      switch(tokens[op].type){
-       case PLUS: return val1 + val2;
-       case SUB: return val1 - val2;
-       case MUL: return val1 * val2;
-       case DIV: {
+       case TK_PLUS: return val1 + val2;
+       case TK_SUB: return val1 - val2;
+       case TK_MUL: return val1 * val2;
+       case TK_DIV: {
         if(val2 == 0){
-          printf(L_PURPLE "warning: " NONE "division by zero " L_PURPLE "[-Wdiv-by-zero]\n" NONE);
+          printf(L_PURPLE "warning: " NONE "TK_DIVision by zero " L_PURPLE "[-Wdiv-by-zero]\n" NONE);
           return -1;
         }
         return val1 / val2;
@@ -185,11 +185,11 @@ word_t eval(int p, int q){
 /*Parentheses Matching Check*/
 bool check_parentheses(int p, int q){
   int par_count = 0;
-  if((tokens[p].type == L_PAR) && (tokens[q].type == R_PAR)){
+  if((tokens[p].type == TK_LPAR) && (tokens[q].type == TK_RPAR)){
      for(int i = p + 1; i <= q - 1; i++){
-        if(tokens[i].type == L_PAR) {
+        if(tokens[i].type == TK_LPAR) {
           par_count++;
-        } else if(tokens[i].type == R_PAR){
+        } else if(tokens[i].type == TK_RPAR){
              par_count--;
              if(par_count < 0){  //to exclude situation ) ( 
                 return false;
@@ -213,9 +213,9 @@ int get_main_operator_position(int p, int q){
   for(int i = p; i <= q; i++){
     int type = tokens[i].type; 
 
-    if(type == L_PAR){
+    if(type == TK_LPAR){
       parentheses_count++;
-    } else if(type == R_PAR){
+    } else if(type == TK_RPAR){
         parentheses_count--;
     } else if(is_operator(type) && (parentheses_count == 0)){  //only operator and operator not in parentheses(parentheses == 0) can be main operator
         int current_precedence = precedence(type);
@@ -232,16 +232,16 @@ int get_main_operator_position(int p, int q){
 }
 
 int is_operator(int type){
-  int is_operator = ((type == PLUS) || (type == SUB) || (type == MUL) || (type == DIV));
+  int is_operator = ((type == TK_PLUS) || (type == TK_SUB) || (type == TK_MUL) || (type == TK_DIV));
   return is_operator;
 }
 
 int precedence(int type){
   switch(type){
-    case PLUS: return 1;
-    case SUB:  return 1;
-    case MUL:  return 2;
-    case DIV:  return 2;
+    case TK_PLUS: return 1;
+    case TK_SUB:  return 1;
+    case TK_MUL:  return 2;
+    case TK_DIV:  return 2;
     default: return INT_MAX;
    }
 }

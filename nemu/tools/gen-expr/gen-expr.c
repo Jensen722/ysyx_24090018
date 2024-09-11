@@ -37,7 +37,7 @@ static uint32_t choose(uint32_t n){
   return rand() % n;
 }
 
-void put_str_to_buf(const char *str, const int str_len){
+void put_str2buf(const char *str, const int str_len){
   if((buf_pos + str_len) > 65535){
     printf("ERROR: buf overflow.\n");
     assert(0);
@@ -48,7 +48,7 @@ void put_str_to_buf(const char *str, const int str_len){
   }
 }
 
-void put_char_to_buf(const char c){
+void put_char2buf(const char c){
   if((buf_pos + 1) > 65535){
     printf("ERROR: buf overflow.\n");
     assert(0);
@@ -63,19 +63,19 @@ void gen_space(){
   for(int i = 0; i < space_len; i++){
     space[i] = ' ';
   }
-  put_str_to_buf(space, space_len);
+  put_str2buf(space, space_len);
 }
 
 void gen_rand_op(){
   const char op[] = "+-*/";
   char c =  op[(rand() % 4)];
   gen_space();
-  put_char_to_buf(c);
+  put_char2buf(c);
   gen_space();
 }
 
 void gen(const char c){
-  put_char_to_buf(c);
+  put_char2buf(c);
 }
 
 void gen_num(){
@@ -88,7 +88,7 @@ void gen_num(){
      str_len = i + 1;
   }
 
-  put_str_to_buf(num_str, str_len);
+  put_str2buf(num_str, str_len);
 }
 
 void gen_rand_expr() {
