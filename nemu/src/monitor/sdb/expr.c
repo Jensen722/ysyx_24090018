@@ -174,14 +174,14 @@ word_t eval(int p, int q){
    if(p > q) {
       assert(0);
    } else if (p == q){
-     bool *success = false;
+     bool success = false;
      if(tokens[p].type == TK_DNUM){
        return strtoul(tokens[p].str, NULL, 10);
      } else if(tokens[p].type == TK_HNUM){
           return strtoul(tokens[p].str, NULL, 16);
        }
 
-     return isa_reg_str2val(tokens[p].str, success);
+     return isa_reg_str2val(tokens[p].str, &success);
 
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
