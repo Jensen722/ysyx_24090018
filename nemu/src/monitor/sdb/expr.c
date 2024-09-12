@@ -24,7 +24,7 @@
 #define NR_REGEX ARRLEN(rules)
 #define INT_MAX 2147473647
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_SUB, TK_MUL, TK_DIV, TK_LPAR, TK_RPAR, TK_DNUM, TK_HNUM, TK_REG, TK_NEQ, TK_AND, 
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_SUB, TK_MUL, TK_DIV, TK_LPAR, TK_RPAR, TK_DNUM, TK_HNUM, TK_REG, TK_NEQ, TK_AND, TK_DEREF,
 
   /* TODO: Add more token types */
 
@@ -39,15 +39,19 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
+  {" +", TK_NOTYPE},        // spaces
   {"[0-9]+", TK_DNUM},      //number
-  {"\\+", TK_PLUS},        //TK_PLUS
-  {"==", TK_EQ},        //equal
-  {"-", TK_SUB},           //sub
-  {"\\*", TK_MUL},         //multiply
-  {"/", TK_DIV},           //divide
-  {"\\(", TK_LPAR},       //left parenthesis (
-  {"\\)", TK_RPAR},       //left parenthesis )
+  {"\\+", TK_PLUS},         //TK_PLUS
+  {"==", TK_EQ},            //equal
+  {"-", TK_SUB},            //sub
+  {"\\*", TK_MUL},          //multiply
+  {"/", TK_DIV},            //divide
+  {"\\(", TK_LPAR},         //left parenthesis (
+  {"\\)", TK_RPAR},         //left parenthesis )
+  {"\\$..", TK_REG},        //reg_name
+  {"0x[0-9a-fA-F]+", TK_HNUM},        //hexadecimal number
+  {"!=", TK_NEQ},           //not equal !=
+  {"&&", TK_AND},           //and &&
 };
 
 static regex_t re[NR_REGEX] = {};
@@ -89,13 +93,13 @@ static bool make_token(char *e) {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *TK_SUBstr_start = e + position;
-        int TK_SUBstr_len = pmatch.rm_eo;
+        char *substr_start = e + position;
+        int substr_len = pmatch.rm_eo;
 
        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-           // i, rules[i].regex, position, TK_SUBstr_len, substr_len, substr_start);
+           // i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-        position += TK_SUBstr_len;
+        position += substr_len;
 
         if(rules[i].token_type == TK_NOTYPE) {break;}
 
@@ -107,13 +111,15 @@ static bool make_token(char *e) {
         tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
           case TK_DNUM:
-             if(TK_SUBstr_len > 32){
+          case TK_HNUM:
+          case TK_REG:
+             if(substr_len > 32){
                 printf("warning: the TK_SUB string is too long [-Woverflow]\n");
                 assert(0);
               } else{
                 memset(tokens[nr_token].str, '\0', 32); //important!reset str! or you will get wrong str.
-                for(int j = 0; j < TK_SUBstr_len; j++){
-                  tokens[nr_token].str[j] = *(TK_SUBstr_start + j);
+                for(int j = 0; j < substr_len; j++){
+                  tokens[nr_token].str[j] = *(substr_start + j);
               }
               } 
         }
@@ -132,11 +138,16 @@ static bool make_token(char *e) {
   return true;
 }
 
+
+
+
 word_t eval(int, int);
 bool check_parentheses(int, int);
 int get_main_operator_position(int, int);
 int is_operator(int);
 int precedence(int);
+word_t isa_reg_str2val(const char *, bool *);
+word_t vaddr_read(vaddr_t, int);
 
 /*calculate the result of experssion*/
 word_t expr(char *e, bool *success) {
@@ -144,6 +155,13 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+
+  for(int i = 0; i < nr_token; i++){
+    if(tokens[i].type == TK_MUL && (i == 0 || is_operator(tokens[i-1].type) || tokens[i-1].type == TK_LPAR)){
+      tokens[i].type = TK_DEREF;
+    }
+  }
+
 
   word_t result = eval(1, nr_token - 1);
   *success = true;
@@ -156,13 +174,25 @@ word_t eval(int p, int q){
    if(p > q) {
       assert(0);
    } else if (p == q){
-     return strtoul(tokens[p].str, NULL, 10);
+     bool *success = false;
+     if(tokens[p].type == TK_DNUM){
+       return strtoul(tokens[p].str, NULL, 10);
+     } else if(tokens[p].type == TK_HNUM){
+          return strtoul(tokens[p].str, NULL, 16);
+       }
+
+     return isa_reg_str2val(tokens[p].str, success);
+
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
      // If that is the case, just throw away the parentheses. //
      return eval(p + 1, q - 1);
    } else {
      int op = get_main_operator_position(p, q);
+     if(tokens[op].type == TK_DEREF){
+        word_t val2 = eval(op + 1, q);
+        return vaddr_read(val2, 4);
+     }
      word_t val1 = eval(p, op - 1);
      word_t val2 = eval(op + 1, q);
 
@@ -177,6 +207,10 @@ word_t eval(int p, int q){
         }
         return val1 / val2;
        }
+       case TK_EQ: return (val1 == val2);
+       case TK_NEQ: return (val1 != val2);
+       case TK_AND: return (val1 && val2);
+       case TK_DEREF: return val1 * vaddr_read(val2, 4);
        default: assert(0);
      }
    }
@@ -222,7 +256,7 @@ int get_main_operator_position(int p, int q){
         if(current_precedence < min_precedence){  //compare precedence of operator
           min_precedence = current_precedence;
           op = i;
-        } else if (current_precedence == min_precedence){
+        } else if (current_precedence == min_precedence && (is_operator(type) != TK_DEREF)){
             op = i;
           }
       }
@@ -232,16 +266,20 @@ int get_main_operator_position(int p, int q){
 }
 
 int is_operator(int type){
-  int is_operator = ((type == TK_PLUS) || (type == TK_SUB) || (type == TK_MUL) || (type == TK_DIV));
+  int is_operator = ((type == TK_PLUS) || (type == TK_SUB) || (type == TK_MUL) || (type == TK_DIV) || (type == TK_EQ) || (type == TK_NEQ) || (type == TK_AND) || type == TK_DEREF );
   return is_operator;
 }
 
 int precedence(int type){
   switch(type){
-    case TK_PLUS: return 1;
-    case TK_SUB:  return 1;
-    case TK_MUL:  return 2;
-    case TK_DIV:  return 2;
+    case TK_AND: return 1;
+    case TK_EQ: return 2;
+    case TK_NEQ: return 2;
+    case TK_PLUS: return 3;
+    case TK_SUB:  return 3;
+    case TK_MUL:  return 4;
+    case TK_DIV:  return 4;
+    case TK_DEREF:return 5;
     default: return INT_MAX;
    }
 }
