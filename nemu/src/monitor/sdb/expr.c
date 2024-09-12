@@ -40,6 +40,7 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},        // spaces
+  {"0x[0-9a-fA-F]{1,8}", TK_HNUM},        //hexadecimal number
   {"[0-9]+", TK_DNUM},      //number
   {"\\+", TK_PLUS},         //TK_PLUS
   {"==", TK_EQ},            //equal
@@ -49,7 +50,6 @@ static struct rule {
   {"\\(", TK_LPAR},         //left parenthesis (
   {"\\)", TK_RPAR},         //left parenthesis )
   {"\\$..", TK_REG},        //reg_name
-  {"0x[0-9a-fA-F]{1,8}", TK_HNUM},        //hexadecimal number
   {"!=", TK_NEQ},           //not equal !=
   {"&&", TK_AND},           //and &&
 };
