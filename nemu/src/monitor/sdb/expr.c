@@ -49,7 +49,7 @@ static struct rule {
   {"\\(", TK_LPAR},         //left parenthesis (
   {"\\)", TK_RPAR},         //left parenthesis )
   {"\\$..", TK_REG},        //reg_name
-  {"0x[0-9a-fA-F]+", TK_HNUM},        //hexadecimal number
+  {"0x[0-9a-fA-F]{1,8}", TK_HNUM},        //hexadecimal number
   {"!=", TK_NEQ},           //not equal !=
   {"&&", TK_AND},           //and &&
 };
@@ -210,7 +210,6 @@ word_t eval(int p, int q){
        case TK_EQ: return (val1 == val2);
        case TK_NEQ: return (val1 != val2);
        case TK_AND: return (val1 && val2);
-       case TK_DEREF: return val1 * vaddr_read(val2, 4);
        default: assert(0);
      }
    }
