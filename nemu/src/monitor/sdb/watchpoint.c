@@ -148,6 +148,26 @@ void disable_wp(int N){
   wp->Enb = false;
 }
 
+_Bool scan_wp(){
+  bool success = false;
+
+  for(WP *p = head; p; p = p->next){
+   if(p->Enb){
+      p->new_value = expr(p->expr, &success);
+      if(p->new_value != p->cur_value){
+        printf("Watchpoint %d triggered: %s\n", p->NO, p->expr);
+        printf("Old value  = %u, New value = %u", p->cur_value, p->new_value);
+
+        p->cur_value = p->new_value;
+
+        return true;
+      }
+    }
+  }
+
+   return false;
+}
+
 
 
 /* TODO: Implement the functionality of watchpoint */

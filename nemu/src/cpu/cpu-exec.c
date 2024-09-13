@@ -34,32 +34,21 @@ static bool g_print_step = false;
 
 void device_update();
 word_t expr(char *, bool *);
-WP *get_head_point();
+bool *scan_wp();
+
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
+  bool trrigle = false;
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
-  WP *head = get_head_point();
-  WP *p = NULL;
-  bool success = false;
-  for(p = head; p; p = p->next){
-   if(p->Enb){
-      p->new_value = expr(p->expr, &success);
-      if(p->new_value != p->cur_value){
-        printf("Watchpoint %d triggered: %s\n", p->NO, p->expr);
-        printf("Old value  = %u, New value = %u", p->cur_value, p->new_value);
-
-        p->cur_value = p->new_value;
-
-        nemu_state.state = NEMU_STOP;
-      }
-   } 
+  trrigle = scan_wp();
+  if(trrigle){
+    nemu_state.state = NEMU_STOP;
   }
-
 
 }
 
