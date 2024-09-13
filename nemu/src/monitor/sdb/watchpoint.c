@@ -107,9 +107,14 @@ void free_wp(int N){
 }
 
 void info_wp(){
-  printf("Num\t    Type\t Enb\t What\n");
-  for(WP *wp = head; wp; wp = wp->next){
-    printf("%2d\t watchpoint\t  %c\t %s\n", wp->NO, wp->Enb ? 'y' : 'n', wp->expr);
+  if(head != NULL){
+    printf("Num\t    Type\t Enb\t What\n");
+    for(WP *wp = head; wp; wp = wp->next){
+      printf("%2d\t watchpoint\t  %c\t %s\n", wp->NO, wp->Enb ? 'y' : 'n', wp->expr);
+    }
+  }
+  else {
+    printf("No watchpoint!\n");
   }
 }
 
