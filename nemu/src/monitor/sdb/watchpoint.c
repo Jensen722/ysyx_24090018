@@ -17,7 +17,7 @@
 #include "colour.h"
 
 #define NR_WP 32
-#define MAX_LEN 100
+#define MAX_LEN 64
 
 typedef struct watchpoint {
   int NO;
