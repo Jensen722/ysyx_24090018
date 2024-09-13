@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include "sdb.h"
+#include "colour.h"
 
 #define NR_WP 32
 
@@ -114,7 +115,7 @@ void info_wp(){
     }
   }
   else {
-    printf("No watchpoint!\n");
+    printf(L_PURPLE "No watchpoint!\n" NONE);
   }
 }
 
