@@ -20,7 +20,7 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char expr[65536];
+  char expr[200]; //change to fix bug
   uint32_t cur_value;
   uint32_t new_value;
   bool Enb;
