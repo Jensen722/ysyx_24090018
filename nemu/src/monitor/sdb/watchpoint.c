@@ -17,11 +17,12 @@
 #include "colour.h"
 
 #define NR_WP 32
+#define MAX_LEN 100
 
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char expr[200]; //change to fix bug
+  char expr[MAX_LEN]; //change to fix bug
   uint32_t cur_value;
   uint32_t new_value;
   bool Enb;
@@ -60,9 +61,10 @@ if (e == NULL) {
   free_ = p->next;
 
   bool success = false;
-  strcpy(p->expr, e);
+  strncpy(p->expr, e, MAX_LEN - 1);
   p->cur_value = expr(p->expr, &success);
   p->new_value = p->cur_value;
+
   if(!success){
     printf("ERROR: Failed to evalute expression.\n");
   }
