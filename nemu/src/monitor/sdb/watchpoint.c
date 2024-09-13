@@ -102,6 +102,11 @@ void free_wp(int N){
   }
 
   /*delete the wp  watchpoint in use*/
+  if(wp == head){
+    head = wp->next;
+    return;
+  }
+
   for(pre = head; pre; pre = pre->next){
     if(pre->next == wp){
       pre->next = wp->next;
