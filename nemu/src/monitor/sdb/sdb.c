@@ -30,7 +30,7 @@ word_t pmem_read(paddr_t addr, int len);
 word_t expr(char *, bool *);
 WP *new_wp();
 void free_wp(int);
-
+void disable_wp(int);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -104,6 +104,14 @@ static int cmd_w(char *args){
   return 0;
 }
 
+static int cmd_disable(char *args){
+  char *arg = strtok(NULL, " ");
+  int N = strtol(arg, NULL, 10);
+  disable_wp(N);
+  
+  return 0;
+}
+
 static int cmd_d(char *args){
   char *arg = strtok(NULL, " ");
   int N = strtol(arg, NULL, 10);
@@ -153,6 +161,7 @@ static struct {
   { "x", "Memory scanning", cmd_x},
   { "w", "Add watchpoint", cmd_w},
   { "d", "Delete watchpoint", cmd_d},
+  { "disable", "Disable watchpoint", cmd_disable},
   /* TODO: Add more commands */
 
 };

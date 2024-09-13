@@ -130,6 +130,24 @@ void info_wp(){
   }
 }
 
+void disable_wp(int N){
+  WP *wp = NULL;
+
+  for(WP *p = head; p; p = p->next){
+    if(p->NO == N){
+      wp = p;
+      break;
+    }
+  }
+
+  if(wp == NULL){
+    printf("watchpoint %d not exist!\n", N);
+    return;
+  }
+  
+  wp->Enb = false;
+}
+
 
 
 /* TODO: Implement the functionality of watchpoint */
