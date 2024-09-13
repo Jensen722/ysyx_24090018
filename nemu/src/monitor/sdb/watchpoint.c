@@ -20,7 +20,11 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-
+  char *expr;
+  uint32_t cur_value;
+  uint32_t new_value;
+  bool Enb;
+  //Address
   /* TODO: Add more members if necessary */
 
 } WP;
@@ -39,5 +43,68 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
-/* TODO: Implement the functionality of watchpoint */
+void new_wp(char *e){
+  if(free_ == NULL){
+    printf("ERROR: no more free watchpoint!\n");
+    assert(0);
+  }  
 
+  /*delete the watchpoint from wp_pool in order.*/
+  WP *p = NULL;
+  p = free_;
+  free_ = p->next;
+
+  /*add this watchpoint to watchpoing lists in use*/
+  p->next = head;
+  head = p;
+
+  bool success = false;
+  strcpy(p->expr, e);
+  p->cur_value = expr(p->expr, &success);
+  if(!success){
+    printf("ERROR: Failed to evalute expression.\n");
+  }
+  p->Enb = true;
+
+
+  //return p;
+
+}
+
+WP *get_head_point(){
+  return head;
+}
+
+
+void free_wp(int N){
+  WP *wp = NULL;
+  WP *pre = NULL;
+
+  /*delete the wp  watchpoint in use*/
+  for(pre = head; pre; pre = pre->next){
+    if(pre->NO - 1 == N){
+      wp = pre->next;
+      pre->next = wp->next;
+      return;
+    } else {
+      printf("ERROR: No this watchpoint.\n");
+      assert(0);
+    }
+
+  }
+
+  /*put wp watchpoint to wp_pool*/
+  wp->next = free_;
+  free_ = wp;
+}
+
+
+/* TODO: Implement the functionality of watchpoint */
+ 
+/*
+WP *add_wp(char *e){
+  WP *wp = new_wp();
+  wp->expr = e;
+  wp->Enb = true;
+  return wp;
+}*/

@@ -18,6 +18,8 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 
+#include "watchpoint.h"
+
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -31,6 +33,8 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 void device_update();
+word_t expr(char *, bool *);
+WP *get_head_point();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -38,6 +42,25 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+
+  WP *head = get_head_point();
+  WP *p = NULL;
+  bool success = false;
+  for(p = head; p; p = p->next){
+   if(p->Enb){
+      p->new_value = expr(p->expr, &success);
+      if(p->new_value != p->cur_value){
+        printf("Watchpoint %d triggered: %s\n", p->NO, p->expr);
+        printf("Old value  = %u, New value = %u", p->cur_value, p->new_value);
+
+        p->cur_value = p->new_value;
+
+        nemu_state.state = NEMU_STOP;
+      }
+   } 
+  }
+
+
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {

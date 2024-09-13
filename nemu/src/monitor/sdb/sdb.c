@@ -20,11 +20,17 @@
 #include "sdb.h"
 #include <memory/vaddr.h>
 
+#include "watchpoint.h"
+
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
 word_t pmem_read(paddr_t addr, int len);
+word_t expr(char *, bool *);
+WP *new_wp();
+void free_wp(int);
+
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -88,6 +94,31 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args){
+  char *expr = args;
+  if(expr == NULL){
+    printf("Enter the expression to be monitored!");
+    return 0;
+  }
+  new_wp(expr);
+  /*
+  strcpy(wp->expr, expr);
+  wp->cur_value = expr(wp->expr, &success);
+  if(!success){
+    printf("ERROR: Failed to evalute expression.\n");
+  }
+  wp->Enb = true;*/
+  return 0;
+}
+
+static int cmd_d(char *args){
+  char *arg = strtok(NULL, " ");
+  int N = strtol(arg, NULL, 10);
+  free_wp(N);
+  return 0;
+}
+
+
 //add new command: x  ->scan memory from starting address
 static int cmd_x(char *args) {
   /* extract the first argument */
@@ -127,6 +158,8 @@ static struct {
   { "si", "Single-step execution", cmd_si},
   { "info", "Display information about registers or watchpoint", cmd_info},
   { "x", "Memory scanning", cmd_x},
+  { "w", "Add watchpoint", cmd_w},
+  { "d", "Delete watchpoint", cmd_d},
   /* TODO: Add more commands */
 
 };
