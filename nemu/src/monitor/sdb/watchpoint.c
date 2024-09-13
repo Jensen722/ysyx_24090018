@@ -105,6 +105,13 @@ void free_wp(int N){
   free_ = wp;
 }
 
+void info_wp(){
+  for(WP *wp = head; wp; wp = wp->next){
+    printf("%d\t %s\t %d\t %u\t\n", wp->NO, wp->expr, wp->Enb, wp->cur_value);
+  }
+}
+
+
 
 /* TODO: Implement the functionality of watchpoint */
  

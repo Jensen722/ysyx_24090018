@@ -20,4 +20,5 @@ void init_wp_pool();
 WP *new_wp(char *);
 WP *get_head_point();
 void free_wp(int);
+void info_wp();
 #endif
