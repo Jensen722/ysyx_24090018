@@ -89,7 +89,7 @@ static int cmd_info(char *args) {
     /*TODO:add watchpoint */
     //WP *wp = get_head_point();
     for(WP *wp = get_head_point(); wp; wp = wp->next){
-      printf("%d\t %s\t %d\t %d\t\n", wp->NO, wp->expr, wp->Enb, wp->cur_value);
+      printf("%d\t %s\t %d\t %u\t\n", wp->NO, wp->expr, wp->Enb, wp->cur_value);
     }
   } else{
     printf("Unknown argument '%s', please input argument 'r' or 'w'\n", arg);
