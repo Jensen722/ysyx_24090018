@@ -32,7 +32,9 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
+  
   /*test experssion*/
+  /*
   FILE *fp = fopen("./tools/gen-expr/build/input", "r");
   assert(fp);
 
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]) {
     else {printf(L_RED "NOT PASS!\n" NONE);}
    }
   }
-  fclose(fp);
+  fclose(fp); */
 
   /* Start engine. */
   engine_start();
