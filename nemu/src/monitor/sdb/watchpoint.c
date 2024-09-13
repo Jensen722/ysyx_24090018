@@ -95,10 +95,9 @@ void free_wp(int N){
       wp = pre->next;
       pre->next = wp->next;
       return;
-    } else {
-      printf("ERROR: No this watchpoint.\n");
-      assert(0);
-    }
+    } 
+    printf("ERROR: No this watchpoint.\n");
+    assert(0);
 
   }
 
