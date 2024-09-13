@@ -89,16 +89,24 @@ void free_wp(int N){
   WP *wp = NULL;
   WP *pre = NULL;
 
+  for(WP *p = head; p; p = p->next){
+    if(p->NO == N){
+      wp = p;
+      break;
+    }
+  }
+
+  if(wp == NULL){
+    printf("watchpoint %d not exist!\n", N);
+    return;
+  }
+
   /*delete the wp  watchpoint in use*/
   for(pre = head; pre; pre = pre->next){
-    if(pre->NO - 1 == N){
-      wp = pre->next;
+    if(pre->next == wp){
       pre->next = wp->next;
       return;
     } 
-    printf("ERROR: No this watchpoint.\n");
-    assert(0);
-
   }
 
   /*put wp watchpoint to wp_pool*/
