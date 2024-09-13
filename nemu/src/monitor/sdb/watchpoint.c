@@ -44,6 +44,10 @@ void init_wp_pool() {
 }
 
 void new_wp(char *e){
+if (e == NULL) {
+        printf("Error: Null expression passed to new_wp.\n");
+    }
+
   if(free_ == NULL){
     printf("ERROR: no more free watchpoint!\n");
     assert(0);
