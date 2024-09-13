@@ -58,10 +58,6 @@ if (e == NULL) {
   p = free_;
   free_ = p->next;
 
-  /*add this watchpoint to watchpoing lists in use*/
-  p->next = head;
-  head = p;
-
   bool success = false;
   strcpy(p->expr, e);
   p->cur_value = expr(p->expr, &success);
@@ -72,6 +68,11 @@ if (e == NULL) {
   }
   p->Enb = true;
   printf("Enb = %d\n",p->Enb);
+
+  /*add this watchpoint to watchpoing lists in use*/
+  p->next = head;
+  head = p;
+
 
 
   //return p;

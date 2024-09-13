@@ -86,11 +86,7 @@ static int cmd_info(char *args) {
   if(strcmp(arg, "r") == 0){
     isa_reg_display();
   } else if(strcmp(arg, "w") == 0){
-    /*TODO:add watchpoint */
-    //WP *wp = get_head_point();
-    for(WP *wp = get_head_point(); wp; wp = wp->next){
-      printf("%d\t %s\t %d\t %u\t\n", wp->NO, wp->expr, wp->Enb, wp->cur_value);
-    }
+    info_wp();
   } else{
     printf("Unknown argument '%s', please input argument 'r' or 'w'\n", arg);
   }
@@ -105,13 +101,6 @@ static int cmd_w(char *args){
     return 0;
   }
   new_wp(expr);
-  /*
-  strcpy(wp->expr, expr);
-  wp->cur_value = expr(wp->expr, &success);
-  if(!success){
-    printf("ERROR: Failed to evalute expression.\n");
-  }
-  wp->Enb = true;*/
   return 0;
 }
 
