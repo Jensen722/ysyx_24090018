@@ -10,7 +10,7 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char *expr;
+  char expr[65536];
   uint32_t cur_value;
   uint32_t new_value;
   bool Enb;
