@@ -69,7 +69,7 @@ if (e == NULL) {
   p->Enb = true;
   printf("Enb = %d\n",p->Enb);
 
-  /*add this watchpoint to watchpoing lists in use*/
+  /*add this watchpoint to watchpoint lists in use*/
   p->next = head;
   head = p;
 
@@ -108,7 +108,7 @@ void free_wp(int N){
 
 void info_wp(){
   for(WP *wp = head; wp; wp = wp->next){
-    printf("%d\t %s\t %d\t %u\t\n", wp->NO, wp->expr, wp->Enb, wp->cur_value);
+    printf("%2d\t watchpoint %c\t %s\n", wp->NO, wp->Enb ? 'y' : 'n', wp->expr);
   }
 }
 
