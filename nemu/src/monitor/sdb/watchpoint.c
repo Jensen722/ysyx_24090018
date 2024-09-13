@@ -71,6 +71,7 @@ if (e == NULL) {
     printf("ERROR: Failed to evalute expression.\n");
   }
   p->Enb = true;
+  printf("Enb = %d\n",p->Enb);
 
 
   //return p;
