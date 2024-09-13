@@ -62,13 +62,11 @@ if (e == NULL) {
   bool success = false;
   strcpy(p->expr, e);
   p->cur_value = expr(p->expr, &success);
-  printf("cur_value = %u\n",p->cur_value);
   p->new_value = p->cur_value;
   if(!success){
     printf("ERROR: Failed to evalute expression.\n");
   }
   p->Enb = true;
-  printf("Enb = %d\n",p->Enb);
 
   /*add this watchpoint to watchpoint lists in use*/
   p->next = head;
@@ -104,13 +102,12 @@ void free_wp(int N){
   /*delete the wp  watchpoint in use*/
   if(wp == head){
     head = wp->next;
-    return;
   }
 
   for(pre = head; pre; pre = pre->next){
     if(pre->next == wp){
       pre->next = wp->next;
-      return;
+      break;
     } 
   }
 
