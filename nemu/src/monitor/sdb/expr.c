@@ -114,7 +114,7 @@ static bool make_token(char *e) {
           case TK_HNUM:
           //case TK_REG:
              if(substr_len > 32){
-                printf(L_PURPLE "warning: the TK_SUB string is too long [-Woverflow]\n" NONE );
+                printf("warning: the TK_SUB string is too long [-Woverflow]\n");
                 assert(0);
               } else{
                 memset(tokens[nr_token].str, '\0', 32); //important!reset str! or you will get wrong str.
