@@ -178,7 +178,7 @@ config DIFFTEST_REF_KVM
 endif
 endchoice
 
-config CONFIG_WATCHPOINT
+config WATCHPOINT
   bool "Enable scan watchpoint"
   default y
 
