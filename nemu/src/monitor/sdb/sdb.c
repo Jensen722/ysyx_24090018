@@ -89,7 +89,7 @@ static int cmd_info(char *args) {
   } else if(strcmp(arg, "w") == 0){
     info_wp();
   } else{
-    printf("Unknown argument '%s', please input argument 'r' or 'w'\n", arg);
+    printf(L_PURPLE"Unknown argument '%s', please input argument 'r' or 'w'\n"NONE, arg);
   }
 
   return 0;
