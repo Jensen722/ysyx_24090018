@@ -95,6 +95,19 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args){
+  char e[50];
+  if(args == NULL){
+    printf(L_PURPLE"Enter the expression to be calculate!\n"NONE);
+    return 0;
+  }
+  bool success = false;
+  strncpy(e, args, 50 - 1);
+  word_t result = expr(e, &success);
+  printf(L_PURPLE "result = %u\n" NONE, result);
+  return 0;
+}
+
 static int cmd_w(char *args){
   char *expr = args;
   if(expr == NULL){
@@ -163,6 +176,7 @@ static struct {
   { "w", "Add watchpoint", cmd_w},
   { "d", "Delete watchpoint", cmd_d},
   { "disable", "Disable watchpoint", cmd_disable},
+  { "p", "Calculate expression", cmd_p},
   /* TODO: Add more commands */
 
 };
