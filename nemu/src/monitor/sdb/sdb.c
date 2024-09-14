@@ -21,6 +21,7 @@
 #include <memory/vaddr.h>
 
 #include "watchpoint.h"
+#include "colour.h"
 
 static int is_batch_mode = false;
 
@@ -97,7 +98,7 @@ static int cmd_info(char *args) {
 static int cmd_w(char *args){
   char *expr = args;
   if(expr == NULL){
-    printf("Enter the expression to be monitored!");
+    printf(L_RED"Enter the expression to be monitored!\n"NONE);
     return 0;
   }
   new_wp(expr);
