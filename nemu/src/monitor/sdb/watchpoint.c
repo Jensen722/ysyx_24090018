@@ -154,6 +154,7 @@ _Bool scan_wp(){
   for(WP *p = head; p; p = p->next){
    if(p->Enb){
       p->new_value = expr(p->expr, &success);
+      if(!success) {assert(0);}
       printf("Watchpoint %d: expr = %s, old value = %u, new value = %u\n", 
              p->NO, p->expr, p->cur_value, p->new_value);
       if(p->new_value != p->cur_value){
