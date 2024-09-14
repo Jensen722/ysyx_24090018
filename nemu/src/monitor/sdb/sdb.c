@@ -139,21 +139,26 @@ static int cmd_x(char *args) {
   /* extract the first argument */
   char *arg1 = strtok(NULL, " ");
   /* extract the second argument */
-  char *arg2 = strtok(NULL, " ");
+  char *arg2 = strtok(NULL, "");
+  char e[50];
+  bool success = false;
 
   if(arg1 == NULL || arg2 == NULL){
     printf("Usage: x N expr //example: x 10 0x80000000");
   }
 
   uint32_t N = strtoul(arg1, NULL, 10);
-  vaddr_t expr = strtoul(arg2, NULL, 16);
+
+  strncpy(e, arg2, 50 - 1);
+  word_t result = expr(e, &success);
+  //vaddr_t expr = strtoul(arg2, NULL, 16);
 
   printf("+-------------------------+\n");
   printf("%-10s %10s\n", "ADDR", "HEX VALUE");
   printf("+-------------------------+\n");
   for(int i = 0; i < N; i++){
-    printf("0x%08X:  0x%08X\n", expr, vaddr_read(expr, 4));
-    expr = expr + 4;
+    printf("0x%08X:  0x%08X\n", result, vaddr_read(result, 4));
+    result = result + 4;
   }
   printf("+-------------------------+\n");
 
