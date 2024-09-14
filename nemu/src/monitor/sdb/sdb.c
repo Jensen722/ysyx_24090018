@@ -20,7 +20,6 @@
 #include "sdb.h"
 #include <memory/vaddr.h>
 
-#include "watchpoint.h"
 #include "colour.h"
 
 static int is_batch_mode = false;
@@ -29,9 +28,10 @@ void init_regex();
 void init_wp_pool();
 word_t pmem_read(paddr_t addr, int len);
 word_t expr(char *, bool *);
-WP *new_wp();
+void new_wp(char *);
 void free_wp(int);
 void disable_wp(int);
+void info_wp();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -98,7 +98,7 @@ static int cmd_info(char *args) {
 static int cmd_w(char *args){
   char *expr = args;
   if(expr == NULL){
-    printf(L_RED"Enter the expression to be monitored!\n"NONE);
+    printf(L_PURPLE"Enter the expression to be monitored!\n"NONE);
     return 0;
   }
   new_wp(expr);
