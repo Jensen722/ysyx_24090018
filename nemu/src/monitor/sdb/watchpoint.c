@@ -47,11 +47,11 @@ void init_wp_pool() {
 
 void new_wp(char *e){
 if (e == NULL) {
-        printf("Error: Null expression passed to new_wp.\n");
-    }//test
+        printf(L_RED"Error: Null expression passed to new_wp.\n"NONE);
+    }
 
   if(free_ == NULL){
-    printf("ERROR: no more free watchpoint!\n");
+    printf(L_RED"ERROR: no more free watchpoint!\n"NONE);
     assert(0);
   }  
 
@@ -66,7 +66,7 @@ if (e == NULL) {
   p->new_value = p->cur_value;
 
   if(!success){
-    printf("ERROR: Failed to evalute expression.\n");
+    printf(L_RED"ERROR: Failed to evalute expression.\n"NONE);
   }
   p->Enb = true;
 
@@ -74,14 +74,6 @@ if (e == NULL) {
   p->next = head;
   head = p;
 
-
-
-  //return p;
-
-}
-
-WP *get_head_point(){
-  return head;
 }
 
 
@@ -97,7 +89,7 @@ void free_wp(int N){
   }
 
   if(wp == NULL){
-    printf("watchpoint %d not exist!\n", N);
+    printf(L_PURPLE "watchpoint %d not exist!\n"NONE, N);
     return;
   }
 
@@ -141,7 +133,7 @@ void disable_wp(int N){
   }
 
   if(wp == NULL){
-    printf("watchpoint %d not exist!\n", N);
+    printf(L_PURPLE "watchpoint %d not exist!\n"NONE, N);
     return;
   }
   
@@ -156,7 +148,7 @@ _Bool scan_wp(){
       p->new_value = expr(p->expr, &success);
       if(p->new_value != p->cur_value){
         printf(L_PURPLE "Watchpoint %d triggered: %s\n" NONE, p->NO, p->expr);
-        printf("Old value  = %u, New value = %u\n", p->cur_value, p->new_value);
+        printf(L_PURPLE"Old value  = %u, New value = %u\n"NONE, p->cur_value, p->new_value);
 
         p->cur_value = p->new_value;
 
@@ -168,14 +160,3 @@ _Bool scan_wp(){
    return false;
 }
 
-
-
-/* TODO: Implement the functionality of watchpoint */
- 
-/*
-WP *add_wp(char *e){
-  WP *wp = new_wp();
-  wp->expr = e;
-  wp->Enb = true;
-  return wp;
-}*/

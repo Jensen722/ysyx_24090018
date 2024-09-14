@@ -180,7 +180,6 @@ word_t eval(int p, int q){
      } else if(tokens[p].type == TK_HNUM){
           return strtoul(tokens[p].str, NULL, 16);
        }
-     printf("str = %s\n", tokens[p].str);
      return isa_reg_str2val(tokens[p].str, &success);
 
    } else if (check_parentheses(p, q) == true) {
