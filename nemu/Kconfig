@@ -178,6 +178,10 @@ config DIFFTEST_REF_KVM
 endif
 endchoice
 
+config CONFIG_WATCHPOINT
+  bool "Enable scan watchpoint"
+  default y
+
 config DIFFTEST_REF_PATH
   string
   default "tools/qemu-diff" if DIFFTEST_REF_QEMU
