@@ -154,11 +154,9 @@ _Bool scan_wp(){
   for(WP *p = head; p; p = p->next){
    if(p->Enb){
       p->new_value = expr(p->expr, &success);
-      printf("Watchpoint %d: expr = %s, old value = %u, new value = %u\n", 
-             p->NO, p->expr, p->cur_value, p->new_value);
       if(p->new_value != p->cur_value){
-        printf("Watchpoint %d triggered: %s\n", p->NO, p->expr);
-        printf("Old value  = %u, New value = %u", p->cur_value, p->new_value);
+        printf(L_PURPLE "Watchpoint %d triggered: %s\n" NONE, p->NO, p->expr);
+        printf("Old value  = %u, New value = %u\n", p->cur_value, p->new_value);
 
         p->cur_value = p->new_value;
 
