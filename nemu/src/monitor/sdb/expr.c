@@ -183,8 +183,8 @@ word_t eval(int p, int q){
      if(success){
        return reg_result;
      }
-     panic(L_RED "reg not exit!\n" NONE);
-
+     printf(L_RED "reg not exit!\n" NONE);
+     assert(0);
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
      // If that is the case, just throw away the parentheses. //
