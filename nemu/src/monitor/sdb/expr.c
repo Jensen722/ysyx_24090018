@@ -179,7 +179,11 @@ word_t eval(int p, int q){
      } else if(tokens[p].type == TK_HNUM){
           return strtoul(tokens[p].str, NULL, 16);
        }
-     return isa_reg_str2val(tokens[p].str, &success);
+     word_t reg_result = isa_reg_str2val(tokens[p].str, &success);
+     if(success){
+       return reg_result;
+     }
+     panic("reg not exit!\n");
 
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
