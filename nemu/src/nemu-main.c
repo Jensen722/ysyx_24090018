@@ -48,13 +48,13 @@ int main(int argc, char *argv[]) {
      e[i] = str[i];
    }*/
    //char *e = strtok(str, "\n");
-   char *e = strtok(strtok(str, "\n"), " ");
-
-  
+   char *res = strtok(strtok(str, "\n"), " ");
+   char *e = strtok(NULL, "");
 
    result_under_test = expr(e, &success);
    printf("result_under_test: %u\n", result_under_test);
-   result = eval(0, 0);
+  // result = eval(0, 0);
+   result = expr(res, &success);
    printf("result: %u\n", result);
    if(success){
     if(result == result_under_test)
