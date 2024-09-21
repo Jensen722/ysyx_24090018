@@ -52,9 +52,9 @@ int main(int argc, char *argv[]) {
    char *e = strtok(NULL, "");
 
    result_under_test = expr(e, &success);
+   result = expr(res, &success);
    printf("result_under_test: %u\n", result_under_test);
   // result = eval(0, 0);
-   result = expr(res, &success);
    printf("result: %u\n", result);
    if(success){
     if(result == result_under_test)
