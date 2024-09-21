@@ -47,12 +47,12 @@ int main(int argc, char *argv[]) {
    /*for(int i = 0; str[i] != '\n'; i++){
      e[i] = str[i];
    }*/
-   char *e = strtok(str, "\n");
-   char *ex = strtok(e, " ");
+   //char *e = strtok(str, "\n");
+   char *e = strtok(strtok(str, "\n"), " ");
 
   
 
-   result_under_test = expr(ex, &success);
+   result_under_test = expr(e, &success);
    printf("result_under_test: %u\n", result_under_test);
    result = eval(0, 0);
    printf("result: %u\n", result);
