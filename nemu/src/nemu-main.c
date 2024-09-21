@@ -41,12 +41,13 @@ int main(int argc, char *argv[]) {
   bool success = true;
   word_t result_under_test = 0;
   uint32_t result = 1;
-  char e[65536];
+  //char e[65536];
   for(; fgets(str, sizeof(str), fp);){
-   memset(e, '\0', sizeof(e));  //important!
-   for(int i = 0; str[i] != '\n'; i++){
+   //memset(e, '\0', sizeof(e));  //important!
+   /*for(int i = 0; str[i] != '\n'; i++){
      e[i] = str[i];
-   }
+   }*/
+   char *e = strtok(str, "\n");
    char *ex = strtok(e, " ");
 
   
