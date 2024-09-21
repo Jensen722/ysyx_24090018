@@ -44,6 +44,11 @@ word_t isa_reg_str2val(const char *s, bool *success) {
     }
   }
 
+  if(strcmp(s+1, "pc") == 0){
+    *success = true;
+    return cpu.pc;
+  }
+
   *success = false;
   return 0;
 }
