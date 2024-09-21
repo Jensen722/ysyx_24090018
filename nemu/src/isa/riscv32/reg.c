@@ -45,7 +45,5 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   }
 
   *success = false;
-  printf("reg not exit!\n");
-  assert(0);
   return 0;
 }
