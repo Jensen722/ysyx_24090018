@@ -33,8 +33,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   
-  /*test experssion*/
- /* 
+  /*test experssion*/ 
   FILE *fp = fopen("./tools/gen-expr/build/input", "r");
   assert(fp);
 
@@ -48,7 +47,11 @@ int main(int argc, char *argv[]) {
    for(int i = 0; str[i] != '\n'; i++){
      e[i] = str[i];
    }
-   result_under_test = expr(e, &success);
+   char *ex = strtok(e, " ");
+
+  
+
+   result_under_test = expr(ex, &success);
    printf("result_under_test: %u\n", result_under_test);
    result = eval(0, 0);
    printf("result: %u\n", result);
@@ -61,7 +64,7 @@ int main(int argc, char *argv[]) {
    }
   }
   fclose(fp); 
-*/
+
   /* Start engine. */
   engine_start();
 
