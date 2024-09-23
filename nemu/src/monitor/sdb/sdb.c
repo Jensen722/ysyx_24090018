@@ -244,8 +244,8 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if(strcmp(cmd, "q") == 0) {
-          nemu_state.state = NEMU_QUIT; } //fix the bug
+       // if(strcmp(cmd, "q") == 0) {
+         // nemu_state.state = NEMU_QUIT; } //fix the bug
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
