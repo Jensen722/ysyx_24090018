@@ -19,7 +19,7 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <memory/vaddr.h>
-
+#include <utils.h>
 #include "colour.h"
 
 static int is_batch_mode = false;
@@ -104,7 +104,8 @@ static int cmd_p(char *args){
   bool success = false;
   strncpy(e, args, 50 - 1);
   word_t result = expr(e, &success);
-  printf(L_PURPLE "result = %u\n" NONE, result);
+  //printf(L_PURPLE "result = %u\n" NONE, result);
+  printf(ANSI_FMT("result = %u\n", ANSI_FG_BLUE), result);
   return 0;
 }
 
