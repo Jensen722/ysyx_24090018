@@ -89,7 +89,7 @@ static int cmd_info(char *args) {
   } else if(strcmp(arg, "w") == 0){
     info_wp();
   } else{
-    printf(L_PURPLE"Unknown argument '%s', please input argument 'r' or 'w'\n"NONE, arg);
+   printf(ANSI_FMT("Unknown argument '%s', please input argument 'r' or 'w'\n", ANSI_FG_MAGENTA), arg);
   }
 
   return 0;
@@ -98,13 +98,12 @@ static int cmd_info(char *args) {
 static int cmd_p(char *args){
   char e[50];
   if(args == NULL){
-    printf(L_PURPLE"Enter the expression to be calculate!\n"NONE);
+    printf(ANSI_FMT("Enter the expression to be calculate!\n", ANSI_FG_MAGENTA));
     return 0;
   }
   bool success = false;
   strncpy(e, args, 50 - 1);
   word_t result = expr(e, &success);
-  //printf(L_PURPLE "result = %u\n" NONE, result);
   printf(ANSI_FMT("result = %u\n", ANSI_FG_BLUE), result);
   return 0;
 }
@@ -112,7 +111,7 @@ static int cmd_p(char *args){
 static int cmd_w(char *args){
   char *expr = args;
   if(expr == NULL){
-    printf(L_PURPLE"Enter the expression to be monitored!\n"NONE);
+    printf(ANSI_FMT("Enter the expression to be monitored!\n", ANSI_FG_MAGENTA));
     return 0;
   }
   new_wp(expr);
