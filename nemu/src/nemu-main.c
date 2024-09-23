@@ -15,7 +15,7 @@
 
 #include <common.h>
 #include <stdio.h>
-#include <colour.h>
+#include <utils.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
@@ -53,9 +53,9 @@ int main(int argc, char *argv[]) {
    if(success){
     if(result == result_under_test)
     {
-     printf(L_GREEN "PASS!\n" NONE);
+     printf(ANSI_FMT("PASS!\n", ANSI_FG_GREEN));
     }
-    else {printf(L_RED "NOT PASS!\n" NONE);}
+    else {printf(ANSI_FMT("NOT PASS!\n", ANSI_FG_RED));}
    }
   }
   fclose(fp); 

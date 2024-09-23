@@ -22,7 +22,7 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char expr[MAX_LEN]; //change to fix bug
+  char expr[MAX_LEN]; 
   uint32_t cur_value;
   uint32_t new_value;
   bool Enb;
