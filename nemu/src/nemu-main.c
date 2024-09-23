@@ -41,21 +41,15 @@ int main(int argc, char *argv[]) {
   bool success = true;
   word_t result_under_test = 0;
   uint32_t result = 1;
-  //char e[65536];
   for(; fgets(str, sizeof(str), fp);){
-   //memset(e, '\0', sizeof(e));  //important!
-   /*for(int i = 0; str[i] != '\n'; i++){
-     e[i] = str[i];
-   }*/
-   //char *e = strtok(str, "\n");
    char *res = strtok(strtok(str, "\n"), " ");
    char *e = strtok(NULL, "");
 
    result_under_test = expr(e, &success);
    result = expr(res, &success);
    printf("result_under_test: %u\n", result_under_test);
-  // result = eval(0, 0);
    printf("result: %u\n", result);
+
    if(success){
     if(result == result_under_test)
     {
