@@ -19,7 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-#include <colour.h>
+#include <utils.h>
 
 #define NR_REGEX ARRLEN(rules)
 #define INT_MAX 2147473647
@@ -183,7 +183,7 @@ static word_t eval(int p, int q){
      if(success){
        return reg_result;
      }
-     printf(L_RED "reg not exit!\n" NONE);
+     printf(ANSI_FMT("reg not exit!\n", ANSI_FG_MAGENTA));
      assert(0);
    } else if (check_parentheses(p, q) == true) {
       // The expression is surrounded by a matched pair of parentheses.
@@ -204,7 +204,7 @@ static word_t eval(int p, int q){
        case TK_MUL: return val1 * val2;
        case TK_DIV: {
         if(val2 == 0){
-          printf(L_PURPLE "warning: " NONE "TK_DIVision by zero " L_PURPLE "[-Wdiv-by-zero]\n" NONE);
+          printf(ANSI_FMT("warning: ", ANSI_FG_MAGENTA) "TK_DIVision by zero " ANSI_FMT("[-Wdiv-by-zero]\n", ANSI_FG_MAGENTA));
           return -1;
         }
         return val1 / val2;

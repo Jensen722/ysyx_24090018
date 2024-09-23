@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include "sdb.h"
-#include "colour.h"
+#include "utils.h"
 
 #define NR_WP 32
 #define MAX_LEN 64
@@ -47,7 +47,7 @@ void init_wp_pool() {
 
 void new_wp(char *e){
   if(free_ == NULL){
-    printf(L_RED"ERROR: no more free watchpoint!\n"NONE);
+    printf(ANSI_FMT("ERROR: no more free watchpoint!\n", ANSI_FG_RED));
     assert(0);
   }  
 
@@ -62,7 +62,7 @@ void new_wp(char *e){
   p->new_value = p->cur_value;
 
   if(!success){
-    printf(L_RED"ERROR: Failed to evalute expression.\n"NONE);
+    printf(ANSI_FMT("ERROR: Failed to evalute expression.\n", ANSI_FG_RED));
   }
   p->Enb = true;
 
@@ -85,7 +85,7 @@ void free_wp(int N){
   }
 
   if(wp == NULL){
-    printf(L_PURPLE "watchpoint %d not exist!\n"NONE, N);
+    printf(ANSI_FMT("watchpoint %d not exist!\n", ANSI_FG_MAGENTA), N);
     return;
   }
 
@@ -114,7 +114,7 @@ void info_wp(){
     }
   }
   else {
-    printf(L_PURPLE "No watchpoint!\n" NONE);
+    printf(ANSI_FMT("No watchpoint!\n", ANSI_FG_MAGENTA));
   }
 }
 
@@ -129,7 +129,7 @@ void disable_wp(int N){
   }
 
   if(wp == NULL){
-    printf(L_PURPLE "watchpoint %d not exist!\n"NONE, N);
+    printf(ANSI_FMT("watchpoint %d not exist!\n", ANSI_FG_MAGENTA), N);
     return;
   }
   
@@ -143,8 +143,8 @@ _Bool scan_wp(){
    if(p->Enb){
       p->new_value = expr(p->expr, &success);
       if(p->new_value != p->cur_value){
-        printf(L_PURPLE "Watchpoint %d triggered: %s\n" NONE, p->NO, p->expr);
-        printf(L_PURPLE"Old value  = %u, New value = %u\n"NONE, p->cur_value, p->new_value);
+        printf(ANSI_FMT("Watchpoint %d triggered: %s\n", ANSI_FG_MAGENTA), p->NO, p->expr);
+        printf(ANSI_FMT("Old value  = %u, New value = %u\n", ANSI_FG_MAGENTA), p->cur_value, p->new_value);
 
         p->cur_value = p->new_value;
 

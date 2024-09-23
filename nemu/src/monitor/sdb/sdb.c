@@ -20,7 +20,6 @@
 #include "sdb.h"
 #include <memory/vaddr.h>
 #include <utils.h>
-#include "colour.h"
 
 static int is_batch_mode = false;
 
