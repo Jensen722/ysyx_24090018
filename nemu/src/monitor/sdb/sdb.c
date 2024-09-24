@@ -104,7 +104,7 @@ static int cmd_p(char *args){
   bool success = false;
   strncpy(e, args, 50 - 1);
   word_t result = expr(e, &success);
-  printf(ANSI_FMT("result = %u\n", ANSI_FG_BLUE), result);
+  printf(ANSI_FMT("result = %08X\n", ANSI_FG_BLUE), result);
   return 0;
 }
 
