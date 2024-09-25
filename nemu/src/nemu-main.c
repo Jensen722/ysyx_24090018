@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
 
   
   /*test experssion*/ 
+  /*
   FILE *fp = fopen("./tools/gen-expr/build/input", "r");
   assert(fp);
 
@@ -58,7 +59,7 @@ int main(int argc, char *argv[]) {
     else {printf(ANSI_FMT("NOT PASS!\n", ANSI_FG_RED));}
    }
   }
-  fclose(fp); 
+  fclose(fp); */
 
   /* Start engine. */
   engine_start();
