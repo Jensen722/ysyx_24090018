@@ -117,7 +117,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(rd) = (int64_t)src1 * (int64_t)src2 ); //pass fact
                                                                                        
-  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, if(src2 == 0) {assert(0);} R(rd) = (int32_t)src1 / (int32_t)src2 ); //pass recursion
+  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, R(rd) = (int32_t)src1 / (int32_t)src2 ); //pass recursion
 
   INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(rd) = (int32_t)src1 % src2 ); //not exclude div 0  pass shuixianhua
 
