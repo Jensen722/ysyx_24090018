@@ -1,0 +1,76 @@
+#include "verilated.h"
+#include "verilated_vcd_c.h"
+#include "Vtop.h"
+#include <time.h>
+
+VerilatedContext* contextp = NULL;
+VerilatedVcdC* tfp = NULL;
+
+static Vtop* top;
+
+void step_and_dump_wave(){
+  top->eval();
+  contextp->timeInc(1);
+  tfp->dump(contextp->time());
+}
+void sim_init(){
+  contextp = new VerilatedContext;
+  tfp = new VerilatedVcdC;
+  top = new Vtop;
+  contextp->traceEverOn(true);
+  top->trace(tfp, 0);
+  tfp->open("wave.vcd");
+}
+
+void sim_exit(){
+  step_and_dump_wave();
+  tfp->close();
+}
+static void single_cycle() {
+  top->clk = 0; step_and_dump_wave();
+  top->clk = 1; step_and_dump_wave();
+}
+
+static void reset(int n) {
+  top->rst = 0;
+  while (n -- > 0) single_cycle();
+  top->rst = 1;
+}
+
+
+static uint32_t inst_mem[1000] = {}; 
+static void put_inst(){
+  inst_mem[0] = 0x00500093; //addi x1, x0, 5
+  inst_mem[1] = 0x00a08113; //addi x2, x1, 10
+  inst_mem[2] = 0x2b878793; //addi x15, x15, 696
+  inst_mem[3] = 0x00710293; //addi x5, x3, 7
+  inst_mem[4] = 0xff410113; //addi sp, sp, -12
+  inst_mem[5] = 0xfe010113; //addi sp, sp, -32
+  inst_mem[6] = 0x01c50513; //addi a0, a0, 28
+  inst_mem[7] = 0x00848493; //addi s1, s1, 8
+}
+static uint32_t pmem_read(uint32_t raddr){
+  printf("pc = 0x%x\n", raddr);
+  int idx = (raddr - 0x80000000) / 4;
+  return inst_mem[idx];
+}
+int main() {
+  sim_init();
+
+  put_inst();
+  int inst_num = 0;
+  reset(1); 
+  while(inst_num < 8) {
+    top->inst_i = pmem_read(top->pc_o);
+    single_cycle();
+   //printf("op1 = %d\n", top->op1_o);
+  //printf("op2 = %d\n", top->op2_o);
+  //printf("out = %d\n", top->rf_wdata_o);
+    inst_num++;
+  }
+
+
+  sim_exit();
+}
+
+
