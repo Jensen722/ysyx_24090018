@@ -52,7 +52,6 @@ static void put_inst(){
   inst_mem[8] = 0x00100073; //ebreak
 }
 static uint32_t pmem_read(uint32_t raddr){
-  printf("pc = 0x%x\n", raddr);
   int idx = (raddr - 0x80000000) / 4;
   return inst_mem[idx];
 }
@@ -71,7 +70,6 @@ int main() {
     svBit ebreak;
     svSetScope(svGetScopeFromName("TOP.top.EXU"));
     get_ebreak(&ebreak);
-    printf("ebreak = %d\n", ebreak);
     if(ebreak) break;
   }
 
