@@ -21,9 +21,6 @@ module top #(PC_ADDR = 32, REG_ADDR = 5, DATA_WIDTH = 32)(
   wire [REG_ADDR-1:0] rf_waddr;
   wire rf_we;
 
-  always @(*)begin
-          $display("op1 = %d", op1_o);
-          $display("op2 = %d", op2_o);end
   //PC_Reg
   ysyx_24090018_pc_reg pc_reg(
     .clk(clk),
