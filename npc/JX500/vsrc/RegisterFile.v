@@ -22,7 +22,6 @@ module ysyx_24090018_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
 
   always @(posedge clk) begin
     if (wen) rf[waddr[3:0]] <= wdata;
-  $display("rf[%d] = 0x%h  %d", waddr, waddr, wdata);
   end
 
  // assign rdata1 = rf[rs1[3:0]];  //read src1 data
@@ -30,6 +29,5 @@ module ysyx_24090018_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
   always @(*) begin
     rdata1 = rf[rs1[3:0]];
     rdata2 = rf[rs2[3:0]];
-  $display("rf[%d] = 0x%h  %d", rs1, rs1, rdata1);
-  $display("rf[%d] = 0x%h  %d", rs2, rs2, rdata2);end
+  end
 endmodule
