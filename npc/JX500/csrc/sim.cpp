@@ -66,6 +66,7 @@ int main() {
   svBit ebreak;
 svSetScope(svGetScopeFromName("TOP.top.EXU"));
   get_ebreak(&ebreak);
+  printf("ebreak = %d\n", ebreak);
   while(!ebreak) {
     top->inst_i = pmem_read(top->pc_o);
     single_cycle();
