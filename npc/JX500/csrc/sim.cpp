@@ -70,7 +70,7 @@ int main() {
     svBit ebreak;
     svSetScope(svGetScopeFromName("TOP.top.EXU"));
     get_ebreak(&ebreak);
-    if(ebreak) {printf("Finish executing instruction!");break;}
+    if(ebreak) {printf("Finish executing instruction!\n");break;}
   }
 
 
