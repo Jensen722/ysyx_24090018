@@ -63,17 +63,17 @@ int main() {
   int inst_num = 0;
   reset(1); 
 
-  svBit ebreak;
-svSetScope(svGetScopeFromName("TOP.top.EXU"));
-  get_ebreak(&ebreak);
-  printf("ebreak = %d\n", ebreak);
-  while(!ebreak) {
+  while(1) {
     top->inst_i = pmem_read(top->pc_o);
     single_cycle();
    //printf("op1 = %d\n", top->op1_o);
   //printf("op2 = %d\n", top->op2_o);
   //printf("out = %d\n", top->rf_wdata_o);
-    inst_num++;
+  svBit ebreak;
+svSetScope(svGetScopeFromName("TOP.top.EXU"));
+  get_ebreak(&ebreak);
+  printf("ebreak = %d\n", ebreak);
+  if(!ebreak) break;
   }
 
 
