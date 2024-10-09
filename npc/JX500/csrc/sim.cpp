@@ -65,6 +65,7 @@ int main() {
 
   while(1) {
     top->inst_i = pmem_read(top->pc_o);
+    printf("inst = %x\n", top->pc_o);
     single_cycle();
    //printf("op1 = %d\n", top->op1_o);
   //printf("op2 = %d\n", top->op2_o);
