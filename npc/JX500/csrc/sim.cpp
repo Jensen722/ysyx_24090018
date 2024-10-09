@@ -73,7 +73,7 @@ int main() {
 svSetScope(svGetScopeFromName("TOP.top.EXU"));
   get_ebreak(&ebreak);
   printf("ebreak = %d\n", ebreak);
-  if(!ebreak) break;
+  if(ebreak) break;
   }
 
 
