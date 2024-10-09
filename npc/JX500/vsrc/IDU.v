@@ -32,7 +32,17 @@ module ysyx_24090018_IDU #(DATA_WIDTH = 32, ADDR_WIDTH = 5) (
 
   always @(*) begin
     case(opcode) 
-      `ysyx_24090018_INST_I: begin
+      `ysyx_24090018_INST_I_0010011: begin //addi & slti & sltiu & xori & ori
+      //& andi & slli & srli & srai 
+          op1_o = rf_rdata1_i;
+          op2_o = {{20{inst_i[31]}}, inst_i[31:20]};
+          rf_we_o = `ysyx_24090018_WriteEnable;
+          rf_raddr1_o = rs1;
+          rf_raddr2_o = `ysyx_24090018_RegZero;
+          rf_waddr_o = rd;
+      end
+      `ysyx_24090018_INST_I_1110011: begin  //ebreak & ecall & csrrw & csrrs
+      //& csrrc & csrrwi &csrrsi & csrrci
           op1_o = rf_rdata1_i;
           op2_o = {{20{inst_i[31]}}, inst_i[31:20]};
           rf_we_o = `ysyx_24090018_WriteEnable;

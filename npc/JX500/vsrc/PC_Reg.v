@@ -13,7 +13,7 @@ module ysyx_24090018_pc_reg #(ADDR_WIDTH = 32) (
 );
   always @(posedge clk) begin
     if(rst == `ysyx_24090018_RstEnable) begin
-      pc_o <= `ysyx_24090018_PC_Base;
+      pc_o <= `ysyx_24090018_PC_BaseAddr;
     end
     else begin
       pc_o <= pc_o + 32'h4;

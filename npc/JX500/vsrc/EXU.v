@@ -21,11 +21,18 @@ module ysyx_24090018_EXU #(DATA_WIDTH = 32)(
   assign funct3 = inst_i[14:12];
   assign funct7 = inst_i[31:25];
 
+  reg ebreak;
+  export "DPI-C" function get_ebreak;
+  function get_ebreak;
+    output bit finish;
+    finish = ebreak;
+  endfunction
+
   always@(*) begin
     case(opcode)
-      `ysyx_24090018_INST_I: begin
+      `ysyx_24090018_INST_I_0010011: begin
         case(funct3) 
-          `ysyx_24090018_ADDI: begin
+          `ysyx_24090018_funct3_ADDI: begin
              rf_wdata_o = op1_i + op2_i;
           end
           default: begin
@@ -33,7 +40,19 @@ module ysyx_24090018_EXU #(DATA_WIDTH = 32)(
           end
         endcase
       end
+      `ysyx_24090018_INST_I_1110011: begin
+          case(funct3)
+            `ysyx_24090018_funct3_EBREAK_ECALL: begin
+                ebreak = inst_i[20] ? 1'b1 : 1'b0;
+                rf_wdata_o = `ysyx_24090018_ZeroWord; 
+            end
+            default: begin
+                ebreak = 1'b0;
+                rf_wdata_o = `ysyx_24090018_ZeroWord;
+             end
+          endcase
 
+      end
       default: begin
         rf_wdata_o = `ysyx_24090018_ZeroWord; 
       end

@@ -2,6 +2,7 @@
 #include "verilated_vcd_c.h"
 #include "Vtop.h"
 #include <time.h>
+#include "Vtop__Dpi.h"
 
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
@@ -48,6 +49,7 @@ static void put_inst(){
   inst_mem[5] = 0xfe010113; //addi sp, sp, -32
   inst_mem[6] = 0x01c50513; //addi a0, a0, 28
   inst_mem[7] = 0x00848493; //addi s1, s1, 8
+  inst_mem[8] = 0x00100073; //ebreak
 }
 static uint32_t pmem_read(uint32_t raddr){
   printf("pc = 0x%x\n", raddr);
@@ -60,7 +62,11 @@ int main() {
   put_inst();
   int inst_num = 0;
   reset(1); 
-  while(inst_num < 8) {
+
+  svBit ebreak;
+svSetScope(svGetScopeFromName("TOP.top.EXU"));
+  get_ebreak(&ebreak);
+  while(!ebreak) {
     top->inst_i = pmem_read(top->pc_o);
     single_cycle();
    //printf("op1 = %d\n", top->op1_o);

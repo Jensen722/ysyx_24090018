@@ -5,7 +5,7 @@
 	> Created Time: 2024年10月06日 星期日 15时34分48秒
  ************************************************************************/
 //PC
-`define ysyx_24090018_PC_Base 32'h8000_0000
+`define ysyx_24090018_PC_BaseAddr 32'h8000_0000
 
 //Enable & Disable Signal
 `define ysyx_24090018_RstEnable 1'b0
@@ -18,8 +18,10 @@
 
 
 //I Type 
-`define ysyx_24090018_INST_I 7'b0010011
-`define ysyx_24090018_ADDI 3'b000
+`define ysyx_24090018_INST_I_0010011 7'b0010011
+`define ysyx_24090018_INST_I_1110011 7'b1110011
+`define ysyx_24090018_funct3_ADDI 3'b000
+`define ysyx_24090018_funct3_EBREAK_ECALL 3'b000
 
 
 
