@@ -120,7 +120,7 @@ static int decode_exec(Decode *s) {
                                                                                        
   INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, R(rd) = ((int32_t)src2 == 0) ? -1 : (((int32_t)src2 == -1 && (int32_t)src1 == -2147483648) ? (int32_t)src1 : (int32_t)src1 / (int32_t)src2 )); //有符号数除法需要判断除0行为和除法溢出
 
-  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(rd) = ((int32_t)(src2) == 0) ? (int32_t)src1 :  (((int32_t)src2 == -1 && (int32_t)src1 == -2147483648) ? 0 : (int32_t)src1 % src2 )); //not exclude div 0  pass shuixianhua
+  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(rd) = ((int32_t)(src2) == 0) ? (int32_t)src1 :  (((int32_t)src2 == -1 && (int32_t)src1 == -2147483648) ? 0 : (int32_t)src1 % (int32_t)src2 )); //not exclude div 0  pass shuixianhua
 
   INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh   , R, R(rd) = ((int64_t)((int32_t)src1 * (int64_t)(int32_t)src2) >> 32)); 
   INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu , R, R(rd) = ((int64_t)((int32_t)src1 * (uint64_t)src2) >> 32)); 
