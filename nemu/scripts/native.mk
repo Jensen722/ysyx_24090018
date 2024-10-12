@@ -37,6 +37,9 @@ run: run-env
 	$(call git_commit, "run NEMU")
 	$(NEMU_EXEC)
 
+#test
+	@echo 'c'
+
 gdb: run-env
 	$(call git_commit, "gdb NEMU")
 	gdb -s $(BINARY) --args $(NEMU_EXEC)
