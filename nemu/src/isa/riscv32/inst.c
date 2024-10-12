@@ -118,7 +118,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(rd) = (int32_t)src1 * (int32_t)src2); 
                                                                                        
-  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, R(rd) = (int32_t)src2 ? 0xFFFFFFFF : ((int32_t)src2 == -1) ? (int32_t)src1 : (int32_t)src1 / (int32_t)src2 ); //有符号数除法需要判断除0行为和除法溢出
+  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, R(rd) = (int32_t)src2 ? -1 : (((int32_t)src2 == -1) ? (int32_t)src1 : (int32_t)src1 / (int32_t)src2 )); //有符号数除法需要判断除0行为和除法溢出
 
   INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(rd) = (int32_t)src1 % src2 ); //not exclude div 0  pass shuixianhua
 
