@@ -48,6 +48,7 @@ int sprintf(char *out, const char *fmt, ...) {
     
     char buf[65];
     char digit[16];
+    char *str = out;
     //int num = 0;
     //int len = 0;
     
@@ -70,20 +71,20 @@ int sprintf(char *out, const char *fmt, ...) {
                         n = va_arg(ap, int);
                         if(n < 0)
                         {
-                            *out = '-';
-                            out++;
+                            *str = '-';
+                            str++;
                             n = -n;
                         }
                         itoa(n, buf);
-                        memcpy(out, buf, strlen(buf));
-                        out += strlen(buf);
+                        memcpy(str, buf, strlen(buf));
+                        str += strlen(buf);
                         break;
                 }    
                 /*case 'c': //字符型
                 {
                         c = va_arg(ap, int);
-                        *out = c;
-                        out++;
+                        *str = c;
+                        str++;
                         
                         break;
                 }
@@ -91,21 +92,21 @@ int sprintf(char *out, const char *fmt, ...) {
                 {
                         n = va_arg(ap, int);
                         xtoa(n, buf);
-                        memcpy(out, buf, strlen(buf));
-                        out += strlen(buf);
+                        memcpy(str, buf, strlen(buf));
+                        str += strlen(buf);
                         break;
                 }*/
                 case 's': //字符串
                 {
                         s = va_arg(ap, char *);
-                        memcpy(out, s, strlen(s));
-                        out += strlen(s);
+                        memcpy(str, s, strlen(s));
+                        str += strlen(s);
                         break;
                 }
                 /*case '%': //输出%//
                 {
-                    *out = '%';
-                    out++;
+                    *str = '%';
+                    str++;
                     
                     break;
                 }*/
@@ -137,23 +138,23 @@ int sprintf(char *out, const char *fmt, ...) {
                                         n = va_arg(ap, int);
                                         if(n < 0)
                                         {
-                                            *out = '-';
-                                            out++;
+                                            *str = '-';
+                                            str++;
                                             n = -n;
                                         }    
                                         itoa(n, buf);
-                                        len = outlen(buf);
+                                        len = strlen(buf);
                                         if(len >= num)
                                         {
-                                                memcpy(out, buf, strlen(buf));
-                                                out += strlen(buf);
+                                                memcpy(str, buf, strlen(buf));
+                                                str += strlen(buf);
                                         }
                                         else
                                         {
-                                                memset(out, '0', num-len);
-                                                out += num-len;
-                                                memcpy(out, buf, strlen(buf));
-                                                out += strlen(buf);
+                                                memset(str, '0', num-len);
+                                                str += num-len;
+                                                memcpy(str, buf, strlen(buf));
+                                                str += strlen(buf);
                                         }
                                         break;
                                 }    
@@ -161,36 +162,36 @@ int sprintf(char *out, const char *fmt, ...) {
                                 {
                                         n = va_arg(ap, int);
                                         xtoa(n, buf);
-                                        len = outlen(buf);
+                                        len = strlen(buf);
                                         if(len >= num)
                                         {
-                                                memcpy(out, buf, len);
-                                                out += len;
+                                                memcpy(str, buf, len);
+                                                str += len;
                                         }            
                                         else
                                         {
-                                                memset(out, '0', num-len);
-                                                out += num-len;
-                                                memcpy(out, buf, len);
-                                                out += len;
+                                                memset(str, '0', num-len);
+                                                str += num-len;
+                                                memcpy(str, buf, len);
+                                                str += len;
                                         }
                                         break;
                                 }
                                 case 's': //字符串
                                 {
                                         s = va_arg(ap, char *);
-                                        len = outlen(s);
+                                        len = strlen(s);
                                         if(len >= num)
                                         {
-                                                memcpy(out, s, strlen(s));
-                                                out += strlen(s);
+                                                memcpy(str, s, strlen(s));
+                                                str += strlen(s);
                                         }
                                         else
                                         {
-                                                memset(out, '0', num-len);
-                                                out += num-len;
-                                                memcpy(out, s, strlen(s));
-                                                out += strlen(s);
+                                                memset(str, '0', num-len);
+                                                str += num-len;
+                                                memcpy(str, s, strlen(s));
+                                                str += strlen(s);
                                         }
                                         break;
                                 }
@@ -204,8 +205,8 @@ int sprintf(char *out, const char *fmt, ...) {
         }
         else
         {
-            *out = *fmt;
-            out++;
+            *str = *fmt;
+            str++;
             
             if(*fmt == '\n')
             {
