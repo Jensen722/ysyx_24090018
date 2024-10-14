@@ -29,6 +29,26 @@ int atoi(const char* nptr) {
   return x;
 }
 
+//add new lib function
+void itoa(unsigned int n, char * buf)
+{
+        int i;
+        
+        if(n < 10)
+        {
+                buf[0] = n + '0';
+                buf[1] = '\0';
+                return;
+        }
+        itoa(n / 10, buf);
+
+        for(i = 0; buf[i] != '\0'; i++);
+        
+        buf[i] = (n % 10) + '0';
+        
+        buf[i+1] = '\0';
+}
+
 void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:

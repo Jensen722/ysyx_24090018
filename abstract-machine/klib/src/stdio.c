@@ -9,24 +9,6 @@ int printf(const char *fmt, ...) {
   panic("Not implemented");
 }
 
-void itoa(unsigned int n, char * buf)
-{
-        int i;
-        
-        if(n < 10)
-        {
-                buf[0] = n + '0';
-                buf[1] = '\0';
-                return;
-        }
-        itoa(n / 10, buf);
-
-        for(i=0; buf[i]!='\0'; i++);
-        
-        buf[i] = (n % 10) + '0';
-        
-        buf[i+1] = '\0';
-}
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   panic("Not implemented");
@@ -218,7 +200,7 @@ int sprintf(char *out, const char *fmt, ...) {
 
     va_end(ap);
 
-    return str - out;
+    return str - out - 1;
 }
 /*
 *功能：整型(int) 转化成 字符型(char)
