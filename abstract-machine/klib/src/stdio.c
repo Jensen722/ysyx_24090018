@@ -38,7 +38,7 @@ int sprintf(char *out, const char *fmt, ...) {
 *注意：这个是简易版本 (%02x 完成)
 * %-3s不行， %f也不行， %X不行
 */
-    int count = 0;
+    //int count = 0;
     //char c;
     char *s;
     int n;
@@ -215,10 +215,11 @@ int sprintf(char *out, const char *fmt, ...) {
         }
         fmt++;
     }
+    *str = '\0';
 
     va_end(ap);
 
-    return count;
+    return str - out - 1;
 }
 /*
 *功能：整型(int) 转化成 字符型(char)
