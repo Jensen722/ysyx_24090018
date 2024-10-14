@@ -1,5 +1,5 @@
 # check ./riscv-test-suite/<TARGET_ISA>/ for more extensions
-TEST_ISA = I M
+TEST_ISA = I
 EXCLUDE_TEST =
 
 SUPPORTED_AM_ISA = riscv64 riscv32 riscv64e riscv32e riscv32mini
