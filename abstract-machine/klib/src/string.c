@@ -5,7 +5,6 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-  //panic("Not implemented");
   size_t len = 0;
   for(; *s != '\0';s++){
     len++;
@@ -14,7 +13,6 @@ size_t strlen(const char *s) {
 }
 
 char *strcpy(char *dst, const char *src) {
-  //panic("Not implemented");
   char *str = dst;
   for(; *src != '\0'; src++){
     *str = *src;
@@ -25,7 +23,6 @@ char *strcpy(char *dst, const char *src) {
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  //panic("Not implemented");
   for(size_t i = 0; i < n; i++){
     *(dst+i) = *(src+i);
   }
@@ -33,14 +30,12 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
-  //panic("Not implemented");
   char *dst_end = dst + strlen(dst);
   strcpy(dst_end, src);
   return dst;
 }
 
 int strcmp(const char *s1, const char *s2) {
-  //panic("Not implemented");
   while(*s1 && (*s1 == *s2)){
     s1++;
     s2++;
@@ -49,7 +44,6 @@ int strcmp(const char *s1, const char *s2) {
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  //panic("Not implemented");
   while(n > 0 && *s1 && (*s1 == *s2)) {
     s1++;
     s2++;
@@ -62,7 +56,6 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
-  //panic("Not implemented");
   unsigned char *byte_ptr = (unsigned char *)s;
   unsigned char val = (unsigned char)c;
   for(size_t i = 0; i < n; i++){
@@ -73,7 +66,6 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  //panic("Not implemented");
   unsigned char *d = (unsigned char *)dst;
   const unsigned char *s = (const unsigned char *)src;
 
@@ -96,7 +88,6 @@ void *memmove(void *dst, const void *src, size_t n) {
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
-  //panic("Not implemented");
 	unsigned char* dst = (unsigned char*)out;
   const unsigned char* s = (const unsigned char *)in; 
 	while (n--)
@@ -107,7 +98,6 @@ void *memcpy(void *out, const void *in, size_t n) {
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  //panic("Not implemented");
   const unsigned char *p1 = (const unsigned char *)s1;
   const unsigned char *p2 = (const unsigned char *)s2;
   // 逐字节比较内存区域
