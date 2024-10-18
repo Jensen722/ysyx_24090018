@@ -182,7 +182,7 @@ void WriteRingBuff(const char *log_buf){
 
 void ReadRingBuff(){
   char *p = pRead;
-  printf("R:%s\n", p);
+  printf("R:%s\n", p - 1);
   /*
   for(int i = 0; i < BUFF_MAX_LEN; i++){
     printf("%s\n", p); 
