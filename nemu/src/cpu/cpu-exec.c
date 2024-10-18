@@ -182,10 +182,10 @@ void WriteRingBuff(const char *log_buf){
 
 void ReadRingBuff(){
   char *p = pRead;
-  if(p != NULL){
-  printf("R:%s\n", pRead - 128);}
+  //if(p != NULL){
+  //printf("R:%s\n", pRead - 128);}
   for(int i = 0; i < BUFF_MAX_LEN; i++){
-    printf("%s\n", p); 
+   if(p!=NULL) { printf("%s\n", p);} 
   if(p - 128 < pHead){
     p = pTail;
   }
