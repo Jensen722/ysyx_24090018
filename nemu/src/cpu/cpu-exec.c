@@ -51,6 +51,7 @@ void InitRingBuff(RingBuff *rb){
   rb->tail = BUFF_MAX_LEN - 1;
   rb->wr_idx = 0;
   rb->rd_idx = 0;
+  memset(rb->ringbuf, 0, sizeof(rb->ringbuf));
 }
 
 void WriteRingBuff(char *log_buf, RingBuff *rb){
@@ -66,7 +67,11 @@ memcpy(rb->ringbuf[rb->wr_idx], log_buf, 128);
 void ReadRingBuff(RingBuff *rb){
   int idx = rb->rd_idx;
   printf("-->%s\n", rb->ringbuf[idx]);
-  printf("%s\n", rb->ringbuf[(idx+1) % BUFF_MAX_LEN]);
+  for(int i = 1; i < BUFF_MAX_LEN; i++){
+    if(strcmp(rb->ringbuf[(idx+i) % BUFF_MAX_LEN], "") != 0){
+      printf("%s\n", rb->ringbuf[(idx+i) % BUFF_MAX_LEN]);
+    }
+  }
 }
 
 
