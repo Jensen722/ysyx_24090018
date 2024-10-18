@@ -25,6 +25,7 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+#define BUFF_MAX_LEN 16
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -34,6 +35,7 @@ static bool g_print_step = false;
 void device_update();
 word_t expr(char *, bool *);
 bool *scan_wp();
+void set_iringbuf(Decode *s);
 
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -90,6 +92,9 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
+
+    set_iringbuf(&s);
+
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
@@ -138,4 +143,53 @@ void cpu_exec(uint64_t n) {
       // fall through
     case NEMU_QUIT: statistic();
   }
+}
+
+//iringbuffer
+char *pHead = NULL;
+char *pRead = NULL;
+char *pWrite = NULL;
+char *pTail = NULL;
+
+void InitRingBuff(){
+  if(pHead == NULL){
+	  	pHead = (char *)malloc(BUFF_MAX_LEN * 128);
+}
+	
+	memset(pHead, 0 , sizeof(BUFF_MAX_LEN));
+	
+	pRead = pHead;
+	pWrite = pHead;
+	pTail = pHead + BUFF_MAX_LEN;  
+} 
+
+void WriteRingBuff(const char *log_buf){
+  if(pHead == NULL){
+    printf("WriteRingBuff:RingBuff is not Init!\n");
+  }
+  if(pWrite == pTail){
+    memcpy(pWrite, log_buf, 128);
+    pRead = pWrite;
+    pWrite = pHead;
+  }
+  
+  memcpy(pWrite, log_buf, 128);
+  pRead = pWrite;
+  pWrite = pWrite + 1;
+}
+
+void ReadRingBuff(){
+  char *p = pRead;
+  for(int i = 0; i < BUFF_MAX_LEN; i++){
+    printf("%s\n", p); 
+  if(p - 1 < pHead){
+    p = pTail;
+  }
+  p = p - 1;   
+  }
+}
+void set_iringbuf(Decode *s){
+  InitRingBuff(s->logbuf);
+  WriteRingBuff(s->logbuf);
+  ReadRingBuff();
 }
