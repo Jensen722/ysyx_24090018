@@ -26,6 +26,7 @@
  */
 #define MAX_INST_TO_PRINT 10
 #define BUFF_MAX_LEN 16
+#define LOGBUF_SIZE 128
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -35,7 +36,40 @@ static bool g_print_step = false;
 void device_update();
 word_t expr(char *, bool *);
 bool *scan_wp();
-void set_iringbuf(Decode *s);
+
+
+typedef struct{
+  char ringbuf[LOGBUF_SIZE][BUFF_MAX_LEN];
+  int head;
+  int tail;
+  int wr_idx;
+  int rd_idx;
+} RingBuff;
+
+void InitRingBuff(RingBuff *rb){
+  rb = malloc(sizeof(RingBuff));
+  assert(rb);
+  rb->head = 0;
+  rb->tail = BUFF_MAX_LEN - 1;
+  rb->wr_idx = 0;
+  rb->rd_idx = 0;
+}
+
+void WriteRingBuff(char *log_buf, RingBuff *rb){
+memcpy(rb->ringbuf[rb->wr_idx], log_buf, 128);
+  rb->rd_idx = rb->wr_idx;
+  if(rb->wr_idx == rb->tail){
+    rb->wr_idx = 0;
+  } else{
+  rb->wr_idx += 1;
+  }
+}
+
+void ReadRingBuff(RingBuff *rb){
+  int idx = rb->rd_idx;
+  printf("-->%s\n", rb->ringbuf[idx]);
+  printf("%s\n", rb->ringbuf[(idx+1) % BUFF_MAX_LEN]);
+}
 
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -88,12 +122,18 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 static void execute(uint64_t n) {
   Decode s;
+  RingBuff *rb = NULL;
+  InitRingBuff(rb);
+
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
 
-    set_iringbuf(&s);
+    WriteRingBuff(s.logbuf, rb);
+    if(nemu_state.state == NEMU_END){
+      ReadRingBuff(rb);
+    }
 
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
@@ -144,7 +184,7 @@ void cpu_exec(uint64_t n) {
     case NEMU_QUIT: statistic();
   }
 }
-
+/*
 //iringbuffer
 char *pHead = NULL;
 char *pRead = NULL;
@@ -197,4 +237,4 @@ void set_iringbuf(Decode *s){
   WriteRingBuff(s->logbuf);
   if(nemu_state.state == NEMU_END){
   ReadRingBuff();}
-}
+}*/
