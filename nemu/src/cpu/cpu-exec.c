@@ -181,13 +181,15 @@ void WriteRingBuff(const char *log_buf){
 
 void ReadRingBuff(){
   char *p = pRead;
+  printf("R:%s\n", p);
+  /*
   for(int i = 0; i < BUFF_MAX_LEN; i++){
     printf("%s\n", p); 
   if(p - 1 < pHead){
     p = pTail;
   }
   p = p - 1;   
-  }
+  }*/
 }
 void set_iringbuf(Decode *s){
   InitRingBuff();
