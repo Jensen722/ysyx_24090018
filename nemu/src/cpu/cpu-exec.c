@@ -168,6 +168,7 @@ void WriteRingBuff(const char *log_buf){
     printf("WriteRingBuff:RingBuff is not Init!\n");
   }
   if(pWrite == pTail){
+    printf("%s\n", log_buf);
     memcpy(pWrite, log_buf, 128);
     pRead = pWrite;
     pWrite = pHead;
