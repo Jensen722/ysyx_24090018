@@ -67,6 +67,7 @@ memcpy(rb->ringbuf[rb->wr_idx], log_buf, 128);
 void ReadRingBuff(RingBuff *rb){
   int idx = rb->rd_idx;
   printf("-->%s\n", rb->ringbuf[idx]);
+  printf("%s\n", rb->ringbuf[idx-1]);
   for(int i = 1; i < BUFF_MAX_LEN; i++){
     if(strcmp(rb->ringbuf[(idx+i) % BUFF_MAX_LEN], "") != 0){
       printf("%s\n", rb->ringbuf[(idx+i) % BUFF_MAX_LEN]);
