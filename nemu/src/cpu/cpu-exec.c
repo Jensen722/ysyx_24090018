@@ -175,6 +175,7 @@ void WriteRingBuff(const char *log_buf){
   
     printf("ringbuf:%s\n", log_buf);
   memcpy(pWrite, log_buf, 128);
+  printf("mem:%s\n", pWrite);
   pRead = pWrite;
   pWrite = pWrite + 1;
 }
