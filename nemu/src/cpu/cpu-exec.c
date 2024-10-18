@@ -189,7 +189,8 @@ void ReadRingBuff(){
   }
 }
 void set_iringbuf(Decode *s){
-  InitRingBuff(s->logbuf);
+  InitRingBuff();
   WriteRingBuff(s->logbuf);
-  ReadRingBuff();
+  if(nemu_state.state == NEMU_END){
+  ReadRingBuff();}
 }
