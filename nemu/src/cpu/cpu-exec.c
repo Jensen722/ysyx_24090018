@@ -47,8 +47,6 @@ typedef struct{
 } RingBuff;
 
 void InitRingBuff(RingBuff *rb){
-  rb = malloc(sizeof(RingBuff));
-  assert(rb);
   rb->head = 0;
   rb->tail = BUFF_MAX_LEN - 1;
   rb->wr_idx = 0;
@@ -122,7 +120,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 static void execute(uint64_t n) {
   Decode s;
-  RingBuff *rb = NULL;
+  RingBuff *rb =  malloc(sizeof(RingBuff));
   InitRingBuff(rb);
 
   for (;n > 0; n --) {
