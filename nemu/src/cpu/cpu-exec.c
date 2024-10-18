@@ -156,7 +156,7 @@ void InitRingBuff(){
 	  	pHead = (char *)malloc(BUFF_MAX_LEN * 128);
 }
 	
-	memset(pHead, 0 , sizeof(BUFF_MAX_LEN));
+	memset(pHead, 0 , sizeof(BUFF_MAX_LEN*128));
 	
 	pRead = pHead;
 	pWrite = pHead;
@@ -177,20 +177,19 @@ void WriteRingBuff(const char *log_buf){
   memcpy(pWrite, log_buf, 128);
   printf("mem:%s\n", pWrite);
   pRead = pWrite;
-  pWrite = pWrite + 1;
+  pWrite = pWrite + 128;
 }
 
 void ReadRingBuff(){
-  //char *p = pRead;
-  printf("R:%s\n", pRead - 1);
-  /*
+  char *p = pRead;
+  printf("R:%s\n", pRead - 128);
   for(int i = 0; i < BUFF_MAX_LEN; i++){
     printf("%s\n", p); 
-  if(p - 1 < pHead){
+  if(p - 128 < pHead){
     p = pTail;
   }
-  p = p - 1;   
-  }*/
+  p = p - 128;   
+  }
 }
 void set_iringbuf(Decode *s){
   InitRingBuff();
