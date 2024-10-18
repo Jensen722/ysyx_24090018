@@ -160,7 +160,7 @@ void InitRingBuff(){
 	
 	pRead = pHead;
 	pWrite = pHead;
-	pTail = pHead + BUFF_MAX_LEN;  
+	pTail = pHead + BUFF_MAX_LEN*128;  
 } 
 
 void WriteRingBuff(const char *log_buf){
