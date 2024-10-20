@@ -35,7 +35,7 @@ void inst_ringbuf_record(Decode *s){
   p += space_len; 
 #ifndef CONFIG_ISA_loongarch32r
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+  disassemble(p, rb.ringbuf[rb.idx] + sizeof(rb.ringbuf[rb.idx]) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
