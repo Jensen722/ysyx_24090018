@@ -24,7 +24,7 @@
  * This is useful when you use the `si' command.
  * You can modify this value as you want.
  */
-#define MAX_INST_TO_PRINT 10
+#define MAX_INST_TO_PRINT 16
 #define BUFF_MAX_LEN 16
 #define LOGBUF_SIZE 128
 
@@ -55,9 +55,10 @@ void InitRingBuff(RingBuff *rb){
 }
 
 void WriteRingBuff(char *log_buf, RingBuff *rb){
-memset(rb->ringbuf[rb->wr_idx], 0, sizeof(rb->ringbuf[rb->wr_idx]));
-memcpy(rb->ringbuf[rb->wr_idx], log_buf, LOGBUF_SIZE);
-rb->ringbuf[rb->wr_idx][LOGBUF_SIZE-1] = '\0';
+  memset(rb->ringbuf[rb->wr_idx], 0, sizeof(rb->ringbuf[rb->wr_idx]));
+  memcpy(rb->ringbuf[rb->wr_idx], log_buf, LOGBUF_SIZE);
+  rb->ringbuf[rb->wr_idx][LOGBUF_SIZE-1] = '\0';
+
   rb->rd_idx = rb->wr_idx;
   if(rb->wr_idx == rb->tail){
     rb->wr_idx = 0;
@@ -66,13 +67,13 @@ rb->ringbuf[rb->wr_idx][LOGBUF_SIZE-1] = '\0';
   }
 }
 
-void ReadRingBuff(RingBuff *rb){
+extern void ReadRingBuff(RingBuff *rb){
   int idx = rb->rd_idx;
   printf("-->%s\n", rb->ringbuf[idx]);
-  printf("%s\n", rb->ringbuf[rb->wr_idx-2]);
+
   for(int i = 1; i < BUFF_MAX_LEN; i++){
     if(strcmp(rb->ringbuf[(idx+i) % BUFF_MAX_LEN], "") != 0){
-      printf("%s\n", rb->ringbuf[(idx+i) % BUFF_MAX_LEN]);
+      printf("   %s\n", rb->ringbuf[(idx+i) % BUFF_MAX_LEN]);
     }
   }
 }
@@ -144,6 +145,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+  free(rb);
 }
 
 static void statistic() {
