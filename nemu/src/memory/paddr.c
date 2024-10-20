@@ -17,6 +17,7 @@
 #include <memory/paddr.h>
 #include <device/mmio.h>
 #include <isa.h>
+#include <utils.h>
 
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
@@ -52,7 +53,7 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
 #ifdef CONFIG_MTRACE
-  printf("[Read ] Address: 0x%X | Value_Read: 0x%X\n", addr, pmem_read(addr, len));
+  printf("ANSI_FMT([Read ], ANSI_FG_GREEN) Address: 0x%X | Value_Read:  0x%08X\n", addr, pmem_read(addr, len));
 #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
@@ -62,7 +63,7 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_MTRACE
-  printf("[Write] Address: 0x%X | Value_Read: 0x%X\n", addr, data);
+  printf("ANSI_FMT([Write], ANSI_FG_BLUE) Address: 0x%X | Value_Write: 0x%08X\n", addr, data);
 #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
