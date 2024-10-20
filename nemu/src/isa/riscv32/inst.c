@@ -23,6 +23,8 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+void inst_ringbuf_record(Decode *s);
+
 enum {
   TYPE_I, TYPE_U, TYPE_S,
   TYPE_N, // none
@@ -146,7 +148,6 @@ static int decode_exec(Decode *s) {
   return 0;
 }
 
-void inst_ringbuf_record(Decode *s);
 int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
   inst_ringbuf_record(s);

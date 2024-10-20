@@ -75,12 +75,3 @@ uint64_t get_time();
 
 
 #endif
-/*
-// ----------- iringbuf -----------
-typedef struct{
-  char ringbuf[BUFF_MAX_LEN][LOGBUF_SIZE];
-  int idx;
-} RingBuff;
-
-void inst_ringbuf_record(Decode *);
-void inst_ringbuf_display();*/

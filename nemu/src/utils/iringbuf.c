@@ -7,8 +7,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <cpu/decode.h>
+
 #define BUFF_MAX_LEN 16
-#define LOGBUF_SIZE 128
+#define LOGBUF_SIZE 64
 
 typedef struct{
   char ringbuf[BUFF_MAX_LEN][LOGBUF_SIZE];
@@ -18,6 +19,7 @@ typedef struct{
 RingBuff rb = {.idx=0};
 
 void inst_ringbuf_record(Decode *s){
+#ifdef CONFIG_IRINGBUF
   char *p = rb.ringbuf[rb.idx];
   
   p += snprintf(p, sizeof(rb.ringbuf[rb.idx]), FMT_WORD ":", s->pc);
@@ -40,12 +42,14 @@ void inst_ringbuf_record(Decode *s){
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
+#endif
 
   rb.idx = (rb.idx + 1) % BUFF_MAX_LEN;
 
 };
 
 void inst_ringbuf_display(){
+#ifdef CONFIG_IRINGBUF
   int rd_idx = (rb.idx - 1 + BUFF_MAX_LEN) % BUFF_MAX_LEN;
 
   printf("-->%s\n", rb.ringbuf[rd_idx]);
@@ -54,4 +58,5 @@ void inst_ringbuf_display(){
       printf("   %s\n", rb.ringbuf[(rd_idx+i) % BUFF_MAX_LEN]);
     }
   }
+#endif
 };
