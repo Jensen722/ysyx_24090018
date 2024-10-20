@@ -55,11 +55,9 @@ void InitRingBuff(RingBuff *rb){
 }
 
 void WriteRingBuff(char *log_buf, RingBuff *rb){
-printf("mem0:%s\n", rb->ringbuf[rb->wr_idx]);
 memset(rb->ringbuf[rb->wr_idx], 0, sizeof(rb->ringbuf[rb->wr_idx]));
-memcpy(rb->ringbuf[rb->wr_idx], log_buf, 128);
+memcpy(rb->ringbuf[rb->wr_idx], log_buf, LOGBUF_SIZE);
 rb->ringbuf[rb->wr_idx][LOGBUF_SIZE-1] = '\0';
-printf("mem1:%s\n", rb->ringbuf[rb->wr_idx]);
   rb->rd_idx = rb->wr_idx;
   if(rb->wr_idx == rb->tail){
     rb->wr_idx = 0;
