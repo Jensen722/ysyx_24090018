@@ -39,7 +39,7 @@ bool *scan_wp();
 
 
 typedef struct{
-  char ringbuf[LOGBUF_SIZE][BUFF_MAX_LEN];
+  char ringbuf[BUFF_MAX_LEN][LOGBUF_SIZE];
   int head;
   int tail;
   int wr_idx;
@@ -58,7 +58,7 @@ void WriteRingBuff(char *log_buf, RingBuff *rb){
 printf("mem0:%s\n", rb->ringbuf[rb->wr_idx]);
 memset(rb->ringbuf[rb->wr_idx], 0, sizeof(rb->ringbuf[rb->wr_idx]));
 memcpy(rb->ringbuf[rb->wr_idx], log_buf, 128);
-rb->ringbuf[LOGBUF_SIZE-1][rb->wr_idx] = '\0';
+rb->ringbuf[rb->wr_idx][LOGBUF_SIZE-1] = '\0';
 printf("mem1:%s\n", rb->ringbuf[rb->wr_idx]);
   rb->rd_idx = rb->wr_idx;
   if(rb->wr_idx == rb->tail){
