@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <utils.h>
 
 
 /* The assembly code of instructions executed is only output to the screen
@@ -25,10 +26,9 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 16
-#define BUFF_MAX_LEN 16
-#define LOGBUF_SIZE 128
 
 CPU_state cpu = {};
+//RingBuff rb = {.idx = 0;};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
@@ -36,8 +36,9 @@ static bool g_print_step = false;
 void device_update();
 word_t expr(char *, bool *);
 bool *scan_wp();
+void inst_ringbuf_display();
 
-
+/*
 typedef struct{
   char ringbuf[BUFF_MAX_LEN][LOGBUF_SIZE];
   int head;
@@ -76,7 +77,7 @@ extern void ReadRingBuff(RingBuff *rb){
       printf("   %s\n", rb->ringbuf[(idx+i) % BUFF_MAX_LEN]);
     }
   }
-}
+}*/
 
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -129,23 +130,15 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 static void execute(uint64_t n) {
   Decode s;
-  RingBuff *rb =  malloc(sizeof(RingBuff));
-  InitRingBuff(rb);
 
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
 
-    WriteRingBuff(s.logbuf, rb);
-    if(nemu_state.state == NEMU_END){
-      ReadRingBuff(rb);
-    }
-
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
-  free(rb);
 }
 
 static void statistic() {
@@ -158,6 +151,7 @@ static void statistic() {
 }
 
 void assert_fail_msg() {
+  inst_ringbuf_display();
   isa_reg_display();
   statistic();
 }
