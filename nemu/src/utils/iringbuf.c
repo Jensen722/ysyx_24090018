@@ -52,11 +52,11 @@ void inst_ringbuf_display(){
 #ifdef CONFIG_IRINGBUF
   int rd_idx = (rb.idx - 1 + BUFF_MAX_LEN) % BUFF_MAX_LEN;
 
-  printf("-->%s\n", rb.ringbuf[rd_idx]);
   for(int i = 1; i < BUFF_MAX_LEN; i++){
     if(strcmp(rb.ringbuf[(rd_idx+i) % BUFF_MAX_LEN], "") != 0){
       printf("   %s\n", rb.ringbuf[(rd_idx+i) % BUFF_MAX_LEN]);
     }
   }
+  printf("-->%s\n", rb.ringbuf[rd_idx]);
 #endif
 };
