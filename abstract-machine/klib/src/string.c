@@ -13,18 +13,20 @@ size_t strlen(const char *s) {
 }
 
 char *strcpy(char *dst, const char *src) {
+  //if((src == NULL) || (dst == NULL)){return NULL;}
   char *str = dst;
-  for(; *src != '\0'; src++){
-    *str = *src;
-    str++;
-  }
-  *str = '\0';
+  while((*str++ = *src++) != '\0');
   return dst;
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  for(size_t i = 0; i < n; i++){
+  size_t i;
+  //if((src == NULL) || (dst == NULL)){return NULL;} 如果传入空指针会引发段错误
+  for(i = 0; i < n && src[i] != '\0'; i++){
     *(dst+i) = *(src+i);
+  }
+  for(;i < n; i++){
+    *(dst+i) = '\0';
   }
   return dst;
 }
@@ -56,6 +58,8 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
+  if(s == NULL) {return NULL;}
+
   unsigned char *byte_ptr = (unsigned char *)s;
   unsigned char val = (unsigned char)c;
   for(size_t i = 0; i < n; i++){
@@ -88,6 +92,8 @@ void *memmove(void *dst, const void *src, size_t n) {
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
+  //if((out == NULL) || (in == NULL)) {return NULL;}
+
 	unsigned char* dst = (unsigned char*)out;
   const unsigned char* s = (const unsigned char *)in; 
 	while (n--)
