@@ -31,6 +31,7 @@ void   free      (void *ptr);
 int    abs       (int x);
 int    atoi      (const char *nptr);
 void   itoa      (unsigned int n, char *buf); //self define 
+void   xtoa      (unsigned int n, char *buf); //self define 
 
 // stdio.h
 int    printf    (const char *format, ...);

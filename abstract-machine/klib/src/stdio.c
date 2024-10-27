@@ -4,23 +4,26 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-
 int printf(const char *fmt, ...) {
   panic("Not implemented");
 }
 
 
-int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
+int sprintf(char *out, const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  int cnt = vsprintf(out, fmt, ap);
+  va_end(ap);
+  return cnt;
 }
 
-int sprintf(char *out, const char *fmt, ...) {
+int vsprintf(char *out, const char *fmt, va_list ap) {
 /*功能：向字符串 格式化打印一个字符串
 *参数：格式化的字符串
 *注意：这个是简易版本 (%02x 完成)
 * %-3s不行， %f也不行， %X不行
 */
-    //char c;
+    char c;
     char *s;
     int n;
     
@@ -36,9 +39,6 @@ int sprintf(char *out, const char *fmt, ...) {
     memset(buf, 0, sizeof(buf));
     memset(digit, 0, sizeof(digit));
 
-    va_list ap;
-    
-    va_start(ap, fmt);
     
     while(*fmt != '\0')
     {
@@ -61,7 +61,7 @@ int sprintf(char *out, const char *fmt, ...) {
                         str += strlen(buf);
                         break;
                 }    
-                /*case 'c': //字符型
+                case 'c': //字符型
                 {
                         c = va_arg(ap, int);
                         *str = c;
@@ -69,14 +69,14 @@ int sprintf(char *out, const char *fmt, ...) {
                         
                         break;
                 }
-                case 'x': 16进制
+                case 'x': //16进制
                 {
                         n = va_arg(ap, int);
                         xtoa(n, buf);
                         memcpy(str, buf, strlen(buf));
                         str += strlen(buf);
                         break;
-                }*/
+                }
                 case 's': //字符串
                 {
                         s = va_arg(ap, char *);
@@ -84,13 +84,13 @@ int sprintf(char *out, const char *fmt, ...) {
                         str += strlen(s);
                         break;
                 }
-                /*case '%': //输出%//
+                case '%': //输出%//
                 {
                     *str = '%';
                     str++;
                     
                     break;
-                }*/
+                }
                 /*case '0': //位不足的左补0
                 {
                         index = 0;
@@ -197,8 +197,6 @@ int sprintf(char *out, const char *fmt, ...) {
         fmt++;
     }
     *str = '\0';
-
-    va_end(ap);
 
     return str - out - 1;
 }
