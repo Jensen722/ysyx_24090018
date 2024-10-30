@@ -206,11 +206,188 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 */
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  panic("Not implemented");
+  va_list ap;
+  va_start(ap, fmt);
+  int cnt = vsnprintf(out, n, fmt, ap);
+  va_end(ap);
+  return cnt;
 }
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  panic("Not implemented");
+    int len = 0;
+    char buf[64];
+    int buf_len;
+    
+
+    
+    while(*fmt != '\0')
+    {
+        if(*fmt == '%')
+        {
+            fmt++;
+            switch(*fmt)
+         {
+                case 'd': //整型
+                {
+                        int num = va_arg(ap, int);
+                        if(num < 0)
+                        {   
+                            if(len < n - 1 && out != NULL){
+                              out[len] = '-';
+                            }
+                            len++;
+                            num = -num;
+                        }
+                        if(num == 0){
+                          if(len < n - 1 && out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){  //倒序记录 如123记录到buf中的结果是321
+                          buf[buf_len++] = (num % 10) + '0';
+                          num /= 10;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
+                          if(len < n - 1 && out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }    
+                case 'c': //字符型
+                {
+                        char c = va_arg(ap, int);
+                        if(len < n -1 && out != NULL){
+                          out[len] = c;
+                        }
+                        len++;
+                        break;
+                }
+                case 'x': //16进制
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          if(len < n - 1 && out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){ //倒序记录
+                          int remainder = num % 16;
+                          if(remainder < 10){
+                            buf[buf_len++] = remainder + '0';
+                          } else{
+                            buf[buf_len++] = remainder - 10 + 'a';
+                          }
+                          num /= 16;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中
+                          if(len < n - 1 && out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }
+                case 'X': //16进制0-9 A-F
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          if(len < n - 1 && out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){ //倒序记录
+                          int remainder = num % 16;
+                          if(remainder < 10){
+                            buf[buf_len++] = remainder + '0';
+                          } else{
+                            buf[buf_len++] = remainder - 10 + 'A';
+                          }
+                          num /= 16;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中
+                          if(len < n - 1 && out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }
+                case 'u': //输出无符号整数
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          if(len < n - 1 && out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){  //倒序记录 如123记录到buf中的结果是321
+                          buf[buf_len++] = (num % 10) + '0';
+                          num /= 10;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
+                          if(len < n - 1 && out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }    
+                case 's': //字符串
+                {
+                        char *s = va_arg(ap, char *);
+                        for(int i = 0; s[i] != '\0'; i++){
+                          if(len < n - 1 && out != NULL){
+                            out[len] = s[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }
+                case '%': //输出%//
+                {
+                    if(len < n - 1 && out != NULL){
+                      out[len] = '%';
+                    }
+                    len++;
+                    break;
+                }
+                default:
+                        break;
+            }
+        }
+        else
+        {  
+            if(len < n - 1 && out != NULL){
+              out[len] = *fmt;
+            }
+            len++;
+            if(*fmt == '\n')
+            {
+                    
+            }
+        }
+        fmt++;
+    }
+    if(n != 0 && out != NULL){
+      out[len] = '\0';
+    }
+
+    return len;
+
 }
 
 #endif
