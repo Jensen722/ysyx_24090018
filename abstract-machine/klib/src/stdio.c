@@ -45,7 +45,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
                               out[len] = '-';
                             }
                             len++;
-                            num = -num; //可能会出问题，当num=-2147483647
+                            if(num == -2147483648){
+                              memcpy(out+len, "2147483648", 10);
+                              len += 10;
+                            } else{
+                            num = -num;} //可能会出问题，当num=-2147483648
                         }
                         if(num == 0){
                           if(out != NULL){
