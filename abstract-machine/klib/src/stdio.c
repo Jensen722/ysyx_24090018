@@ -25,7 +25,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 */
     int len = 0;
     char buf[64];
-    int buf_len;
+    int buf_len = 0;
     
 
     
