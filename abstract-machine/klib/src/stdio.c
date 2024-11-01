@@ -23,21 +23,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 *注意：这个是简易版本 (%02x 完成)
 * %-3s不行， %f也不行， %X不行
 */
-    char c;
-    char *s;
-    int n;
+    int len = 0;
+    char buf[64];
+    int buf_len;
     
-    //int index = 0;
-    //int ret = 2;
-    
-    char buf[65];
-    char digit[16];
-    char *str = out;
-    //int num = 0;
-    //int len = 0;
-    
-    memset(buf, 0, sizeof(buf));
-    memset(digit, 0, sizeof(digit));
 
     
     while(*fmt != '\0')
@@ -49,146 +38,152 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
          {
                 case 'd': //整型
                 {
-                        n = va_arg(ap, int);
-                        if(n < 0)
-                        {
-                            *str = '-';
-                            str++;
-                            n = -n;
+                        int num = va_arg(ap, int);
+                        if(num < 0)
+                        {   
+                            if(out != NULL){
+                              out[len] = '-';
+                            }
+                            len++;
+                            num = -num;
                         }
-                        itoa(n, buf);
-                        memcpy(str, buf, strlen(buf));
-                        str += strlen(buf);
+                        if(num == 0){
+                          if(out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){  //倒序记录 如123记录到buf中的结果是321
+                          buf[buf_len++] = (num % 10) + '0';
+                          num /= 10;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
+                          if(out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
                         break;
                 }    
                 case 'c': //字符型
                 {
-                        c = va_arg(ap, int);
-                        *str = c;
-                        str++;
-                        
+                        char c = va_arg(ap, int);
+                        if(out != NULL){
+                          out[len] = c;
+                        }
+                        len++;
                         break;
                 }
                 case 'x': //16进制
                 {
-                        n = va_arg(ap, int);
-                        xtoa(n, buf);
-                        memcpy(str, buf, strlen(buf));
-                        str += strlen(buf);
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          if(out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){ //倒序记录
+                          int remainder = num % 16;
+                          if(remainder < 10){
+                            buf[buf_len++] = remainder + '0';
+                          } else{
+                            buf[buf_len++] = remainder - 10 + 'a';
+                          }
+                          num /= 16;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中
+                          if(out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
                         break;
                 }
+                case 'X': //16进制0-9 A-F
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          if(out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){ //倒序记录
+                          int remainder = num % 16;
+                          if(remainder < 10){
+                            buf[buf_len++] = remainder + '0';
+                          } else{
+                            buf[buf_len++] = remainder - 10 + 'A';
+                          }
+                          num /= 16;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中
+                          if(out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }
+                case 'u': //输出无符号整数
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          if(out != NULL){
+                            out[len] = '0';
+                          }
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){  //倒序记录 如123记录到buf中的结果是321
+                          buf[buf_len++] = (num % 10) + '0';
+                          num /= 10;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
+                          if(out != NULL){
+                            out[len] = buf[i];
+                          }
+                          len++;
+                        }
+                        break;
+                }    
                 case 's': //字符串
                 {
-                        s = va_arg(ap, char *);
-                        memcpy(str, s, strlen(s));
-                        str += strlen(s);
+                        char *s = va_arg(ap, char *);
+                        for(int i = 0; s[i] != '\0'; i++){
+                          if(out != NULL){
+                            out[len] = s[i];
+                          }
+                          len++;
+                        }
                         break;
                 }
                 case '%': //输出%//
                 {
-                    *str = '%';
-                    str++;
-                    
+                    if(out != NULL){
+                      out[len] = '%';
+                    }
+                    len++;
                     break;
                 }
-                /*case '0': //位不足的左补0
-                {
-                        index = 0;
-                        num = 0;
-                        memset(digit, 0, sizeof(digit));
-                        
-                        while(1)
-                        {
-                                fmt++;
-                                ret = isDigit(*fmt);
-                                if(ret == 1) //是数字
-                                {
-                                        digit[index] = *fmt;
-                                        index++;
-                                }
-                                else
-                                {
-                                        num = atoi(digit);
-                                        break;
-                                }
-                        }
-                        switch(*fmt)
-                     {
-                                case 'd': //整型
-                                {
-                                        n = va_arg(ap, int);
-                                        if(n < 0)
-                                        {
-                                            *str = '-';
-                                            str++;
-                                            n = -n;
-                                        }    
-                                        itoa(n, buf);
-                                        len = strlen(buf);
-                                        if(len >= num)
-                                        {
-                                                memcpy(str, buf, strlen(buf));
-                                                str += strlen(buf);
-                                        }
-                                        else
-                                        {
-                                                memset(str, '0', num-len);
-                                                str += num-len;
-                                                memcpy(str, buf, strlen(buf));
-                                                str += strlen(buf);
-                                        }
-                                        break;
-                                }    
-                                case 'x': //16进制
-                                {
-                                        n = va_arg(ap, int);
-                                        xtoa(n, buf);
-                                        len = strlen(buf);
-                                        if(len >= num)
-                                        {
-                                                memcpy(str, buf, len);
-                                                str += len;
-                                        }            
-                                        else
-                                        {
-                                                memset(str, '0', num-len);
-                                                str += num-len;
-                                                memcpy(str, buf, len);
-                                                str += len;
-                                        }
-                                        break;
-                                }
-                                case 's': //字符串
-                                {
-                                        s = va_arg(ap, char *);
-                                        len = strlen(s);
-                                        if(len >= num)
-                                        {
-                                                memcpy(str, s, strlen(s));
-                                                str += strlen(s);
-                                        }
-                                        else
-                                        {
-                                                memset(str, '0', num-len);
-                                                str += num-len;
-                                                memcpy(str, s, strlen(s));
-                                                str += strlen(s);
-                                        }
-                                        break;
-                                }
-                                default:
-                                        break;
-                        }
-                }*/
                 default:
                         break;
             }
         }
         else
-        {
-            *str = *fmt;
-            str++;
-            
+        {  
+            if(out != NULL){
+              out[len] = *fmt;
+            }
+            len++;
             if(*fmt == '\n')
             {
                     
@@ -196,10 +191,14 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         fmt++;
     }
-    *str = '\0';
+    if(out != NULL){
+      out[len] = '\0';
+    }
 
-    return str - out - 1;
+    return len;
+
 }
+
 /*
 *功能：整型(int) 转化成 字符型(char)
 *注意：不用 % / 符号的话，只能正确打印:0...9的数字对应的字符'0'...'9'
