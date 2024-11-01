@@ -45,7 +45,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
                               out[len] = '-';
                             }
                             len++;
-                            num = -num;
+                            num = -num; //可能会出问题，当num=-2147483647
                         }
                         if(num == 0){
                           if(out != NULL){
