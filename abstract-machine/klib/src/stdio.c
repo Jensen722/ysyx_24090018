@@ -216,7 +216,7 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
     int len = 0;
     char buf[64];
-    int buf_len;
+    int buf_len = 0;
     
 
     
@@ -383,7 +383,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         fmt++;
     }
     if(n != 0 && out != NULL){
-      out[len] = '\0';
+      if(len < n){
+        out[len] = '\0';
+      } else{
+        out[n-1] = '\0';
+      }
     }
 
     return len;
