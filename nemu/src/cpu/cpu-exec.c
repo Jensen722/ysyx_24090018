@@ -38,47 +38,6 @@ word_t expr(char *, bool *);
 bool *scan_wp();
 void inst_ringbuf_display();
 
-/*
-typedef struct{
-  char ringbuf[BUFF_MAX_LEN][LOGBUF_SIZE];
-  int head;
-  int tail;
-  int wr_idx;
-  int rd_idx;
-} RingBuff;
-
-void InitRingBuff(RingBuff *rb){
-  rb->head = 0;
-  rb->tail = BUFF_MAX_LEN - 1;
-  rb->wr_idx = 0;
-  rb->rd_idx = 0;
-  memset(rb->ringbuf, 0, sizeof(rb->ringbuf));
-}
-
-void WriteRingBuff(char *log_buf, RingBuff *rb){
-  memset(rb->ringbuf[rb->wr_idx], 0, sizeof(rb->ringbuf[rb->wr_idx]));
-  memcpy(rb->ringbuf[rb->wr_idx], log_buf, LOGBUF_SIZE);
-  rb->ringbuf[rb->wr_idx][LOGBUF_SIZE-1] = '\0';
-
-  rb->rd_idx = rb->wr_idx;
-  if(rb->wr_idx == rb->tail){
-    rb->wr_idx = 0;
-  } else{
-  rb->wr_idx += 1;
-  }
-}
-
-extern void ReadRingBuff(RingBuff *rb){
-  int idx = rb->rd_idx;
-  printf("-->%s\n", rb->ringbuf[idx]);
-
-  for(int i = 1; i < BUFF_MAX_LEN; i++){
-    if(strcmp(rb->ringbuf[(idx+i) % BUFF_MAX_LEN], "") != 0){
-      printf("   %s\n", rb->ringbuf[(idx+i) % BUFF_MAX_LEN]);
-    }
-  }
-}*/
-
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND

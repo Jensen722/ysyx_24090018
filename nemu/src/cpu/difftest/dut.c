@@ -51,10 +51,10 @@ void difftest_skip_ref() {
 // The semantic is
 //   Let REF run `nr_ref` instructions first.
 //   We expect that DUT will catch up with REF within `nr_dut` instructions.
-void difftest_skip_dut(int nr_ref, int nr_dut) {
+void difftest_skip_dut(int nr_ref, int nr_dut) { //ref先执行nr_ref次，希望dut后执行nr_dut条指令可以追上ref状态
   skip_dut_nr_inst += nr_dut;
 
-  while (nr_ref -- > 0) {
+  while (nr_ref -- > 0) { //执行nr_ref条ref指令
     ref_difftest_exec(1);
   }
 }
@@ -62,14 +62,15 @@ void difftest_skip_dut(int nr_ref, int nr_dut) {
 void init_difftest(char *ref_so_file, long img_size, int port) {
   assert(ref_so_file != NULL);
 
+  //66-83line就是为了能调用ref.c中的函数
   void *handle;
-  handle = dlopen(ref_so_file, RTLD_LAZY);
+  handle = dlopen(ref_so_file, RTLD_LAZY);//加载动态库，只有在函数调用的时候才解析符号，并返回句柄handle
   assert(handle);
 
   ref_difftest_memcpy = dlsym(handle, "difftest_memcpy");
   assert(ref_difftest_memcpy);
 
-  ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");
+  ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");//从动态库handle中加载名为'difftest_memcpy'的符号
   assert(ref_difftest_regcpy);
 
   ref_difftest_exec = dlsym(handle, "difftest_exec");
@@ -87,11 +88,11 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
       "If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 
   ref_difftest_init(port);
-  ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
-  ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+  ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);//使dut和ref初始memory状态一样
+  ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);//使dut和ref初始regs状态一样
 }
 
-static void checkregs(CPU_state *ref, vaddr_t pc) {
+static void checkregs(CPU_state *ref, vaddr_t pc) { //如果寄存器状态不一致，则记录pc值，打印出寄存器的值
   if (!isa_difftest_checkregs(ref, pc)) {
     nemu_state.state = NEMU_ABORT;
     nemu_state.halt_pc = pc;
@@ -102,7 +103,7 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
 void difftest_step(vaddr_t pc, vaddr_t npc) {
   CPU_state ref_r;
 
-  if (skip_dut_nr_inst > 0) {
+  if (skip_dut_nr_inst > 0) {  //dut慢执行好几条指令
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
     if (ref_r.pc == npc) {
       skip_dut_nr_inst = 0;
@@ -115,14 +116,14 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
     return;
   }
 
-  if (is_skip_ref) {
+  if (is_skip_ref) { //ref逃过执行部分指令
     // to skip the checking of an instruction, just copy the reg state to reference design
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     return;
   }
 
-  ref_difftest_exec(1);
+  ref_difftest_exec(1); //正常执行
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
   checkregs(&ref_r, pc);
