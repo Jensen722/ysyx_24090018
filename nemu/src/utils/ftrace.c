@@ -14,7 +14,7 @@
 #ifdef CONFIG_FTRACE
 
 void init_ftrace(const char *elf_file){
-  Assert(elf_file, "elf_file is null, input elf_file using '--elf=[]filenaem].elf'");
+  Assert(elf_file, "elf_file is null, input elf_file using '--elf=[filename].elf'");
   FILE *fp = fopen(elf_file, "rb");
   Assert(fp, "Can not open '%s'", elf_file);
 
