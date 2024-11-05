@@ -18,6 +18,7 @@ void init_ftrace(const char *elf_file){
   Assert(fp, "Can not open '%s'", elf_file);
 fseek(fp, 0, SEEK_END);  // 将文件指针移动到文件末尾
 long file_size = ftell(fp);
+printf("file_size = %ld\n", file_size);
 fseek(fp, 0, SEEK_SET);  // 重新将文件指针移到开头
 
 if (file_size == 0) {
