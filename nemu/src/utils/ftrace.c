@@ -65,9 +65,9 @@ void init_ftrace(const char *elf_file){
 
   //读取字符串表
   char *strtab = malloc(strtab_section->sh_size);
-    printf("strtab size = %d\n", strtab_section->sh_size);
   fseek(fp, strtab_section->sh_offset, SEEK_SET);
   int ret_strtab = fread(strtab, strtab_section->sh_size, 1, fp);
+    printf("strtab size = %ld\n", sizeof(strtab));
   assert(ret_strtab == 1);
 
   //计算符号数量并输出符号信息
