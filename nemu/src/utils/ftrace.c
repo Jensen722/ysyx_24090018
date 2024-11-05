@@ -17,9 +17,8 @@ void init_ftrace(const char *elf_file){
   FILE *fp = fopen(elf_file, "rb");
   Assert(fp, "Can not open '%s'", elf_file);
 
-printf("Size of Elf32_Ehdr: %zu\n", sizeof(Elf32_Ehdr));
   Elf32_Ehdr elf_header;
-  int ret_elf_hdr = fread(&elf_header, 1, sizeof(Elf32_Ehdr), fp);
+  int ret_elf_hdr = fread(&elf_header, sizeof(Elf32_Ehdr), 1, fp);
 if (ret_elf_hdr != 1) {
     perror("Error reading ELF header");
     Assert(ret_elf_hdr == 1, "Failed to read ELF header");
@@ -37,8 +36,8 @@ if (ret_elf_hdr != 1) {
 
   //从elf头的信息获取节头表到内存中
   Elf32_Shdr *section_headers = malloc(elf_header.e_shnum * elf_header.e_shentsize);
-  int ret_sec_hdr = fread(section_headers, elf_header.e_shnum, elf_header.e_shentsize, fp);
-  assert(ret_sec_hdr == 1);
+  int ret_sec_hdr = fread(section_headers, elf_header.e_shentsize, elf_header.e_shnum, fp);
+  assert(ret_sec_hdr == elf_header.e_shnum);
 
   //由节头表的信息找到指向节头表中符号表和字符串表的指针
   Elf32_Shdr *symtab_section = NULL;
