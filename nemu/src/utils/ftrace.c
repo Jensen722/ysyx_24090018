@@ -11,7 +11,7 @@
 #include<debug.h>
 #include<elf.h>
 
-//#ifdef CONFIG_FTRACE
+#ifdef CONFIG_FTRACE
 
 void init_ftrace(const char *elf_file){
   Assert(elf_file, "elf_file is null, input elf_file using '--elf=[]filenaem].elf'");
@@ -85,4 +85,6 @@ int num_symbols = symtab_section->sh_size / sizeof(Elf64_Sym);
     free(strtab);
     fclose(fp);
 }
-//#endif
+#else
+void init_ftrace(const char *elf_file){ }
+#endif
