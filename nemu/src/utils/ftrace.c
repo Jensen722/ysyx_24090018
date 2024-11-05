@@ -12,6 +12,8 @@
 #include<elf.h>
 
 #ifdef CONFIG_FTRACE
+Elf32_Sym *symtab = NULL;
+char *strtab = NULL;
 
 void init_ftrace(const char *elf_file){
   Assert(elf_file, "elf_file is null, input elf_file using '--elf=[filename].elf'");
@@ -58,16 +60,15 @@ void init_ftrace(const char *elf_file){
   }
 
   //读取符号表
-  Elf32_Sym *symtab = malloc(symtab_section->sh_size);
+  symtab = malloc(symtab_section->sh_size);
   fseek(fp, symtab_section->sh_offset, SEEK_SET);
   int ret_symtab = fread(symtab, symtab_section->sh_size, 1, fp);
   assert(ret_symtab == 1);
 
   //读取字符串表
-  char *strtab = malloc(strtab_section->sh_size);
+  strtab = malloc(strtab_section->sh_size);
   fseek(fp, strtab_section->sh_offset, SEEK_SET);
   int ret_strtab = fread(strtab, strtab_section->sh_size, 1, fp);
-    printf("strtab size = %ld\n", sizeof(strtab));
   assert(ret_strtab == 1);
 
   //计算符号数量并输出符号信息
@@ -83,8 +84,8 @@ printf("entry = %d\n", num_symbols);
         }
     // 释放分配的内存并关闭文件
     free(section_headers);
-    free(symtab);
-    free(strtab);
+    //free(symtab);
+    //free(strtab);
     fclose(fp);
 }
 #else
