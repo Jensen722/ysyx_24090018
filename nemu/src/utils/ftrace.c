@@ -16,6 +16,14 @@
 void init_ftrace(const char *elf_file){
   FILE *fp = fopen(elf_file, "rb");
   Assert(fp, "Can not open '%s'", elf_file);
+fseek(fp, 0, SEEK_END);  // 将文件指针移动到文件末尾
+long file_size = ftell(fp);
+fseek(fp, 0, SEEK_SET);  // 重新将文件指针移到开头
+
+if (file_size == 0) {
+    fprintf(stderr, "File is empty\n");
+    assert(0 && "ELF file is empty");
+}
 
   Elf32_Ehdr elf_header;
   int ret_elf_hdr = fread(&elf_header, 1, sizeof(Elf32_Ehdr), fp);
