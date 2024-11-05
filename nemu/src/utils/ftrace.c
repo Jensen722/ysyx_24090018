@@ -65,6 +65,7 @@ void init_ftrace(const char *elf_file){
 
   //读取字符串表
   char *strtab = malloc(strtab_section->sh_size);
+    printf("strtab size = %d\n", strtab_section->sh_size);
   fseek(fp, strtab_section->sh_offset, SEEK_SET);
   int ret_strtab = fread(strtab, strtab_section->sh_size, 1, fp);
   assert(ret_strtab == 1);
@@ -80,7 +81,6 @@ printf("entry = %d\n", num_symbols);
                    symtab[i].st_value,
                    symtab[i].st_size);
         }
-    printf("strtab size = %ld\n", sizeof(strtab));
     // 释放分配的内存并关闭文件
     free(section_headers);
     free(symtab);
