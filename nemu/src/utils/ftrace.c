@@ -15,6 +15,10 @@
 
 void init_ftrace(const char *elf_file){
   FILE *fp = fopen(elf_file, "rb");
+if (!fp) {
+    perror("Error opening file");
+    exit(EXIT_FAILURE);
+}
   Assert(fp, "Can not open '%s'", elf_file);
 
   Elf32_Ehdr elf_header;
