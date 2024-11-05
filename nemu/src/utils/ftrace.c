@@ -19,6 +19,10 @@ void init_ftrace(const char *elf_file){
 
   Elf32_Ehdr elf_header;
   int ret_elf_hdr = fread(&elf_header, 1, sizeof(Elf32_Ehdr), fp);
+if (ret_elf_hdr != 1) {
+    perror("Error reading ELF header");
+    Assert(ret_elf_hdr == 1, "Failed to read ELF header");
+}
   assert(ret_elf_hdr == 1);
 
   //elf文件检查。只有前面四个字节为0x7F, 'E', 'L', 'F'，即ELFMAG数组，才表示为elf文件格式
