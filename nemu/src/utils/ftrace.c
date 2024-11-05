@@ -76,7 +76,7 @@ printf("entry = %d\n", num_symbols);
             printf("%d Symbol: %s, TYPE: %d Address: 0x%x, Size: %u\n",
                    i,
                    &strtab[symtab[i].st_name],
-                   symtab[i].st_info,
+                   ELF32_ST_TYPE(symtab[i].st_info),
                    symtab[i].st_value,
                    symtab[i].st_size);
         }
