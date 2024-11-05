@@ -70,7 +70,8 @@ void init_ftrace(const char *elf_file){
   assert(ret_strtab == 1);
 
   //计算符号数量并输出符号信息
-int num_symbols = symtab_section->sh_size / sizeof(Elf64_Sym);
+int num_symbols = symtab_section->sh_size / sizeof(Elf32_Sym);
+printf("entry = %d\n", num_symbols);
     for (int i = 0; i < num_symbols; i++) {
         if (ELF64_ST_TYPE(symtab[i].st_info) != STT_FILE && symtab[i].st_name != 0) {
             printf("Symbol: %s, Address: 0x%x, Size: %u\n",
