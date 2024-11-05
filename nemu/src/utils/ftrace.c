@@ -79,6 +79,7 @@ printf("entry = %d\n", num_symbols);
                    symtab[i].st_value,
                    symtab[i].st_size);
         }
+    printf("strtab size = %ld\n", sizeof(strtab));
     // 释放分配的内存并关闭文件
     free(section_headers);
     free(symtab);
