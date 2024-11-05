@@ -13,7 +13,7 @@ LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
 LDFLAGS   += --gc-sections -e _start
 NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
 ifdef CONFIG_FTRACE
-NEMUFLAGS +=--elf=$(IMAGE).elf #new add for ftrace
+NEMUFLAGS += --elf=$(IMAGE).elf #new add for ftrace
 endif
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
