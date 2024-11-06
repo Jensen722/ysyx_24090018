@@ -142,10 +142,10 @@ void func_call(vaddr_t pc, vaddr_t jal_addr){
   }
 }
 
-void func_ret(vaddr_t pc, vaddr_t jalr_addr){
+void func_ret(vaddr_t pc){
   char *func_ret_name = NULL;
   for (int i = 0; i < ftracedata->num_func_symbols; i++) {
-    if(jalr_addr >= ftracedata->filtered_symtab[i].st_value && jalr_addr < (ftracedata->filtered_symtab[i].st_value + ftracedata->filtered_symtab[i].st_size)){
+    if(pc >= ftracedata->filtered_symtab[i].st_value && pc < (ftracedata->filtered_symtab[i].st_value + ftracedata->filtered_symtab[i].st_size)){
       func_ret_name = &ftracedata->strtab[ftracedata->filtered_symtab[i].st_name];
       n--;
       printf("0x%x: ", pc);
@@ -159,7 +159,7 @@ void func_ret(vaddr_t pc, vaddr_t jalr_addr){
 
 void ftrace(vaddr_t pc, vaddr_t jump_addr, word_t imm, word_t Rd){
   if(imm == 0){
-    func_ret(pc, jump_addr);
+    func_ret(pc);
   }else{
     func_call(pc, jump_addr);
   }
