@@ -13,7 +13,7 @@
 
 #ifdef CONFIG_FTRACE
 typedef struct{
-  Elf32_Sym *filterd_symtab;
+  Elf32_Sym *filtered_symtab;
   char *strtab;
   int num_func_symbols;
 } FTraceData;
@@ -97,7 +97,7 @@ void init_ftrace(const char *elf_file){
 
   //创建并填充FTraceData结构体
   ftracedata = malloc(sizeof(FTraceData));
-  ftracedata->filterd_symtab = filtered_symtab;
+  ftracedata->filtered_symtab = filtered_symtab;
   ftracedata->strtab = strtab;
   ftracedata->num_func_symbols = num_func_symbols;
 
@@ -106,15 +106,14 @@ void init_ftrace(const char *elf_file){
 
 
   //计算符号数量并输出符号信息
-    for (int i = 0; i < num_symbols; i++) {
-      if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC){
+    for (int i = 0; i < ftracedata->num_func_symbols; i++) {
             printf("%d Symbol: %s, TYPE: %d Address: 0x%x, Size: %u\n",
                    i,
-                   &strtab[symtab[i].st_name],
-                   ELF32_ST_TYPE(symtab[i].st_info),
-                   symtab[i].st_value,
-                   symtab[i].st_size);}
-        }
+                   &ftracedata->strtab[ftracedata->filtered_symtab[i].st_name],
+                   ELF32_ST_TYPE(ftracedata->filtered_symtab[i].st_info),
+                   ftracedata->filtered_symtab[i].st_value,
+                   ftracedata->filtered_symtab[i].st_size);
+    }
     // 释放分配的内存并关闭文件
     free(section_headers);
     free(symtab);
