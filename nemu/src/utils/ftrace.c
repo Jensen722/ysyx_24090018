@@ -73,16 +73,15 @@ void init_ftrace(const char *elf_file){
 
   //计算符号数量并输出符号信息
 int num_symbols = symtab_section->sh_size / sizeof(Elf32_Sym);
-printf("entry = %d\n", num_symbols);
     for (int i = 0; i < num_symbols; i++) {
-      if(symtab[i].st_info == STT_FUNC){
+      //if(symtab[i].st_info == STT_FUNC){
             printf("%d Symbol: %s, TYPE: %d Address: 0x%x, Size: %u\n",
                    i,
                    &strtab[symtab[i].st_name],
                    ELF32_ST_TYPE(symtab[i].st_info),
                    symtab[i].st_value,
                    symtab[i].st_size);}
-        }
+       // }
     // 释放分配的内存并关闭文件
     free(section_headers);
     //free(symtab);
