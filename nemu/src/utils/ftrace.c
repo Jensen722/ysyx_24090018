@@ -12,8 +12,13 @@
 #include<elf.h>
 
 #ifdef CONFIG_FTRACE
-Elf32_Sym *symtab = NULL;
-char *strtab = NULL;
+typedef struct{
+  Elf32_Sym *filterd_symtab;
+  char *strtab;
+  int num_func_symbols;
+} FTraceData;
+
+FTraceData *ftracedata = NULL;
 
 void init_ftrace(const char *elf_file){
   Assert(elf_file, "elf_file is null, input elf_file using '--elf=[filename].elf'");
@@ -60,19 +65,47 @@ void init_ftrace(const char *elf_file){
   }
 
   //读取符号表
-  symtab = malloc(symtab_section->sh_size);
+  Elf32_Sym *symtab = malloc(symtab_section->sh_size);
   fseek(fp, symtab_section->sh_offset, SEEK_SET);
   int ret_symtab = fread(symtab, symtab_section->sh_size, 1, fp);
   assert(ret_symtab == 1);
 
   //读取字符串表
-  strtab = malloc(strtab_section->sh_size);
+  char *strtab = malloc(strtab_section->sh_size);
   fseek(fp, strtab_section->sh_offset, SEEK_SET);
   int ret_strtab = fread(strtab, strtab_section->sh_size, 1, fp);
   assert(ret_strtab == 1);
 
+  int num_func_symbols = 0;
+  int num_symbols = symtab_section->sh_size / sizeof(Elf32_Sym);
+
+  //先计算type为func的symbol数量，方便后面分配空间
+  for(int i = 0; i < num_symbols; i++){
+    if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC){
+      num_func_symbols++;
+    }
+  }
+
+  //分配内存用于存储type为STT_FUNC的symbol
+  Elf32_Sym *filtered_symtab = malloc(num_func_symbols * sizeof(Elf32_Sym));
+  int idx = 0;
+  for(int i = 0; i < num_symbols; i++){
+    if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC){
+      filtered_symtab[idx++] = symtab[i];
+    }
+  }
+
+  //创建并填充FTraceData结构体
+  ftracedata = malloc(sizeof(FTraceData));
+  ftracedata->filterd_symtab = filtered_symtab;
+  ftracedata->strtab = strtab;
+  ftracedata->num_func_symbols = num_func_symbols;
+
+
+
+
+
   //计算符号数量并输出符号信息
-int num_symbols = symtab_section->sh_size / sizeof(Elf32_Sym);
     for (int i = 0; i < num_symbols; i++) {
       if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC){
             printf("%d Symbol: %s, TYPE: %d Address: 0x%x, Size: %u\n",
@@ -84,10 +117,15 @@ int num_symbols = symtab_section->sh_size / sizeof(Elf32_Sym);
         }
     // 释放分配的内存并关闭文件
     free(section_headers);
-    //free(symtab);
-    //free(strtab);
+    free(symtab);
+    free(strtab);
     fclose(fp);
 }
+/*char *func_call(vaddr_t jal_addr){
+  
+}
+char *func_ret(vaddr_t jalr_addr){}
+*/
 #else
 void init_ftrace(const char *elf_file){ }
 #endif
