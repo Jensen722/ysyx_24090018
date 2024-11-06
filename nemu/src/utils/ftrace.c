@@ -156,6 +156,14 @@ void func_ret(vaddr_t pc, vaddr_t jalr_addr){
     }
   }
 }
+
+void ftrace(vaddr_t pc, vaddr_t jump_addr, word_t imm, word_t Rd){
+  if(imm == 0 && Rd == 0){
+    func_ret(pc, jump_addr);
+  }else{
+    func_call(pc, jump_addr);
+  }
+}
 #else
 void init_ftrace(const char *elf_file){ }
 void func_call(vaddr_t pc, vaddr_t jal_addr){ }
