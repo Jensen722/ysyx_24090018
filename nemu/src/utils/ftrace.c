@@ -102,9 +102,6 @@ void init_ftrace(const char *elf_file){
   ftracedata->num_func_symbols = num_func_symbols;
 
 
-
-
-
   //计算符号数量并输出符号信息
     for (int i = 0; i < ftracedata->num_func_symbols; i++) {
             printf("%d Symbol: %s, TYPE: %d Address: 0x%x, Size: %u\n",
@@ -114,18 +111,52 @@ void init_ftrace(const char *elf_file){
                    ftracedata->filtered_symtab[i].st_value,
                    ftracedata->filtered_symtab[i].st_size);
     }
+
     // 释放分配的内存并关闭文件
     free(section_headers);
-    free(filtered_symtab);
     free(symtab);
-    free(strtab);
     fclose(fp);
 }
-/*char *func_call(vaddr_t jal_addr){
-  
+void cleanup_ftrace(){
+  if(ftracedata){
+    free(ftracedata->filtered_symtab);
+    free(ftracedata->strtab);
+    free(ftracedata);
+  }
 }
-char *func_ret(vaddr_t jalr_addr){}
-*/
+
+int n = 0;
+
+void func_call(vaddr_t pc, vaddr_t jal_addr){
+  char *func_call_name = NULL;
+  for (int i = 0; i < ftracedata->num_func_symbols; i++) {
+    if(jal_addr >= ftracedata->filtered_symtab[i].st_value && jal_addr < (ftracedata->filtered_symtab[i].st_value + ftracedata->filtered_symtab[i].st_size)){
+      func_call_name = &ftracedata->strtab[ftracedata->filtered_symtab[i].st_name];
+      n++;
+      printf("0x%x: ", pc);
+      for(int j = 0; j < n; j++){
+        printf(" ");
+      }
+      printf("call [%s@0x%x]\n", func_call_name, jal_addr);
+    }
+  }
+}
+void func_ret(vaddr_t pc, vaddr_t jalr_addr){
+  char *func_ret_name = NULL;
+  for (int i = 0; i < ftracedata->num_func_symbols; i++) {
+    if(jalr_addr >= ftracedata->filtered_symtab[i].st_value && jalr_addr < (ftracedata->filtered_symtab[i].st_value + ftracedata->filtered_symtab[i].st_size)){
+      func_ret_name = &ftracedata->strtab[ftracedata->filtered_symtab[i].st_name];
+      n--;
+      printf("0x%x: ", pc);
+      for(int j = 0; j < n; j++){
+        printf(" ");
+      }
+      printf("ret [%s]\n", func_ret_name);
+    }
+  }
+}
 #else
 void init_ftrace(const char *elf_file){ }
+void func_call(vaddr_t pc, vaddr_t jal_addr){ }
+void func_ret(vaddr_t pc, vaddr_t jalr_addr){ }
 #endif
