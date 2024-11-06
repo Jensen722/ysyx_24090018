@@ -141,6 +141,7 @@ void func_call(vaddr_t pc, vaddr_t jal_addr){
     }
   }
 }
+
 void func_ret(vaddr_t pc, vaddr_t jalr_addr){
   char *func_ret_name = NULL;
   for (int i = 0; i < ftracedata->num_func_symbols; i++) {
