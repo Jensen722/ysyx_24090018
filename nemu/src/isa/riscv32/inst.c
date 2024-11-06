@@ -26,6 +26,7 @@
 void inst_ringbuf_record(Decode *s);
 void func_call(vaddr_t pc, vaddr_t jal_addr);
 void func_ret(vaddr_t pc, vaddr_t jalr_addr);
+void cleanup_ftrace();
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
@@ -141,7 +142,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(rd) = (src1 < imm) ? 1 : 0);
   INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(rd) = ((int32_t)src1 < (int32_t)src2) ? 1 : 0);
                                                                                                 
-  INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+  INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)); cleanup_ftrace();); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
