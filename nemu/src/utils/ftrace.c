@@ -116,6 +116,7 @@ void init_ftrace(const char *elf_file){
     }
     // 释放分配的内存并关闭文件
     free(section_headers);
+    free(filtered_symtab);
     free(symtab);
     free(strtab);
     fclose(fp);
