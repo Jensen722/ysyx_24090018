@@ -21,11 +21,13 @@
 static IOMap maps[NR_MAP] = {};
 static int nr_map = 0;
 
+//给定一个物理地址，返回是属于第几个map的
 static IOMap* fetch_mmio_map(paddr_t addr) {
   int mapid = find_mapid_by_addr(maps, nr_map, addr);
   return (mapid == -1 ? NULL : &maps[mapid]);
 }
 
+//当内存空间重叠时打印输出
 static void report_mmio_overlap(const char *name1, paddr_t l1, paddr_t r1,
     const char *name2, paddr_t l2, paddr_t r2) {
   panic("MMIO region %s@[" FMT_PADDR ", " FMT_PADDR "] is overlapped "
@@ -33,21 +35,21 @@ static void report_mmio_overlap(const char *name1, paddr_t l1, paddr_t r1,
 }
 
 /* device interface */
-void add_mmio_map(const char *name, paddr_t addr, void *space, uint32_t len, io_callback_t callback) {
+void add_mmio_map(const char *name, paddr_t addr, void *space, uint32_t len, io_callback_t callback) { //在已有的map中添加新的mmio map
   assert(nr_map < NR_MAP);
   paddr_t left = addr, right = addr + len - 1;
-  if (in_pmem(left) || in_pmem(right)) {
+  if (in_pmem(left) || in_pmem(right)) { //检查需要新添加的内存空间是否已与存在的pmem空间重叠
     report_mmio_overlap(name, left, right, "pmem", PMEM_LEFT, PMEM_RIGHT);
   }
-  for (int i = 0; i < nr_map; i++) {
+  for (int i = 0; i < nr_map; i++) {  //检查需要新添加的内存空间是否已与存在的mmio map空间重叠
     if (left <= maps[i].high && right >= maps[i].low) {
       report_mmio_overlap(name, left, right, maps[i].name, maps[i].low, maps[i].high);
     }
   }
 
   maps[nr_map] = (IOMap){ .name = name, .low = addr, .high = addr + len - 1,
-    .space = space, .callback = callback };
-  Log("Add mmio map '%s' at [" FMT_PADDR ", " FMT_PADDR "]",
+    .space = space, .callback = callback }; //添加mmio map
+  Log("Add mmio map '%s' at [" FMT_PADDR ", " FMT_PADDR "]",  //打印输出
       maps[nr_map].name, maps[nr_map].low, maps[nr_map].high);
 
   nr_map ++;
