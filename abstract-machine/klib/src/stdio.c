@@ -30,7 +30,7 @@ int printf(const char *fmt, ...) {
                 case 'd': //整型
                 {
                         int num = va_arg(ap, int);
-                        assert(1);
+                        assert(num);
                         if(num < 0)
                         { 
                            putch('-');
