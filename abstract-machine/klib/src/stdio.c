@@ -2,7 +2,7 @@
 #include <klib.h>
 #include <klib-macros.h>
 #include <stdarg.h>
-
+#include <limits.h>
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 int printf(const char *fmt, ...) {
     char buf[64];
@@ -25,7 +25,7 @@ int printf(const char *fmt, ...) {
                         { 
                            putch('-');
                            len++;
-                           assert(num == (int)-2147483648);
+                           assert(num == INT_MIN);
                            if(num == -2147483648){
                              putch('2');
                              putch('1');
