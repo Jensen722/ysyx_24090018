@@ -125,8 +125,8 @@ int printf(const char *fmt, ...) {
                         for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
                           putch(buf[i]);
                           len++;
+                        }
                         break;
-                        } 
                 }
                 case 's': //字符串
                 {
@@ -134,8 +134,8 @@ int printf(const char *fmt, ...) {
                         for(int i = 0; s[i] != '\0'; i++){
                          putch(s[i]);
                          len++;
-                        break;
                         }
+                        break;
                 }
                 case '%': //输出%//
                 {
