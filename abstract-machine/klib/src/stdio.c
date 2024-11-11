@@ -50,6 +50,7 @@ int printf(const char *fmt, ...) {
                         }
 
                         buf_len = 0;
+                        memset(buf, 0, 64);
                         while(num > 0){  //倒序记录 如123记录到buf中的结果是321
                           buf[buf_len++] = (num % 10) + '0';
                           num /= 10;
