@@ -1868,7 +1868,7 @@ rvtest_\__MODE__\()end:
 /************************************************************************************/
 .macro RVTEST_CODE_BEGIN
  .option push
- .option norvc
+ .option rvc /**/
  .align UNROLLSZ
  .option norvc
  .section .text.init
