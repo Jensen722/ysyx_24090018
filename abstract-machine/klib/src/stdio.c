@@ -6,11 +6,19 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 int printf(const char *fmt, ...) {
     char buf[64];
-    int buf_len = 0;
+    //int buf_len = 0;
     int len = 0;
     va_list ap;
     va_start(ap, fmt);
 
+
+    len = vsprintf(buf, fmt, ap);
+    for(int i = 0; buf[i] != '\0'; i++){
+      putch(buf[i]);
+    }
+    va_end(ap);
+    return len;
+    /*
     while(*fmt != '\0')
     {
         if(*fmt == '%')
@@ -156,7 +164,7 @@ int printf(const char *fmt, ...) {
         fmt++;
     }
     va_end(ap);
-    return len;
+    return len;*/
 }
 
 
