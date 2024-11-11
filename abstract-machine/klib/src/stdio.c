@@ -5,7 +5,161 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+    char buf[64];
+    int buf_len = 0;
+    int len = 0;
+    va_list ap;
+    va_start(ap, fmt);
+
+    while(*fmt != '\0')
+    {
+        if(*fmt == '%')
+        {
+            fmt++;
+            switch(*fmt)
+         {
+                case 'd': //整型
+                {
+                        int num = va_arg(ap, int);
+                        if(num < 0)
+                        { 
+                           putch('-');
+                           len++;
+                           if(num == -2147483648){
+                             putch('2');
+                             putch('1');
+                             putch('4');
+                             putch('7');
+                             putch('4');
+                             putch('8');
+                             putch('3');
+                             putch('6');
+                             putch('4');
+                             putch('8');
+                             len += 10;
+                            } else{
+                            num = -num;} //可能会出问题，当num=-2147483648
+                        }
+                        if(num == 0){
+                          putch('0');
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){  //倒序记录 如123记录到buf中的结果是321
+                          buf[buf_len++] = (num % 10) + '0';
+                          num /= 10;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
+                          putch(buf[i]);
+                          len++;
+                        }
+                        break;
+                }    
+                case 'c': //字符型
+                {
+                        char c = va_arg(ap, int);
+                        putch(c);
+                        len++;
+                        break;
+                }
+                case 'x': //16进制
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          putch('0');
+                          len++;
+                        }
+                        buf_len = 0;
+                        while(num > 0){ //倒序记录
+                          int remainder = num % 16;
+                          if(remainder < 10){
+                            buf[buf_len++] = remainder + '0';
+                          } else{
+                            buf[buf_len++] = remainder - 10 + 'a';
+                          }
+                          num /= 16;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中
+                          putch(buf[i]);
+                          len++;
+                        }
+                        break;
+                }
+                case 'X': //16进制0-9 A-F
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          putch('0');
+                          len++;
+                        }
+                        buf_len = 0;
+                        while(num > 0){ //倒序记录
+                          int remainder = num % 16;
+                          if(remainder < 10){
+                            buf[buf_len++] = remainder + '0';
+                          } else{
+                            buf[buf_len++] = remainder - 10 + 'A';
+                          }
+                          num /= 16;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中
+                          putch(buf[i]);
+                          len++;
+                        }
+                        break;
+                }
+                case 'u': //输出无符号整数
+                {
+                        uint32_t num = (uint32_t)va_arg(ap, int);
+                        if(num == 0){
+                          putch('0');
+                          len++;
+                        }
+
+                        buf_len = 0;
+                        while(num > 0){  //倒序记录 如123记录到buf中的结果是321
+                          buf[buf_len++] = (num % 10) + '0';
+                          num /= 10;
+                        }
+                        for(int i = buf_len - 1; i >= 0; i--){ //倒序输出到out中，321->123
+                          putch(buf[i]);
+                          len++;
+                        break;
+                        } 
+                }
+                case 's': //字符串
+                {
+                        char *s = va_arg(ap, char *);
+                        for(int i = 0; s[i] != '\0'; i++){
+                         putch(s[i]);
+                         len++;
+                        break;
+                        }
+                }
+                case '%': //输出%//
+                {
+                    putch('%');
+                    len++;
+                    break;
+                }
+                default:
+                        break;
+            }
+          }
+        else
+        {  
+            putch(*fmt);
+            len++;
+            if(*fmt == '\n')
+            {
+                    
+            }
+        }
+        fmt++;
+    }
+    va_end(ap);
+    return len;
 }
 
 
