@@ -35,7 +35,7 @@ int printf(const char *fmt, ...) {
                         { 
                            putch('-');
                            len++;
-                           assert(num == (int)-2147483648);
+                           //assert(num == (int)-2147483648);
                            if(num == -2147483648){ //打印最小整数有问题
                              const char *min_int_str = "2147483648";
                              for(int i = 0; min_int_str[i] != '\0'; i++){
