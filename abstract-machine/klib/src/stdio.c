@@ -25,7 +25,7 @@ int printf(const char *fmt, ...) {
                         { 
                            putch('-');
                            len++;
-                           assert(num == -2147483648);
+                           assert(num == (int)-2147483648);
                            if(num == -2147483648){
                              putch('2');
                              putch('1');
