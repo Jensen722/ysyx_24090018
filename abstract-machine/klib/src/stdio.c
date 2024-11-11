@@ -37,6 +37,7 @@ int printf(const char *fmt, ...) {
                              putch('4');
                              putch('8');
                              len += 10;
+                             break;
                             } else{
                             num = -num;
                             } //可能会出问题，当num=-2147483648
