@@ -1083,7 +1083,7 @@ rvtest_\__MODE__\()prolog_done:
 
 .macro RVTEST_TRAP_HANDLER __MODE__
 .option push
-.option rvc             // temporarily allow compress to allow c.nop alignment
+.option norvc             // temporarily allow compress to allow c.nop alignment
 .align MTVEC_ALIGN      // ensure that a trampoline is on a model defined or reasonable boundary
 .option pop
 
