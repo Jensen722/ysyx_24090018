@@ -26,10 +26,10 @@ int printf(const char *fmt, ...) {
                            putch('-');
                            len++;
                            //assert(num == (int)-2147483648);
-                           if(-num == -2147483648){
+                           if(-num == -2147483648){ //打印最小整数有问题
                              putch('2');
                              putch('1');
-                             putch('a');
+                             putch('4');
                              putch('7');
                              putch('4');
                              putch('8');
