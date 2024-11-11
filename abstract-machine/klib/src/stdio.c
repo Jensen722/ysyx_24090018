@@ -27,17 +27,11 @@ int printf(const char *fmt, ...) {
                            len++;
                            //assert(num == (int)-2147483648);
                            if(num == -2147483648){ //打印最小整数有问题
-                             putch('2');
-                             putch('1');
-                             putch('4');
-                             putch('7');
-                             putch('4');
-                             putch('8');
-                             putch('3');
-                             putch('6');
-                             putch('4');
-                             putch('8');
-                             len += 10;
+                             const char *min_int_str = "2147483648";
+                             for(int i = 0; min_int_str[i] != '\0'; i++){
+                               putch(min_int_str[i]);
+                               len++;
+                             }
                             } else{
                             num = -num;
                             } //可能会出问题，当num=-2147483648
