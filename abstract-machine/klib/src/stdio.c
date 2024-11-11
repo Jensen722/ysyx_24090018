@@ -28,7 +28,7 @@ int printf(const char *fmt, ...) {
                            if(num == -2147483648){
                              putch('2');
                              putch('1');
-                             putch('4');
+                             putch('a');
                              putch('7');
                              putch('4');
                              putch('8');
@@ -38,7 +38,8 @@ int printf(const char *fmt, ...) {
                              putch('8');
                              len += 10;
                             } else{
-                            num = -num;} //可能会出问题，当num=-2147483648
+                            num = -num;
+                            } //可能会出问题，当num=-2147483648
                         }
                         if(num == 0){
                           putch('0');
