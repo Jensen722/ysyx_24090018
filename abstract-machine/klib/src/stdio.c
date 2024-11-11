@@ -20,13 +20,13 @@ int printf(const char *fmt, ...) {
          {
                 case 'd': //整型
                 {
-                        int num = va_arg(ap, int);
+                        long int num = va_arg(ap, int);
                         if(num < 0)
                         { 
                            putch('-');
                            len++;
                            //assert(num == (int)-2147483648);
-                           if(-num == -2147483648){ //打印最小整数有问题
+                           if(num == -2147483648){ //打印最小整数有问题
                              putch('2');
                              putch('1');
                              putch('4');
