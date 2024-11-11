@@ -20,7 +20,7 @@ int printf(const char *fmt, ...) {
          {
                 case 'd': //整型
                 {
-                        long int num = va_arg(ap, int);
+                        int num = va_arg(ap, int);
                         if(num < 0)
                         { 
                            putch('-');
