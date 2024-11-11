@@ -483,7 +483,7 @@
 #define LA(reg,val)     ;\
     .ifnc(reg, X0)       ;\
         .option push    ;\
-        .option rvc     ;\
+        .option norvc     ;\
         .align UNROLLSZ ;\
         .option norvc   ;\
         la reg,val      ;\
