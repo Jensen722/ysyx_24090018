@@ -25,7 +25,7 @@ static int nr_map = 0;
 static IOMap* fetch_mmio_map(paddr_t addr) {
   int mapid = find_mapid_by_addr(maps, nr_map, addr);
   printf("mapid: %s  ", maps[mapid].name);
-  return (mapid == -1 ? NULL : &maps[mapid]);
+  return (mapid == -1 ? NULL : &maps[mapid+1]);
 }
 
 //当内存空间重叠时打印输出
