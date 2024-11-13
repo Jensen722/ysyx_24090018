@@ -24,8 +24,9 @@ static int nr_map = 0;
 //给定一个物理地址，返回是属于第几个map的
 static IOMap* fetch_mmio_map(paddr_t addr) {
   int mapid = find_mapid_by_addr(maps, nr_map, addr);
+  printf("addr: %x   ", addr);
   printf("mapid: %s  ", maps[mapid].name);
-  return (mapid == -1 ? NULL : &maps[mapid+1]);
+  return (mapid == -1 ? NULL : &maps[mapid]);
 }
 
 //当内存空间重叠时打印输出
