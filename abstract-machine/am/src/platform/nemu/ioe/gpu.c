@@ -31,12 +31,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     outl(SYNC_ADDR, 1);
   }
 uint32_t *pixels = (uint32_t *)ctl->pixels;
-  for(int y = 0; y < 32; y++){
-    for(int x = 0; x < 32; x++){
-      outl(0xa1000000+4*x*y, pixels[x*y]);
-    }
-  }
-  
+  outl(FB_ADDR, pixels[0]);
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
