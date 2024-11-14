@@ -5,12 +5,13 @@
 
 void __am_gpu_init() {
    int i;
-  uint16_t width = inl(VGACTL_ADDR) >> 16;
-  uint16_t height = inl(VGACTL_ADDR);
-  printf("width: %d\n", width);
-  printf("height: %d\n", height);
-   int w = width / 32;
-   int h = height / 32;
+   //uint16_t width = inl(VGACTL_ADDR) >> 16;
+   //uint16_t height = inl(VGACTL_ADDR);
+
+   int w = 32;
+   int h = 32;
+   //int w = width / 32;
+   //int h = height / 32;
    uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
    for (i = 0; i < w * h; i ++) fb[i] = i;
      outl(SYNC_ADDR, 1);
