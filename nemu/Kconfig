@@ -159,6 +159,10 @@ config MTRACE
   bool "Enable mtrace"
   default n
 
+config DTRACE
+  bool "Enable dtrace"
+  default n
+
 config FTRACE
   bool "Enable ftrace"
   default n
