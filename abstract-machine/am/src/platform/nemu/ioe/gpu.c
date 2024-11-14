@@ -18,7 +18,7 @@ void __am_gpu_init() {
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   uint32_t width = inl(VGACTL_ADDR) >> 16;
-  uint32_t height = inl(VGACTL_ADDR) && 0xffff;
+  uint16_t height = inl(VGACTL_ADDR);
 
   printf("2width: %d\n", width);
   printf("2height: %d\n", height);
