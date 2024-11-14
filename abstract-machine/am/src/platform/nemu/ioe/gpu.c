@@ -7,8 +7,8 @@ void __am_gpu_init() {
    int i;
   uint32_t width = inl(VGACTL_ADDR) >> 16;
   uint32_t height = inl(VGACTL_ADDR) && 0xffff;
-  printf("width: 0x%x\n", width);
-  printf("height: 0x%x\n", height);
+  printf("width: %d\n", width);
+  printf("height: %d\n", height);
    int w = width / 32;
    int h = height / 32;
    uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
@@ -20,8 +20,8 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   uint32_t width = inl(VGACTL_ADDR) >> 16;
   uint32_t height = inl(VGACTL_ADDR) && 0xffff;
 
-  printf("2width: 0x%x\n", width);
-  printf("2height: 0x%x\n", height);
+  printf("2width: %d\n", width);
+  printf("2height: %d\n", height);
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = width, .height = height,
