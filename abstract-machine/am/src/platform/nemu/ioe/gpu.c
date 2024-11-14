@@ -5,8 +5,10 @@
 
 void __am_gpu_init() {
    int i;
-   int w = io_read(AM_GPU_CONFIG).width / 32;
-   int h = io_read(AM_GPU_CONFIG).height / 32;
+  uint32_t width = inl(VGACTL_ADDR) >> 16;
+  uint32_t height = inl(VGACTL_ADDR) && 0xffff;
+   int w = width / 32;
+   int h = height / 32;
    uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
    for (i = 0; i < w * h; i ++) fb[i] = i;
      outl(SYNC_ADDR, 1);
