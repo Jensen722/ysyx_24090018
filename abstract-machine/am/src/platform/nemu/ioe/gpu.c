@@ -1,12 +1,14 @@
 #include <am.h>
 #include <nemu.h>
-
+#include <klib.h>
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
 void __am_gpu_init() {
    int i;
   uint32_t width = inl(VGACTL_ADDR) >> 16;
   uint32_t height = inl(VGACTL_ADDR) && 0xffff;
+  printf("width: 0x%x\n", width);
+  printf("height: 0x%x\n", height);
    int w = width / 32;
    int h = height / 32;
    uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
