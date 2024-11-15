@@ -34,7 +34,7 @@ uint32_t *pixels = (uint32_t *)ctl->pixels;
   for (int y = 0; y < h; y++) {
     for (int x = 0; x < w; x++) {
       // 计算帧缓冲区中该像素的地址
-      uintptr_t pixel_addr = FB_ADDR + ((y_start + y) * 400 + (x_start + x)) * sizeof(uint32_t);
+      uintptr_t pixel_addr = FB_ADDR + ((y_start + y) * io_read(AM_GPU_CONFIG).width + (x_start + x)) * sizeof(uint32_t);
       outl(pixel_addr, pixels[y * w + x]);
     }
   }
