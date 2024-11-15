@@ -29,8 +29,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   }
   //uint32_t *pixels = (uint32_t *)ctl->pixels;
   int x = ctl->x / ctl->w;
-  //int y = ctl->y / ctl->h;
-  printf("ADDR = %x\n", FB_ADDR + 4*x);
+  int y = ctl->y / ctl->h;
+  printf("ADDR = %x\n", FB_ADDR + 4*(x+x*y));
   //printf("y = %d\n", y);
     //outl(FB_ADDR + 4, *(pixels));
 }
