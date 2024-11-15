@@ -8,8 +8,8 @@ void __am_gpu_init() {
    uint16_t width = inl(VGACTL_ADDR) >> 16;
    uint16_t height = inl(VGACTL_ADDR);
 
-   int w = width;
-   int h = height;
+   uint32_t w = width / 2;
+   uint32_t h = height / 2;
    uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
    for (i = 0; i < w * h; i ++) fb[i] = i;
      outl(SYNC_ADDR, 1);
