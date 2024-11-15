@@ -29,7 +29,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   }
   uint32_t *pixels = (uint32_t *)ctl->pixels;
   int x = ctl->x / ctl->w;
-    outl(FB_ADDR + 4*x, *(pixels+x));
+  printf("x = %d\n", x);
+    outl(FB_ADDR + 4, *(pixels+x));
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
