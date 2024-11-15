@@ -27,12 +27,12 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
     outl(SYNC_ADDR, 1);
   }
-  //uint32_t *pixels = (uint32_t *)ctl->pixels;
+  uint32_t *pixels = (uint32_t *)ctl->pixels;
   int x = ctl->x / ctl->w;
  // int y = ctl->y / ctl->h;
-  printf("ADDR = %x\n", FB_ADDR + 4*x);
+  //printf("ADDR = %x\n", FB_ADDR + 4*x);
   //printf("y = %d\n", y);
-    //outl(FB_ADDR + 4, *(pixels));
+  outl(FB_ADDR + 4*x, *(pixels+x));
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
