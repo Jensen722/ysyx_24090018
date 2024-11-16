@@ -54,6 +54,7 @@ desired.freq = audio_base[reg_freq];
 desired.channels = audio_base[reg_channels];
 desired.samples = audio_base[reg_samples];
 desired.callback = audio_callback;
+printf("channels: %d\n", audio_base[reg_channels]);
 
 SDL_InitSubSystem(SDL_INIT_AUDIO);
 SDL_OpenAudio(&desired, NULL);
