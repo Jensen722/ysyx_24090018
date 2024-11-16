@@ -30,7 +30,46 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
+
+//SDL音频回调函数
+//将sbuf中的音频数据拷贝至SDL库的缓冲区
+static int buf_rd_pos = 0;
+void audio_callback(void *userdata, uint8_t *stream, int len){
+  if(buf_rd_pos + len > audio_base[reg_count]){
+    len = audio_base[reg_count] - buf_rd_pos;
+  }
+
+  memcpy(stream, sbuf + buf_rd_pos, len);
+  buf_rd_pos += len;
+}
+
+//SDL库播放音频
+void audio_play(){
+SDL_AudioSpec desired;
+
+desired.format = AUDIO_S16SYS;
+desired.userdata = NULL;
+desired.silence = 0;
+desired.freq = audio_base[reg_freq];
+desired.channels = audio_base[reg_channels];
+desired.samples = audio_base[reg_samples];
+desired.callback = audio_callback;
+
+SDL_InitSubSystem(SDL_INIT_AUDIO);
+SDL_OpenAudio(&desired, NULL);
+
+SDL_PauseAudio(0); //开始播放
+SDL_Delay(5000);
+
+SDL_CloseAudio();
+SDL_Quit();
+}
+
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
+  if(!is_write){
+    audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
+    audio_base[reg_count] = SDL_AudioStreamAvailable((SDL_AudioStream *)sbuf);
+  } 
 }
 
 void init_audio() {
