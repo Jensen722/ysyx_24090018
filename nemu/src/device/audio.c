@@ -31,11 +31,6 @@ extern uint32_t audio_wr_ptr;
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
-void printf_sbuf(){
-  for(int i = 0;i< CONFIG_SB_SIZE;i ++){\
-    printf("sbuf[%d]: 0x%x\n", i, *(sbuf+i));
-  }
-}
 //SDL音频回调函数
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
 static int audio_pos;
