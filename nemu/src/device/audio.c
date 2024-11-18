@@ -38,7 +38,8 @@ void audio_callback(void *userdata, uint8_t *stream, int len){
   if(buf_rd_pos + len > audio_base[reg_count]){
     len = audio_base[reg_count] - buf_rd_pos;
   }
-
+  
+  printf("sbuf: %s\n", (char *)sbuf);
   memcpy(stream, sbuf + buf_rd_pos, len);
   buf_rd_pos += len;
 }
