@@ -27,7 +27,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
   stat->count = inl(AUDIO_COUNT_ADDR);
 }
 
-//uint32_t audio_start_adddr = AUDIO_SBUF_ADDR;
+uint32_t audio_start_adddr = AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   int count = io_read(AM_AUDIO_STATUS).count;
   int bufsize = io_read(AM_AUDIO_CONFIG).bufsize;
@@ -37,8 +37,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   while(bufsize - count < len); //若当前流缓冲区的空闲空间少于即将写入的音频数据, 此次写入将会一直等待, 直到有足够的空闲空间
 
   for(int i = 0; i < len; i++){
-    //outb(AUDIO_SBUF_ADDR + i, *(buf_start + i));
-    printf("buf: 0x%x, addr: 0x%x\n", *(buf_start + i), (uintptr_t) buf_start + i);
+    outb(audio_start_adddr + i, *(buf_start + i));
   }
-  //audio_start_adddr = (audio_start_adddr + len) % AUDIO_SBUF_ADDR;  //环形缓冲区
+  audio_start_adddr = (audio_start_adddr + len);  //环形缓冲区
 }
