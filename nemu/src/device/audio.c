@@ -56,6 +56,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
     //SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
     memcpy(stream, sbuf+audio_pos, len);
     audio_pos += len;
+    printf("audio_pos : %d\n", audio_pos);
     audio_len -= len;
 }
 
