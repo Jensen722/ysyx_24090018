@@ -41,4 +41,5 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
     outb(audio_start_adddr + i, *(buf_start + i));
   }
   audio_start_adddr = (audio_start_adddr + len);  //环形缓冲区
+                                                  printf("start adr= 0x%x\n", audio_start_adddr);
 }
