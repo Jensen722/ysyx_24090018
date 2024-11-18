@@ -72,6 +72,7 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   printf("paddr: 0x%x\n", addr);
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
+  printf("space: 0x%x", *(uint8_t *)(map->space + offset + len));
   invoke_callback(map->callback, offset, len, true);
 #ifdef CONFIG_DTRACE
   if(strcmp(map->name, "serial") != 0){
