@@ -39,7 +39,7 @@ void audio_callback(void *userdata, uint8_t *stream, int len){
     len = audio_base[reg_count] - buf_rd_pos;
   }
   
-  printf("sbuf: %s\n", (char *)sbuf);
+  printf("sbuf: %s\n", (char *)(sbuf+buf_rd_pos));
   memcpy(stream, sbuf + buf_rd_pos, len);
   buf_rd_pos += len;
 }
