@@ -50,7 +50,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
 
     memcpy(stream, sbuf+audio_pos, len);
     audio_pos = (audio_pos + len) % CONFIG_SB_SIZE;
-    printf("audio_pos = %d\n", audio_pos);
+    //printf("audio_pos = %d\n", audio_pos);
     audio_len -= len;
 }
 
