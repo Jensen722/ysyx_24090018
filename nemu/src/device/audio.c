@@ -43,7 +43,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
   memcpy(stream, sbuf + buf_rd_pos, len);
   buf_rd_pos += len;*/
   uint32_t audio_len = audio_base[reg_count];
- SDL_memset(stream, 0, len);
+ //SDL_memset(stream, 0, len);
     if (audio_len == 0)
         return;
     len = (len > audio_len ? audio_len : len);
