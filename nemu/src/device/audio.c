@@ -30,7 +30,11 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
-
+void printf_sbuf(){
+  for(int i = 0;i< CONFIG_SB_SIZE;i ++){\
+    printf("sbuf[%d]: 0x%x\n", i, *(sbuf+i));
+  }
+}
 //SDL音频回调函数
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
 static int buf_rd_pos = 0;
@@ -60,6 +64,7 @@ int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
 if(ret == 0){
 SDL_OpenAudio(&desired, NULL);
 SDL_PauseAudio(0);
+printf_sbuf();
 }
 }
 
