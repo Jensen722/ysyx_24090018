@@ -69,7 +69,7 @@ SDL_Quit();
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   if(!is_write){
     audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-    audio_base[reg_count] = SDL_AudioStreamAvailable((SDL_AudioStream *)sbuf);
+    audio_base[reg_count] = strlen((char *)sbuf);
   } 
 }
 
