@@ -27,6 +27,7 @@ enum {
   nr_reg
 };
 
+extern uint32_t audio_wr_ptr;
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
@@ -80,7 +81,7 @@ SDL_PauseAudio(0);
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   if(!is_write){
     audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-    audio_base[reg_count] = audio_pos;
+    audio_base[reg_count] = audio_wr_ptr;
   } 
 }
 
