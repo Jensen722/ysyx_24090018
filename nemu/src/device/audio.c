@@ -61,6 +61,7 @@ SDL_InitSubSystem(SDL_INIT_AUDIO);
 SDL_OpenAudio(&desired, NULL);
 
 SDL_PauseAudio(0); //开始播放
+SDL_Delay(5000);
 
 SDL_CloseAudio();
 SDL_Quit();
