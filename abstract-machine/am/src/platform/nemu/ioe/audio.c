@@ -38,7 +38,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 
   for(int i = 0; i < len; i++){
     //outb(AUDIO_SBUF_ADDR + i, *(buf_start + i));
-    printf("buf: 0x%x\n, addr: %d", *(buf_start + i), (uintptr_t) buf_start + i);
+    printf("buf: 0x%x, addr: 0x%x\n", *(buf_start + i), (uintptr_t) buf_start + i);
   }
   //audio_start_adddr = (audio_start_adddr + len) % AUDIO_SBUF_ADDR;  //环形缓冲区
 }
