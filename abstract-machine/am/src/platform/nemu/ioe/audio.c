@@ -39,7 +39,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 
   for(int i = 0; i < len; i++){
     outb(audio_start_adddr + i, *(buf_start + i));
-    printf("buf_s: %x\n", *(buf_start + i));
+    //printf("buf_s: %x\n", *(buf_start + i));
     //outb(audio_start_adddr + i, 'a');
   }
   audio_start_adddr = (audio_start_adddr + len);  //环形缓冲区
