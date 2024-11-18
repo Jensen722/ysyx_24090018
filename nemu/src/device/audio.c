@@ -52,7 +52,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
         return;
     len = (len > audio_len ? audio_len : len);
 
-    SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
+    //SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
     audio_pos += len;
     audio_len -= len;
 }
@@ -73,7 +73,6 @@ int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
 if(ret == 0){
 SDL_OpenAudio(&desired, NULL);
 SDL_PauseAudio(0);
-//printf_sbuf();
 }
 }
 
