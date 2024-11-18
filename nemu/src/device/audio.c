@@ -76,7 +76,7 @@ SDL_PauseAudio(0);
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   if(!is_write){
     audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-    audio_base[reg_count] = audio_wr_ptr - audio_pos;
+    audio_base[reg_count] = (audio_wr_ptr - audio_pos) > 0 ? audio_wr_ptr - audio_pos :audio_wr_ptr - audio_pos+CONFIG_SB_SIZE ;
   } 
 }
 
