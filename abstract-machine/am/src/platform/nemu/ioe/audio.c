@@ -33,6 +33,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   int bufsize = io_read(AM_AUDIO_CONFIG).bufsize;
   int len = ctl->buf.end - ctl->buf.start;
 
+  printf("count = %d, buf_size= %d, len = %d\n", count, bufsize, len);
   uint8_t *buf_start = (uint8_t *)ctl->buf.start;
   while(bufsize - count < len); //若当前流缓冲区的空闲空间少于即将写入的音频数据, 此次写入将会一直等待, 直到有足够的空闲空间
 
