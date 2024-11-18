@@ -39,7 +39,6 @@ void printf_sbuf(){
 //SDL音频回调函数
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
 static int audio_pos;
-static int audio_len = CONFIG_SB_SIZE;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
   /*if(buf_rd_pos + len > audio_base[reg_count]){
     len = audio_base[reg_count] - buf_rd_pos;
@@ -48,6 +47,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
   printf("sbuf: %x\n", *(sbuf+buf_rd_pos));
   memcpy(stream, sbuf + buf_rd_pos, len);
   buf_rd_pos += len;*/
+  uint32_t audio_len = audio_base[reg_count];
  SDL_memset(stream, 0, len);
     if (audio_len == 0)
         return;
@@ -55,7 +55,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
 
     //SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
     memcpy(stream, sbuf+audio_pos, len);
-    audio_pos += len;
+    audio_pos = (audio_pos + len) % CONFIG_SB_SIZE;
     printf("audio_pos : %d\n", audio_pos);
     audio_len -= len;
 }
