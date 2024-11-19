@@ -35,8 +35,11 @@ static uint32_t *audio_base = NULL;
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
 static int nemu_audio_nplay;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
-  SDL_memset(stream, 0, len);
-  while(nemu_audio_nplay < nemu_audio_len){
+    SDL_memset(stream, 0, len);
+    if(nemu_audio_nplay >= nemu_audio_len){
+      return;
+    }
+
     len = nemu_audio_len - nemu_audio_nplay > len ? len : nemu_audio_len - nemu_audio_nplay;
     uint8_t *sbuf_start = sbuf + nemu_audio_nplay % CONFIG_SB_SIZE;
     for(int i = 0; i<len ; i++){
@@ -46,7 +49,6 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
     memcpy(stream, sbuf_start, len);
     nemu_audio_nplay += len;
     printf("nplay: %d\n", nemu_audio_nplay);
-    }
 }
 
 //SDL库播放音频
