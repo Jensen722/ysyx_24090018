@@ -29,7 +29,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 
 uint32_t am_audio_pos = 0;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
-  int count = io_read(AM_AUDIO_STATUS).count;
+  /*int count = io_read(AM_AUDIO_STATUS).count;
   int bufsize = io_read(AM_AUDIO_CONFIG).bufsize;
   int len = ctl->buf.end - ctl->buf.start;
 
@@ -42,5 +42,5 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
     outb(AUDIO_SBUF_ADDR + am_audio_pos + i, *(buf_start + i));
     //printf("addr = 0x%x, buf = %x\n", AUDIO_SBUF_ADDR + am_audio_pos + i,*(buf_start + i));
   }
-  am_audio_pos = (am_audio_pos + len) % bufsize;  //环形缓冲区
+  am_audio_pos = (am_audio_pos + len) % bufsize;  //环形缓冲区*/
 }
