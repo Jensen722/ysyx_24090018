@@ -75,7 +75,6 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   if(addr > CONFIG_SB_ADDR && addr < CONFIG_SB_ADDR + CONFIG_SB_SIZE){
     nemu_audio_len += 1; //new add for audio
   }
-  printf("data: 0x%x\n", data);
   invoke_callback(map->callback, offset, len, true);
 #ifdef CONFIG_DTRACE
   if(strcmp(map->name, "serial") != 0){

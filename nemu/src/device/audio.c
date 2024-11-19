@@ -39,6 +39,9 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
   while(nemu_audio_nplay < nemu_audio_len){
     len = nemu_audio_len - nemu_audio_nplay > len ? len : nemu_audio_len - nemu_audio_nplay;
     uint8_t *sbuf_start = sbuf + nemu_audio_nplay % CONFIG_SB_SIZE;
+    for(int i = 0; i<len ; i++){
+      printf("sbuf: 0x%x\n", *(sbuf_start+i));
+    }
 
     memcpy(stream, sbuf_start, len);
     nemu_audio_nplay += len;
