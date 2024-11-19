@@ -35,13 +35,6 @@ static uint32_t *audio_base = NULL;
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
 static int audio_pos;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
-  /*if(buf_rd_pos + len > audio_base[reg_count]){
-    len = audio_base[reg_count] - buf_rd_pos;
-  }
-  
-  printf("sbuf: %x\n", *(sbuf+buf_rd_pos));
-  memcpy(stream, sbuf + buf_rd_pos, len);
-  buf_rd_pos += len;*/
   uint32_t audio_len = audio_base[reg_count];
   SDL_memset(stream, 0, len);
     if (audio_len == 0)
