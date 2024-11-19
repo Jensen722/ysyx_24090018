@@ -45,6 +45,7 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
 
     memcpy(stream, sbuf_start, len);
     nemu_audio_nplay += len;
+    printf("nplay: %d\n", nemu_audio_nplay);
     //}
 }
 
