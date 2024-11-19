@@ -27,21 +27,21 @@ enum {
   nr_reg
 };
 
-extern uint32_t audio_len;
+extern uint32_t nemu_audio_len;
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
 //SDL音频回调函数
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
-static int audio_nplay;
+static int nemu_audio_nplay;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
   SDL_memset(stream, 0, len);
-  while(audio_nplay < audio_len){
-    len = audio_len - audio_nplay > len ? len : audio_len - audio_nplay;
-    uint8_t *sbuf_start = sbuf + audio_nplay % CONFIG_SB_SIZE;
+  while(nemu_audio_nplay < nemu_audio_len){
+    len = nemu_audio_len - nemu_audio_nplay > len ? len : nemu_audio_len - nemu_audio_nplay;
+    uint8_t *sbuf_start = sbuf + nemu_audio_nplay % CONFIG_SB_SIZE;
 
     memcpy(stream, sbuf_start, len);
-    audio_nplay += len;
+    nemu_audio_nplay += len;
     }
 }
 
@@ -67,7 +67,7 @@ SDL_PauseAudio(0);
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   if(!is_write){
     audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-    audio_base[reg_count] = audio_len - audio_nplay;
+    audio_base[reg_count] = nemu_audio_len - nemu_audio_nplay;
   } 
 }
 
