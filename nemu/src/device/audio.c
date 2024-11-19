@@ -47,21 +47,21 @@ static void audio_play_callback(void *userdata, uint8_t *stream, int len){
 
 //SDL库播放音频
 void audio_play(){
-SDL_AudioSpec desired = {};
+  SDL_AudioSpec desired = {};
 
-desired.format = AUDIO_S16SYS;
-desired.userdata = NULL;
-desired.silence = 0;
-desired.freq = audio_base[reg_freq];
-desired.channels = audio_base[reg_channels];
-desired.samples = audio_base[reg_samples];
-desired.callback = audio_play_callback;
+  desired.format = AUDIO_S16SYS;
+  desired.userdata = NULL;
+  desired.silence = 0;
+  desired.freq = audio_base[reg_freq];
+  desired.channels = audio_base[reg_channels];
+  desired.samples = audio_base[reg_samples];
+  desired.callback = audio_play_callback;
 
-int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
-if(ret == 0){
-SDL_OpenAudio(&desired, NULL);
-SDL_PauseAudio(0);
-}
+  int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
+  if(ret == 0){
+    SDL_OpenAudio(&desired, NULL);
+    SDL_PauseAudio(0);
+  }
 }
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
