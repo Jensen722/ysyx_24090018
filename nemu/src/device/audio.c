@@ -36,7 +36,7 @@ static uint32_t *audio_base = NULL;
 static int nemu_audio_nplay;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
     SDL_memset(stream, 0, len);
-    printf("len: %u, nplay: %d\n", nemu_audio_len, nemu_audio_nplay);
+    printf("count: %d\n", nemu_audio_len - nemu_audio_nplay);
     if(nemu_audio_nplay >= nemu_audio_len){
       return;
     }
