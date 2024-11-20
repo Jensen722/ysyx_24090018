@@ -29,18 +29,18 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 
 uint32_t am_audio_len = 0;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
-  //int count = io_read(AM_AUDIO_STATUS).count;
+  int count = io_read(AM_AUDIO_STATUS).count;
   int bufsize = io_read(AM_AUDIO_CONFIG).bufsize;
   int len = ctl->buf.end - ctl->buf.start;
 
   uint8_t *buf_start = (uint8_t *)ctl->buf.start;
 
   //若当前流缓冲区的空闲空间少于即将写入的音频数据, 此次写入将会一直等待, 直到有足够的空闲空间
-  /*int freespace = bufsize - count;
+  int freespace = bufsize - count;
   while(freespace < len){
     count = io_read(AM_AUDIO_STATUS).count; //更新状态
     freespace = bufsize - count;
-  }*/
+  }
  
 
   for(int i = 0; i < len; i++){
