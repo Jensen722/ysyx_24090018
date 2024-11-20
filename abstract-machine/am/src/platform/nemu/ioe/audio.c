@@ -35,7 +35,13 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 
   uint8_t *buf_start = (uint8_t *)ctl->buf.start;
   printf("count = %d\n",count);
-  //while(bufsize - count < len);//若当前流缓冲区的空闲空间少于即将写入的音频数据, 此次写入将会一直等待, 直到有足够的空闲空间
+
+  int freespace = bufsize - count;
+  while(freespace < len){
+    count = io_read(AM_AUDIO_STATUS).count;
+    freespace = bufsize - count;
+  }
+  //若当前流缓冲区的空闲空间少于即将写入的音频数据, 此次写入将会一直等待, 直到有足够的空闲空间
 
   for(int i = 0; i < len; i++){
     uint32_t audio_waddr = AUDIO_SBUF_ADDR + (am_audio_len + i) % bufsize; //环形缓冲区
