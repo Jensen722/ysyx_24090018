@@ -35,8 +35,6 @@ static uint32_t *audio_base = NULL;
 //将sbuf中的音频数据拷贝至SDL库的缓冲区
 static int nemu_audio_nplay;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
-    SDL_memset(stream, 0, len);
-    //printf("count: %d\n", nemu_audio_len - nemu_audio_nplay);
     int count = nemu_audio_len - nemu_audio_nplay; //计算已使用缓冲区
     if(count <= 0){
       return;
