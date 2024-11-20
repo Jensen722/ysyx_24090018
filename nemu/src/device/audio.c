@@ -36,9 +36,10 @@ static uint32_t *audio_base = NULL;
 static int nemu_audio_nplay;
 static void audio_play_callback(void *userdata, uint8_t *stream, int len){
     int count = nemu_audio_len - nemu_audio_nplay; //计算已使用缓冲区
-   /* if(count <= 0){
+    if(count <= 0){
+      SDL_memset(stream, 0, len);
       return;
-    }*/
+    }
 
     //len = nemu_audio_len - nemu_audio_nplay > len ? len : nemu_audio_len - nemu_audio_nplay; //会导致一开始产生噪音
     uint8_t *sbuf_start = sbuf + nemu_audio_nplay % CONFIG_SB_SIZE;
