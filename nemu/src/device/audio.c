@@ -27,54 +27,10 @@ enum {
   nr_reg
 };
 
-extern uint32_t nemu_audio_len;
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
-//SDL音频回调函数
-//将sbuf中的音频数据拷贝至SDL库的缓冲区
-static int nemu_audio_nplay;
-static void audio_play_callback(void *userdata, uint8_t *stream, int len){
-    int count = nemu_audio_len - nemu_audio_nplay; //计算已使用缓冲区
-    if(count <= 0){
-      SDL_memset(stream, 0, len);
-      return;
-    }
-
-    //len = count > len ? len : count; //会导致一开始产生噪音
-    uint8_t *sbuf_start = sbuf + nemu_audio_nplay % CONFIG_SB_SIZE;
-
-    memcpy(stream, sbuf_start, len);
-    if(count < len){
-      SDL_memset(stream + count, 0, len - count); //将剩余部分清0
-    }
-    nemu_audio_nplay += len;
-}
-
-//SDL库播放音频
-void audio_play(){
-  SDL_AudioSpec desired = {};
-
-  desired.format = AUDIO_S16SYS;
-  desired.userdata = NULL;
-  desired.silence = 0;
-  desired.freq = audio_base[reg_freq];
-  desired.channels = audio_base[reg_channels];
-  desired.samples = audio_base[reg_samples];
-  desired.callback = audio_play_callback;
-
-  int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
-  if(ret == 0){
-    SDL_OpenAudio(&desired, NULL);
-    SDL_PauseAudio(0);
-  }
-}
-
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
-  if(!is_write){
-    audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-    audio_base[reg_count] = nemu_audio_len - nemu_audio_nplay;
-  } 
 }
 
 void init_audio() {
