@@ -43,4 +43,4 @@ clean:
 
 .PHONY: default all clean run
 
-include $(YSYX_HOME)/Makefile
+include ../../Makefile

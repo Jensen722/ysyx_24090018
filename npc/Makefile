@@ -1,46 +1,19 @@
-TOPNAME = top
-INC_PATH ?=
+VSRC=$(wildcard ./vsrc/switch.v)
+CSRC=$(wildcard ./csrc/sim.cpp)
 
-VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build -cc --trace \
-				-O3 --x-assign fast --x-initial fast --noassert
+all:
+	@echo "Write this Makefile by your self."
 
-VERILATOR_CFLAGS += -Ivsrc
+sim:
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	verilator --cc --exe --trace -Wall -j 0 $(VSRC) $(CSRC)
+	make -C obj_dir -f Vswitch.mk Vswitch   #also can use --build to make itself
+	./obj_dir/Vswitch
+	#gtkwave wave.vcd
 
-
-BUILD_DIR = ./build
-OBJ_DIR = $(BUILD_DIR)/obj_dir
-BIN = $(BUILD_DIR)/$(TOPNAME)
-
-default: $(BIN)
-
-$(shell mkdir -p $(BUILD_DIR))
-
-
-# project source
-VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
-CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-
-# rules for verilator
-INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
-
-$(BIN): $(VSRCS) $(CSRCS)# $(NVBOARD_ARCHIVE)
-	@rm -rf $(OBJ_DIR)
-	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
-
-all: default
-
-run: $(BIN)
-	$(call git_commit, "sim RTL")  #开发跟踪
-	@$^
+.PHONY:clean
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf obj_dir wave.vcd
 
-.PHONY: default all clean run
-
-include $(YSYX_HOME)/Makefile
+include ../Makefile
