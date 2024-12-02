@@ -9,6 +9,7 @@
 #include<stdlib.h>
 #include<assert.h>
 #include<stdint.h>
+#include<string.h>
 
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MBASE 0x80000000
@@ -32,6 +33,7 @@ void pmem_write(int waddr, int wdata, char wmask){
 void init_mem() {
   pmem = (uint8_t *)malloc(CONFIG_MSIZE);
   assert(pmem);
+memset(pmem, rand(), CONFIG_MSIZE);
   printf("%x\n", *pmem+499);
 }
 
