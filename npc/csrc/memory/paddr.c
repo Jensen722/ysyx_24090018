@@ -20,12 +20,12 @@ static inline int host_read(void *addr){
 }
 
 static uint8_t *pmem = NULL;
-uint8_t* guest_to_host(int addr) {
+uint8_t* guest_to_host(uint32_t addr) {
   uint8_t* addr_ptr = pmem + addr - CONFIG_MBASE;
   printf("addr: %d addr_ptr: %p pmem: %p\n", addr - CONFIG_MBASE, addr_ptr, pmem);
 if (addr_ptr < pmem || addr_ptr >= pmem + CONFIG_MSIZE) {assert(0);}
   return pmem + addr - CONFIG_MBASE; }
-int pmem_read(int raddr){
+int pmem_read(uint32_t raddr){
   int aligned_addr = raddr & ~0x3u;
   int ret = host_read(guest_to_host(aligned_addr));
   return ret;

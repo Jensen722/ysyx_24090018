@@ -9,8 +9,9 @@
 #include<assert.h>
 #include<getopt.h>
 #include<stdlib.h>
+#include<stdint.h>
 
-int *guest_to_host(int addr);
+int *guest_to_host(uint32_t addr);
 #define RESET_VECTOR 0x80000000
 
 static char *log_file = NULL;
