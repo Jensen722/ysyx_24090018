@@ -32,7 +32,7 @@ void pmem_write(int waddr, int wdata, char wmask){
 void init_mem() {
   pmem = (uint8_t *)malloc(CONFIG_MSIZE);
   assert(pmem);
-  printf("%x\n", *pmem+49);
+  printf("%x\n", *pmem+499);
 }
 
 
