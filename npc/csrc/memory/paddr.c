@@ -16,7 +16,7 @@
 
 
 static inline int host_read(void *addr){
-  return *(int *)addr;
+  return *(uint32_t *)addr;
 }
 
 static uint8_t *pmem = NULL;
