@@ -42,7 +42,7 @@ void init_mem() {
   pmem = (uint8_t *)malloc(CONFIG_MSIZE);
   assert(pmem);
 memset(pmem, 0x00100073, CONFIG_MSIZE);
-  printf("%x\n", *(pmem+CONFIG_MSIZE-1));
+  printf("%x\n", *(pmem+100-1));
 }
 
 
