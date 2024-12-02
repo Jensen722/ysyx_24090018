@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
   reset(1); 
 
   while(1) {
-    top->inst_i = pmem_read(top->pc_o);
+    //top->inst_i = pmem_read(top->pc_o);
     printf("inst = 0x%08x\n", pmem_read(top->pc_o));
     single_cycle();
 
