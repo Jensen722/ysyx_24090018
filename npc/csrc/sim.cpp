@@ -59,7 +59,6 @@ int pmem_read(uint32_t raddr);
 void init_monitor(int argc, char *argv[]);
 int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
-  //printf("inst = 0x%08x\n", pmem_read(0x80000000));
   sim_init();
 
   reset(1); 
