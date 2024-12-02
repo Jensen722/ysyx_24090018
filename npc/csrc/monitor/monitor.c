@@ -38,8 +38,8 @@ fflush(stdout);
 
   fseek(fp, 0, SEEK_SET);
   printf("%p\n",guest_to_host(RESET_VECTOR));
-  int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
-  assert(ret == 1);
+  //int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
+  //assert(ret == 1);
 
   fclose(fp);
   return size;
