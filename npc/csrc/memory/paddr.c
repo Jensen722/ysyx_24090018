@@ -21,7 +21,7 @@ static inline int host_read(void *addr){
 
 static uint8_t *pmem = NULL;
 uint8_t* guest_to_host(int addr) {
-  uint8_t* addr_ptr = pmem + addr - CONFIG_MBASE;
+  uint8_t* addr_ptr = pmem + addr - CONFIG_MBASE +0x10000000;
   printf("addr: %d addr_ptr: %p pmem: %p\n", addr - CONFIG_MBASE, addr_ptr, pmem);
 if (addr_ptr < pmem || addr_ptr >= pmem + CONFIG_MSIZE) {assert(0);}
   return pmem + addr - CONFIG_MBASE; }
