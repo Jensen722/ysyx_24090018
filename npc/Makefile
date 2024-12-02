@@ -32,11 +32,15 @@ $(BIN): $(VSRCS) $(CSRCS)# $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
+# Command to execute NEMU
+IMG ?=
+NPC_EXEC := $(BINARY) $(IMG)
+
 all: default
 
-run: $(BIN)
+run: $(NPC_EXEC)
 	$(call git_commit, "sim RTL")  #开发跟踪
-	@$^
+	@$(NPC_EXEC)
 
 clean:
 	rm -rf $(BUILD_DIR)

@@ -39,8 +39,8 @@ static void reset(int n) {
 }
 
 
-static uint32_t inst_mem[1000] = {}; 
-static void put_inst(){
+//static uint32_t inst_mem[1000] = {}; 
+/*static void put_inst(){
   inst_mem[0] = 0x00500093; //addi x1, x0, 5
   inst_mem[1] = 0x00a08113; //addi x2, x1, 10
   inst_mem[2] = 0x2b878793; //addi x15, x15, 696
@@ -54,8 +54,11 @@ static void put_inst(){
 static uint32_t pmem_read(uint32_t raddr){
   int idx = (raddr - 0x80000000) / 4;
   return inst_mem[idx];
-}
+}*/
+int pmem_read(int raddr);
+void init_monitor();
 int main() {
+  init_monitor();
   sim_init();
 
   put_inst();
