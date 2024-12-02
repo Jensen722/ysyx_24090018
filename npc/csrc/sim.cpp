@@ -55,7 +55,7 @@ static uint32_t pmem_read(uint32_t raddr){
   int idx = (raddr - 0x80000000) / 4;
   return inst_mem[idx];
 }*/
-int pmem_read(int raddr);
+int pmem_read(uint32_t raddr);
 void init_monitor(int argc, char *argv[]);
 int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
@@ -65,8 +65,8 @@ int main(int argc, char *argv[]) {
   reset(1); 
 
   while(1) {
-    //top->inst_i = pmem_read(top->pc_o);
-    //printf("inst = 0x%08x\n", pmem_read(top->pc_o));
+    top->inst_i = pmem_read(top->pc_o);
+    printf("inst = 0x%08x\n", pmem_read(top->pc_o));
     single_cycle();
 
     svBit ebreak;
