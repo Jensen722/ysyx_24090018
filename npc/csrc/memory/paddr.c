@@ -10,7 +10,7 @@
 #include<assert.h>
 #include<stdint.h>
 
-#define CONFIG_MSIZE 0x8000000
+#define CONFIG_MSIZE 0x8100000
 #define CONFIG_MBASE 0x80000000
 
 
