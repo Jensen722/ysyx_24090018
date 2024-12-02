@@ -42,6 +42,9 @@ run: $(NPC_EXEC)
 	$(call git_commit, "sim RTL")  #开发跟踪
 	@$(NPC_EXEC)
 
+gdb: $(NPC_EXEC)
+	gdb -s $(BIN) --args $(NPC_EXEC)
+
 clean:
 	rm -rf $(BUILD_DIR)
 
