@@ -4,10 +4,6 @@
 #include <time.h>
 #include "Vtop__Dpi.h"
 
-#include <memory/paddr.h>
-
-
-
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 
@@ -42,8 +38,8 @@ static void reset(int n) {
   top->rst = 1;
 }
 
-void init_monitor();
-/*static uint32_t inst_mem[1000] = {}; 
+
+static uint32_t inst_mem[1000] = {}; 
 static void put_inst(){
   inst_mem[0] = 0x00500093; //addi x1, x0, 5
   inst_mem[1] = 0x00a08113; //addi x2, x1, 10
@@ -58,12 +54,12 @@ static void put_inst(){
 static uint32_t pmem_read(uint32_t raddr){
   int idx = (raddr - 0x80000000) / 4;
   return inst_mem[idx];
-}*/
+}
 int main() {
   sim_init();
 
-  init_monitor();
-
+  put_inst();
+  int inst_num = 0;
   reset(1); 
 
   while(1) {
