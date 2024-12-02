@@ -80,7 +80,7 @@ void init_mem();
 int pmem_read(int addr);
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
-
+assert(0);
   /* Parse arguments. */
   parse_args(argc, argv);
 
