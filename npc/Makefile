@@ -3,7 +3,7 @@ INC_PATH ?=
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc --trace \
-				-O3 --x-assign fast --x-initial fast --noassert
+				-O2 --x-assign fast --x-initial fast --noassert
 
 VERILATOR_CFLAGS += -Ivsrc
 
@@ -23,7 +23,7 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\"" -g
 
 $(BIN): $(VSRCS) $(CSRCS)# $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
