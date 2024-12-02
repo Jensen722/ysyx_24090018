@@ -4,6 +4,9 @@
 #include <time.h>
 #include "Vtop__Dpi.h"
 
+
+#include <debug.h>
+
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 

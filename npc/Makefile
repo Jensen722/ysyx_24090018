@@ -1,5 +1,8 @@
 TOPNAME = top
-INC_PATH ?=
+
+WORK_DIR  = $(shell pwd)
+
+INC_PATH := $(WORK_DIR)/include
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc --trace \

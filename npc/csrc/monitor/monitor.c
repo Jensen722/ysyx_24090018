@@ -5,11 +5,10 @@
 	> Created Time: 2024年12月02日 星期一 11时11分29秒
  ************************************************************************/
 
-#include<stdio.h>
-#include<assert.h>
+#include <common.h>
+
+#include <debug.h>
 #include<getopt.h>
-#include<stdlib.h>
-#include<stdint.h>
 
 int *guest_to_host(uint32_t addr);
 #define RESET_VECTOR 0x80000000

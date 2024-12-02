@@ -5,12 +5,8 @@
 	> Created Time: 2024年12月02日 星期一 10时56分33秒
  ************************************************************************/
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<assert.h>
-#include<stdint.h>
-#include<string.h>
-
+#include <common.h>
+#include <debug.h>
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MBASE 0x80000000
 
