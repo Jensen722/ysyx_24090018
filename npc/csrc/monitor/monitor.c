@@ -80,7 +80,7 @@ void init_mem();
 int pmem_read(int addr);
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
-assert(0);
+
   /* Parse arguments. */
   parse_args(argc, argv);
 
@@ -89,6 +89,7 @@ assert(0);
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
+fflush(stdout); 
   printf("img_size = %ld\n", img_size);
   //printf("inst = 0x%08x\n", pmem_read(0x80000000));
 }
