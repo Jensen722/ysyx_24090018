@@ -34,7 +34,7 @@ $(BIN): $(VSRCS) $(CSRCS)# $(NVBOARD_ARCHIVE)
 
 # Command to execute NEMU
 IMG ?=
-NPC_EXEC := $(BINARY) $(IMG)
+NPC_EXEC := $(BIN) $(IMG)
 
 all: default
 

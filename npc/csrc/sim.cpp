@@ -62,8 +62,6 @@ int main() {
   init_monitor();
   sim_init();
 
-  put_inst();
-  int inst_num = 0;
   reset(1); 
 
   while(1) {
