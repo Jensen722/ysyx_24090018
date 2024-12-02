@@ -22,6 +22,7 @@ static int difftest_port = 1234;
 static long load_img() {
   if (img_file == NULL) {
     printf("img_file is NULL");
+fflush(stdout); 
     assert(0);
     return 4096; // built-in image size
   }
