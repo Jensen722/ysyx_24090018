@@ -20,7 +20,10 @@ static inline int host_read(void *addr){
 }
 
 static uint8_t *pmem = NULL;
-uint8_t* guest_to_host(int addr) { return pmem + addr - CONFIG_MBASE; }
+uint8_t* guest_to_host(int addr) {
+  uint8_t* addr_ptr = pmem + addr - CONFIG_MBASE;
+if (addr_ptr < pmem || addr_ptr >= pmem + CONFIG_MSIZE) {assert(0);}
+  return pmem + addr - CONFIG_MBASE; }
 int pmem_read(int raddr){
   int aligned_addr = raddr & ~0x3u;
   int ret = host_read(guest_to_host(aligned_addr));
@@ -33,7 +36,7 @@ void pmem_write(int waddr, int wdata, char wmask){
 void init_mem() {
   pmem = (uint8_t *)malloc(CONFIG_MSIZE);
   assert(pmem);
-memset(pmem, 0, CONFIG_MSIZE);
+memset(pmem, rand(), CONFIG_MSIZE);
   printf("%x\n", *(pmem+CONFIG_MSIZE-1));
 }
 
