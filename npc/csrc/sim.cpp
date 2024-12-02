@@ -58,6 +58,7 @@ static uint32_t pmem_read(uint32_t raddr){
 int pmem_read(int raddr);
 void init_monitor();
 int main() {
+  assert(0);
   init_monitor();
   sim_init();
 
