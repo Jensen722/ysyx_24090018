@@ -11,6 +11,7 @@
 `define ysyx_24090018_RstEnable 1'b0
 `define ysyx_24090018_WriteEnable 1
 `define ysyx_24090018_WriteDisable 0
+`define ysyx_24090018_JumpEnable 1'b1
 
 //Zero
 `define ysyx_24090018_RegZero 0
@@ -22,6 +23,12 @@
 `define ysyx_24090018_INST_I_1110011 7'b1110011
 `define ysyx_24090018_funct3_ADDI 3'b000
 `define ysyx_24090018_funct3_EBREAK_ECALL 3'b000
+`define ysyx_24090018_INST_I_1100111 7'b1100111
 
+//U Type 
+`define ysyx_24090018_INST_U_0010111 7'b0010111
+`define ysyx_24090018_INST_U_0110111 7'b0110111
 
+//J Type 
+`define ysyx_24090018_INST_J_1101111 7'b1101111
 

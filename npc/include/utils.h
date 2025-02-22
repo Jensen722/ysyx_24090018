@@ -9,6 +9,21 @@
 #define __UTILS_H__
 
 #include <common.h>
+
+// ----------- state -----------
+
+enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
+
+typedef struct {
+  int state;
+  vaddr_t halt_pc;
+  uint32_t halt_ret;
+} NPCState;
+
+extern NPCState npc_state;
+
+#define MAX_INST_TO_PRINT 16
+#define INT_MAX 2147473647
 // ----------- log -----------
 
 #define ANSI_FG_BLACK   "\33[1;30m"
@@ -30,5 +45,22 @@
 #define ANSI_NONE       "\33[0m"
 
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
+
+#define log_write(...) \
+  do { \
+    extern FILE* log_fp; \
+    extern bool log_enable(); \
+    if (log_enable()) { \
+      fprintf(log_fp, __VA_ARGS__); \
+      fflush(log_fp); \
+    } \
+  } while (0) 
+
+
+#define _Log(...) \
+  do { \
+    printf(__VA_ARGS__); \
+    log_write(__VA_ARGS__); \
+  } while (0)
 
 #endif

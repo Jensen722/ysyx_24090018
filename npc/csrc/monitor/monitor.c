@@ -10,7 +10,11 @@
 #include <debug.h>
 #include<getopt.h>
 
-int *guest_to_host(uint32_t addr);
+void init_mem();
+void init_sdb();
+void init_log(const char *log_file);
+
+uint8_t *guest_to_host(uint32_t addr);
 #define RESET_VECTOR 0x80000000
 
 static char *log_file = NULL;
@@ -33,10 +37,9 @@ static long load_img() {
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
 
-  //Log("The image is %s, size = %ld", img_file, size);
+  Log("The image is %s, size = %ld", img_file, size);
 
   fseek(fp, 0, SEEK_SET);
-  printf("%p\n",guest_to_host(RESET_VECTOR));
   int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
   assert(ret == 1);
 
@@ -76,20 +79,23 @@ static int parse_args(int argc, char *argv[]) {
   }
   return 0;
 }
-void init_mem();
-int pmem_read(int addr);
+
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
 
   /* Parse arguments. */
   parse_args(argc, argv);
 
+  /* Open the log file. */
+  init_log(log_file);
+
   /* Initialize memory. */
   init_mem();
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
-  printf("img_size = %ld\n", img_size);
-  //printf("inst = 0x%08x\n", pmem_read(0x80000000));
+
+  /* Initialize the simple debugger. */
+  init_sdb();
 }
 

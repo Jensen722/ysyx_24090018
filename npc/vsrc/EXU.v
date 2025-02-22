@@ -10,8 +10,13 @@ module ysyx_24090018_EXU #(DATA_WIDTH = 32)(
   input [DATA_WIDTH-1:0] op1_i,
   input [DATA_WIDTH-1:0] op2_i,
   input [DATA_WIDTH-1:0] inst_i,
+  input [DATA_WIDTH-1 : 0] inst_addr_i,
+  input [DATA_WIDTH-1:0] op1_jump_i,
+  input [DATA_WIDTH-1:0] op2_jump_i,
 
-  output reg [DATA_WIDTH-1:0] rf_wdata_o
+
+  output reg [DATA_WIDTH-1:0] rf_wdata_o,
+  output reg [DATA_WIDTH-1:0] jump_addr_o
 );
   wire [6:0] opcode;
   wire [2:0] funct3;
@@ -27,6 +32,7 @@ module ysyx_24090018_EXU #(DATA_WIDTH = 32)(
     output bit finish;
     finish = ebreak;
   endfunction
+
 
   always@(*) begin
     case(opcode)
@@ -51,10 +57,17 @@ module ysyx_24090018_EXU #(DATA_WIDTH = 32)(
                 rf_wdata_o = `ysyx_24090018_ZeroWord;
              end
           endcase
-
+      end
+      `ysyx_24090018_INST_J_1101111,`ysyx_24090018_INST_I_1100111: begin
+        jump_addr_o = op1_jump_i + op2_jump_i;
+        rf_wdata_o = op1_i + op2_i;
+      end
+      `ysyx_24090018_INST_U_0010111, `ysyx_24090018_INST_U_0110111: begin //
+        rf_wdata_o = op1_i + op2_i;
       end
       default: begin
         rf_wdata_o = `ysyx_24090018_ZeroWord; 
+        jump_addr_o = `ysyx_24090018_ZeroWord;
       end
     endcase
   end

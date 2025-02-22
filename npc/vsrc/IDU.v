@@ -9,6 +9,8 @@
 module ysyx_24090018_IDU #(DATA_WIDTH = 32, ADDR_WIDTH = 5) (
   //from IFU
   input [DATA_WIDTH-1 : 0] inst_i,
+  input [DATA_WIDTH-1 : 0] inst_addr_i,
+
   //from RegisterFile
   input [DATA_WIDTH-1 : 0] rf_rdata1_i,
   input [DATA_WIDTH-1 : 0] rf_rdata2_i,
@@ -19,6 +21,9 @@ module ysyx_24090018_IDU #(DATA_WIDTH = 32, ADDR_WIDTH = 5) (
   output reg rf_we_o,
 
   //to EXU
+  output reg [DATA_WIDTH-1 : 0] op1_jump_o,
+  output reg [DATA_WIDTH-1 : 0] op2_jump_o,
+  output reg jump_flag_o,
   output reg [DATA_WIDTH-1 : 0] op1_o,
   output reg [DATA_WIDTH-1 : 0] op2_o
 );
@@ -32,30 +37,86 @@ module ysyx_24090018_IDU #(DATA_WIDTH = 32, ADDR_WIDTH = 5) (
 
   always @(*) begin
     case(opcode) 
-      `ysyx_24090018_INST_I_0010011: begin //addi & slti & sltiu & xori & ori
-      //& andi & slli & srli & srai 
-          op1_o = rf_rdata1_i;
-          op2_o = {{20{inst_i[31]}}, inst_i[31:20]};
+        `ysyx_24090018_INST_I_0010011: begin //addi & slti & sltiu & xori & ori
+        //& andi & slli & srli & srai 
+            op1_o = rf_rdata1_i;
+            op2_o = {{20{inst_i[31]}}, inst_i[31:20]};
+            rf_we_o = `ysyx_24090018_WriteEnable;
+            jump_flag_o = 1'b0;
+          op1_jump_o = `ysyx_24090018_ZeroWord;
+          op2_jump_o = `ysyx_24090018_ZeroWord;
+            rf_raddr1_o = rs1;
+            rf_raddr2_o = `ysyx_24090018_RegZero;
+            rf_waddr_o = rd;
+        end
+        `ysyx_24090018_INST_I_1110011: begin  //ebreak & ecall & csrrw & csrrs
+        //& csrrc & csrrwi &csrrsi & csrrci
+            op1_o = rf_rdata1_i;
+            op2_o = {{20{inst_i[31]}}, inst_i[31:20]};
+            rf_we_o = `ysyx_24090018_WriteEnable;
+            rf_raddr1_o = rs1;
+            rf_raddr2_o = `ysyx_24090018_RegZero;
+            rf_waddr_o = rd;
+            jump_flag_o = 1'b0;
+          op1_jump_o = `ysyx_24090018_ZeroWord;
+          op2_jump_o = `ysyx_24090018_ZeroWord;
+        end
+        `ysyx_24090018_INST_J_1101111: begin //jal
+          op1_o = inst_addr_i;
+          op2_o = 32'h4;
+          rf_we_o = `ysyx_24090018_WriteDisable;
+          rf_waddr_o = rd;
+          rf_raddr1_o = `ysyx_24090018_RegZero;
+          rf_raddr2_o = `ysyx_24090018_RegZero;
+          op1_jump_o = inst_addr_i;
+          op2_jump_o = {{12{inst_i[31]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
+          jump_flag_o = 1'b1;
+        end
+        `ysyx_24090018_INST_I_1100111: begin //jalr
+          op1_o = inst_addr_i;
+          op2_o = 32'h4;
           rf_we_o = `ysyx_24090018_WriteEnable;
           rf_raddr1_o = rs1;
           rf_raddr2_o = `ysyx_24090018_RegZero;
           rf_waddr_o = rd;
-      end
-      `ysyx_24090018_INST_I_1110011: begin  //ebreak & ecall & csrrw & csrrs
-      //& csrrc & csrrwi &csrrsi & csrrci
-          op1_o = rf_rdata1_i;
-          op2_o = {{20{inst_i[31]}}, inst_i[31:20]};
-          rf_we_o = `ysyx_24090018_WriteEnable;
-          rf_raddr1_o = rs1;
+          op1_jump_o = rf_rdata1_i;
+          op2_jump_o = {{20{inst_i[31]}}, inst_i[31:20]};
+          jump_flag_o = 1'b1;
+        end
+        `ysyx_24090018_INST_U_0110111: begin  //lui
+            op1_o = {inst_i[31:12], 12'b0};
+            op2_o = 32'h0;
+            rf_we_o = `ysyx_24090018_WriteEnable;
+            rf_raddr1_o =`ysyx_24090018_RegZero;
+            rf_raddr2_o = `ysyx_24090018_RegZero;
+            rf_waddr_o = rd;
+            jump_flag_o = 1'b0;
+          op1_jump_o = `ysyx_24090018_ZeroWord;
+          op2_jump_o = `ysyx_24090018_ZeroWord;
+        end
+         `ysyx_24090018_INST_U_0010111: begin  //auipc
+            op1_o = {inst_i[31:12], 12'b0};
+            op2_o = inst_addr_i;
+            rf_we_o = `ysyx_24090018_WriteEnable;
+            rf_raddr1_o =`ysyx_24090018_RegZero;
+            rf_raddr2_o = `ysyx_24090018_RegZero;
+            rf_waddr_o = rd;
+            jump_flag_o = 1'b0;
+          op1_jump_o = `ysyx_24090018_ZeroWord;
+          op2_jump_o = `ysyx_24090018_ZeroWord;
+          end
+         default: begin
+          rf_we_o = `ysyx_24090018_WriteDisable;
+          rf_waddr_o = `ysyx_24090018_RegZero;
+          rf_raddr1_o = `ysyx_24090018_RegZero;
           rf_raddr2_o = `ysyx_24090018_RegZero;
-          rf_waddr_o = rd;
-      end
-    default: begin
-      rf_we_o = `ysyx_24090018_WriteDisable;
-      rf_waddr_o = `ysyx_24090018_RegZero;
-      rf_raddr1_o = `ysyx_24090018_RegZero;
-      rf_raddr2_o = `ysyx_24090018_RegZero;
-    end
+          jump_flag_o = 1'b0;
+          op1_jump_o = `ysyx_24090018_ZeroWord;
+          op2_jump_o = `ysyx_24090018_ZeroWord;
+          op1_o = `ysyx_24090018_ZeroWord;
+          op2_o = `ysyx_24090018_ZeroWord;
+         end
+
     endcase
   end
 

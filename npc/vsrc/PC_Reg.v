@@ -9,6 +9,8 @@
 module ysyx_24090018_pc_reg #(ADDR_WIDTH = 32) (
   input clk,
   input rst,
+  input jump_flag,
+  input [ADDR_WIDTH-1 : 0] jump_addr,
   output reg [ADDR_WIDTH-1 : 0] pc_o
 );
   always @(posedge clk) begin
@@ -16,7 +18,12 @@ module ysyx_24090018_pc_reg #(ADDR_WIDTH = 32) (
       pc_o <= `ysyx_24090018_PC_BaseAddr;
     end
     else begin
-      pc_o <= pc_o + 32'h4;
+      if(jump_flag == `ysyx_24090018_JumpEnable) begin
+        pc_o <= jump_addr;
+      end
+      else begin
+        pc_o <= pc_o + 32'h4;
+      end
     end
   end
 endmodule

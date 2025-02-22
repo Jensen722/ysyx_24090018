@@ -21,7 +21,7 @@ module ysyx_24090018_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
   end
 
   always @(posedge clk) begin
-    if (wen) rf[waddr[3:0]] <= wdata;
+    if (wen && waddr != 0) rf[waddr[3:0]] <= wdata;
   end
 
  // assign rdata1 = rf[rs1[3:0]];  //read src1 data
