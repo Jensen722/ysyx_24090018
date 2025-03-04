@@ -33,6 +33,11 @@ module ysyx_24090018_EXU #(DATA_WIDTH = 32)(
     finish = ebreak;
   endfunction
 
+  export "DPI-C" function get_inst;
+  function get_inst;
+    output  [31:0] inst;
+    inst = inst_i;
+  endfunction
 
   always@(*) begin
     case(opcode)

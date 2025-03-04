@@ -1,7 +1,9 @@
 -include $(YSYX_HOME)/Makefile
 include $(NPC_HOME)/scripts/build.mk
+include $(NPC_HOME)/tools/difftest.mk
 
 override ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
+override ARGS += $(ARGS_DIFF)
 
 # Command to execute NPC
 IMG ?=

@@ -8,10 +8,10 @@ void init_monitor(int argc, char *argv[]);
 void engine_start();
 
 int main(int argc, char *argv[]) {
-  init_monitor(argc, argv);
   sim_init();
-
   reset(1); 
+
+  init_monitor(argc, argv);
 
   /* Start engine. */
   engine_start();

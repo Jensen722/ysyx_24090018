@@ -10,6 +10,7 @@
  */
 #include <regex.h>
 #include <utils.h>
+#include <debug.h>
 
 #define NR_REGEX ARRLEN(rules)
 enum {

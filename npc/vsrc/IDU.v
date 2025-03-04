@@ -64,7 +64,7 @@ module ysyx_24090018_IDU #(DATA_WIDTH = 32, ADDR_WIDTH = 5) (
         `ysyx_24090018_INST_J_1101111: begin //jal
           op1_o = inst_addr_i;
           op2_o = 32'h4;
-          rf_we_o = `ysyx_24090018_WriteDisable;
+          rf_we_o = `ysyx_24090018_WriteEnable;
           rf_waddr_o = rd;
           rf_raddr1_o = `ysyx_24090018_RegZero;
           rf_raddr2_o = `ysyx_24090018_RegZero;

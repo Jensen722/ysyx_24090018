@@ -21,6 +21,11 @@
 #define concat4(x, y, z, w) concat3(concat(x, y), z, w)
 #define concat5(x, y, z, v, w) concat4(concat(x, y), z, v, w)
 
+// macro testing
+// See https://stackoverflow.com/questions/26099745/test-if-preprocessor-symbol-is-defined-inside-macro
+#define CHOOSE2nd(a, b, ...) b
+#define MUX_WITH_COMMA(contain_comma, a, b) CHOOSE2nd(contain_comma a, b)
+#define MUX_MACRO_PROPERTY(p, macro, a, b) MUX_WITH_COMMA(concat(p, macro), a, b)
 // define placeholders for some property
 #define __P_DEF_0  X,
 #define __P_DEF_1  X,
