@@ -20,13 +20,23 @@ uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
 static word_t pmem_read(paddr_t addr, int len){
-  word_t aligned_addr = addr & ~0x3u;
-  word_t ret = host_read(guest_to_host(aligned_addr), len);
+  word_t aligned_raddr = addr & ~0x3u;  //按4字节对齐
+  word_t ret = host_read(guest_to_host(aligned_raddr), len);
   return ret;
 }
 
-static void pmem_write(paddr_t addr, int len, word_t data) {
-  host_write(guest_to_host(addr), len, data);
+static void pmem_write(paddr_t addr, int len, word_t wdata, char wmask) {
+  word_t aligned_waddr = addr & ~0x3u;
+  if(wmask == 1){
+    new_wdata = wdata & 0xFF;
+  } else if(wmask == 3) {
+    new_wdata = wdata & 0xFFFF;
+  } else if(wmask ==  7){
+    new_wdata = wdata & 0xFFFFFF;
+  } else if(wmask == 15){
+    new_wdata = wdata & 0xFFFFFFFF;
+  } else {assert(0);}
+  host_write(guest_to_host(addr), len, new_wdata);
 }
 
 static void out_of_bound(paddr_t addr) {
@@ -40,13 +50,13 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
-word_t paddr_read(paddr_t addr, int len) {
+extern "C" word_t paddr_read(paddr_t addr, int len) {
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   out_of_bound(addr);
   return 0;
 }
 
-void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+extern "C" void paddr_write(paddr_t addr, int len, word_t wdata, char wmask) {
+  if (likely(in_pmem(addr))) { pmem_write(addr, len, wdata, wmask); return; }
   out_of_bound(addr);
 }
