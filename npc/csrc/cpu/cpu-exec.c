@@ -87,34 +87,31 @@ static void trace_and_difftest() {
 }
 
 static void exec_once(){
-  pc = top->pc_o;
-  top->inst_i = vaddr_read(top->pc_o, 4);
+  //pc = top->pc_o;
+  //pc = top->rootp->top__DOT__pc;
+  //top->inst_i = vaddr_read(top->pc_o, 4);
   single_cycle();
+  pc = top->rootp->top__DOT__pc;
 
 #ifdef CONFIG_DIFFTEST
   for(int i = 0; i < 16; i++){
-    cpu.gpr[i] = top->rootp->top__DOT__RF__DOT__rf[i];
+    //cpu.gpr[i] = top->rootp->top__DOT__RF__DOT__rf[i];
+    cpu.gpr[i] = top->rootp->top__DOT__rf__DOT__rf[i];
   }
-  cpu.pc = top->pc_o;
+  //cpu.pc = top->pc_o;
+  cpu.pc = top->rootp->top__DOT__pc;
 #endif
 
+#ifdef CONFIG_ITRACE
   svLogicVecVal inst;
-  svSetScope(svGetScopeFromName("TOP.top.EXU"));
-  if (!svSetScope(svGetScopeFromName("TOP.top.EXU"))) {
+  svSetScope(svGetScopeFromName("TOP.top.IDU"));
+  if (!svSetScope(svGetScopeFromName("TOP.top.IDU"))) {
     printf("Error: Failed to set scope.\n");
     return;
   }
   get_inst(&inst);
-// 提取 32 位值
-  uint32_t inst_value = (uint32_t)(inst.aval & 0xFFFFFFFF);
-  printf("inst_o = 0x%08x\n", inst_value);
+  uint32_t inst_value = (uint32_t)(inst.aval & 0xFFFFFFFF);  // 提取 32 位值
 
-  svBit ebreak;
-  svSetScope(svGetScopeFromName("TOP.top.EXU"));
-  top->get_ebreak(&ebreak);
-  if(ebreak) {NPCTRAP(pc, top->rootp->top__DOT__RF__DOT__rf[10]);printf("Finish executing instruction!\n");} //
-
-#ifdef CONFIG_ITRACE
   char *p = logbuf;
   p += snprintf(p, sizeof(logbuf), FMT_WORD ":", pc);
   int ilen = 4;
@@ -147,6 +144,15 @@ void execute(uint64_t n){
     exec_once();
     g_nr_guest_inst ++;
     trace_and_difftest();
+
+    svBit ebreak;
+    svSetScope(svGetScopeFromName("TOP.top.EXU"));
+    top->get_ebreak(&ebreak);
+    if(ebreak) {  //如果执行了ebreak指令，则退出循环，不再给时钟
+      NPCTRAP(pc, top->rootp->top__DOT__rf__DOT__rf[10]);
+      printf("Finish executing instruction!\n");
+      return;
+    }
   }
 }
 
@@ -190,10 +196,11 @@ void isa_reg_display(){
   int i;
 
   printf("+------------------------------------+\n");
-  printf("%-10s | %-10s | %-10s\n", "Register", "Hex Value", "Dec Value");
+  printf("%-10s | %-10s | %-10s\n", "NPC_REG", "Hex Value", "Dec Value");
   printf("+------------------------------------+\n");
+  printf("%-10s | 0x%08X | %-10u\n", "pc",  cpu.pc, cpu.pc);
   for(i = 0; i < 16; i++){
-    printf("%-10s | 0x%08X | %-10u\n", regs[i], top->rootp->top__DOT__RF__DOT__rf[i], top->rootp->top__DOT__RF__DOT__rf[i]);
+    printf("%-10s | 0x%08X | %-10u\n", regs[i],  top->rootp->top__DOT__rf__DOT__rf[i], top->rootp->top__DOT__rf__DOT__rf[i]);
   }
   printf("+------------------------------------+\n");
 }
@@ -202,13 +209,15 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   //$pc
   if(strcmp(s+1, "pc") == 0){
     *success = true;
-    return top->pc_o;
+    //return top->pc_o;
+    return top->rootp->top__DOT__pc;
   }
   //32 normal regs
   for(int i = 0; i < 16; i++){
     if(strcmp(s+1, regs[i]) == 0){
       *success = true;
-      return top->rootp->top__DOT__RF__DOT__rf[i];
+      //return top->rootp->top__DOT__RF__DOT__rf[i];
+      return top->rootp->top__DOT__rf__DOT__rf[i];
     }
   }
 
@@ -228,7 +237,6 @@ void (*ref_difftest_exec)(uint64_t n) = NULL;
 void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 
 
-  riscv32_CPU_state *ncpu = &cpu;
 #ifdef CONFIG_DIFFTEST
 
 void init_difftest(char *ref_so_file, long img_size, int port){
@@ -241,7 +249,6 @@ void init_difftest(char *ref_so_file, long img_size, int port){
   assert(handle);
 
   ref_difftest_memcpy = (void (*)(paddr_t, void*, size_t, bool))dlsym(handle, "difftest_memcpy");
-  riscv32_CPU_state *ncpu = &cpu;
   assert(ref_difftest_memcpy);
 
   ref_difftest_regcpy = (void (*)(void*, bool))dlsym(handle, "difftest_regcpy");//从动态库handle中加载名为'difftest_memcpy'的符号
@@ -262,9 +269,11 @@ void init_difftest(char *ref_so_file, long img_size, int port){
       "If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 
   for(int i = 0; i < 16; i++){
-    cpu.gpr[i] = top->rootp->top__DOT__RF__DOT__rf[i];
+    //cpu.gpr[i] = top->rootp->top__DOT__RF__DOT__rf[i];
+    cpu.gpr[i] = top->rootp->top__DOT__rf__DOT__rf[i];
   }
-  cpu.pc = top->pc_o;
+  //cpu.pc = top->pc_o;
+  cpu.pc = top->rootp->top__DOT__pc;
 
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
   ref_difftest_init(port);
@@ -272,13 +281,28 @@ void init_difftest(char *ref_so_file, long img_size, int port){
 }
 
 bool isa_difftest_checkregs(riscv32_CPU_state *ref_r, vaddr_t pc) {
+ if(cpu.pc != ref_r->pc){
+    printf("regs not match at pc = %x\n", pc);
+    return false;
+  }
   for(int i = 0; i < 16; i++){
     if(cpu.gpr[i] != ref_r->gpr[i]){
-      printf("regs not match at pc = %x\n", pc);
+      printf(ANSI_FMT("regs not match at pc = %x\n", ANSI_FG_RED), pc);
       return false;
     } 
   }
   return true;
+}
+
+void nemu_reg_display(riscv32_CPU_state *ref_r){
+  printf("+------------------------------------+\n");
+  printf("%-10s | %-10s | %-10s\n", "NEMU_REG", "Hex Value", "Dec Value");
+  printf("+------------------------------------+\n");
+  printf("%-10s | 0x%08X | %-10u\n", "pc",  ref_r->pc, ref_r->pc);
+  for(int i = 0; i < 16; i++){
+    printf("%-10s | 0x%08X | %-10u\n", regs[i],  ref_r->gpr[i], ref_r->gpr[i]);
+  }
+  printf("+------------------------------------+\n");
 }
 
 static void checkregs(riscv32_CPU_state *ref, vaddr_t pc) { //如果寄存器状态不一致，则记录pc值，打印出寄存器的值
@@ -286,6 +310,7 @@ static void checkregs(riscv32_CPU_state *ref, vaddr_t pc) { //如果寄存器状
     npc_state.state = NPC_ABORT;
     npc_state.halt_pc = pc;
     isa_reg_display();
+    nemu_reg_display(ref);
   }
 }
 

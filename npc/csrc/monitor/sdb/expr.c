@@ -11,6 +11,7 @@
 #include <regex.h>
 #include <utils.h>
 #include <debug.h>
+#include <memory/paddr.h>
 
 #define NR_REGEX ARRLEN(rules)
 enum {
@@ -134,7 +135,8 @@ int get_main_operator_position(int, int);
 int is_operator(int);
 int precedence(int);
 word_t isa_reg_str2val(const char *, bool *);
-word_t vaddr_read(vaddr_t, int);
+//word_t vaddr_read(vaddr_t, int);
+//int paddr_read(int addr, int len);
 
 /*calculate the result of experssion*/
 word_t expr(char *e, bool *success) {
@@ -181,7 +183,7 @@ static word_t eval(int p, int q){
      int op = get_main_operator_position(p, q);
      if(tokens[op].type == TK_DEREF){
         word_t val2 = eval(op + 1, q);
-        return vaddr_read(val2, 4);
+        return paddr_read(val2, 4);
      }
      word_t val1 = eval(p, op - 1);
      word_t val2 = eval(op + 1, q);

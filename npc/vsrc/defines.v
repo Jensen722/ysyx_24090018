@@ -25,7 +25,7 @@
 `define ysyx_24090018_TYPE_U_0010111         7'b0010111         //auipc
 
 //J Type 1101111
-`define ysyx_24090018_TYPE_J_0110111         7'b1101111         //jal
+`define ysyx_24090018_TYPE_J_1101111         7'b1101111         //jal
 
 //I Type 0010011 
 `define ysyx_24090018_TYPE_I_0010011         7'b0010011
@@ -52,7 +52,7 @@
 //I Type 0001111
 `define ysyx_24090018_TYPE_I_0001111         7'b0001111     
 `define ysyx_24090018_INST_FENCE             3'b000             //fence
-`define ysyx_24090018_INST_FENCE.I           3'b001             //fence.i
+`define ysyx_24090018_INST_FENCE_I           3'b001             //fence.i
 
 //I Type 1110011
 `define ysyx_24090018_TYPE_I_1110011         7'b1110011

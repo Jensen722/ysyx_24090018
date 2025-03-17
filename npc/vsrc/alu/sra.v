@@ -9,5 +9,5 @@ module sra(
   input [4:0] shamt,
   output [31:0] dout
 );
-  assign dout = din >>> shamt; 
+  assign dout = $signed(din) >>> shamt; //得将din声明为有符号数才行 
 endmodule

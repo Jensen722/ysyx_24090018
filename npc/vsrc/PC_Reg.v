@@ -13,8 +13,15 @@ module ysyx_24090018_pc_reg #(ADDR_WIDTH = 32) (
   input      [31:0]             jump_addr_i,
   output reg [ADDR_WIDTH-1 : 0] pc_o
 );
+
+
+initial begin
+  pc_o = 32'h80000000;
+end
+
   wire [31:0] pc_muxout;
-  `ysyx_24090018_MuxKey #(2, 1, 32) i0(
+
+  ysyx_24090018_MuxKey #(2, 1, 32) i0(
     .out(pc_muxout),
     .key(jump_flag_i),
     .lut({
@@ -28,7 +35,7 @@ module ysyx_24090018_pc_reg #(ADDR_WIDTH = 32) (
       pc_o <= `ysyx_24090018_PC_BaseAddr;
     end
     else begin
-      pc_o = pc_muxout;
+      pc_o <= pc_muxout;
     end
   end
 endmodule

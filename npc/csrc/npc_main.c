@@ -9,9 +9,9 @@ void engine_start();
 
 int main(int argc, char *argv[]) {
   sim_init();
+  init_monitor(argc, argv);
   reset(1); 
 
-  init_monitor(argc, argv);
 
   /* Start engine. */
   engine_start();

@@ -8,7 +8,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <memory/vaddr.h>
+#include <memory/paddr.h>
 #include <utils.h>
 
 static int is_batch_mode = false;
@@ -90,7 +90,7 @@ static int cmd_x(char *args) {
   printf("%-11s %10s\n", "ADDR", "HEX VALUE");
   printf("+-------------------------+\n");
   for(int i = 0; i < N; i++){
-    printf("0x%08x:  0x%08x\n", result, vaddr_read(result, 4));
+    printf("0x%08x:  0x%08x\n", result, paddr_read(result, 4));
     result = result + 4;
   }
   printf("+-------------------------+\n");

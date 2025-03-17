@@ -9,7 +9,7 @@ module ysyx_24090018_Reg #(WIDTH = 32, RESET_VAL = 0) (
   input                     rst,
   input                     wen_i,
   input       [WIDTH-1:0]   din_i,
-  output reg  [WIDTH-1:0]   dout_o,
+  output reg  [WIDTH-1:0]   dout_o
 );
   always @(posedge clk) begin
     if (rst) begin
