@@ -20,12 +20,13 @@ module Imm_Gen(
   wire [31:0] imm_S = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};
 
   //imm select
-  ysyx_24090018_MuxKeyWithDefault #(7, 7, 32) i0 (
+  ysyx_24090018_MuxKeyWithDefault #(8, 7, 32) i0 (
     .out(imm_o),
     .key(opcode),
     .default_out(32'b0),
     .lut({
-      `ysyx_24090018_TYPE_I_0010011, imm_I,  //jalr addi slti ... andi
+      `ysyx_24090018_TYPE_I_0010011, imm_I,  //addi slti ... andi
+      `ysyx_24090018_TYPE_I_1100111, imm_I,  //jalr
       `ysyx_24090018_TYPE_I_0000011, imm_I,  //lb lh lw lbu lhu
       `ysyx_24090018_TYPE_U_0110111, imm_U,  //lui
       `ysyx_24090018_TYPE_U_0010111, imm_U,  //auipc

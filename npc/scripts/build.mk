@@ -29,8 +29,8 @@ LDFLAGS += -lreadline -ldl -pie  # 如果需要，也可以添加 -ldl 和 -pie
 
 #ifneq ($(CONFIG_ITRACE)$(CONFIG_IQUEUE),)
 CSRCs += ./csrc/utils/disasm.cc
-CXXFLAGS += $(shell llvm-config --cxxflags) -fPIE
-#CXXFLAGS += -I/usr/lib/llvm-18/include -std=c++17   -fno-exceptions -funwind-tables -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -fPIE
+#CXXFLAGS += $(shell llvm-config --cxxflags) -fPIE
+CXXFLAGS += -I/usr/lib/llvm-18/include -std=c++17   -fno-exceptions -funwind-tables -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -fPIE
 LDFLAGS += $(shell llvm-config --libs) #-Wl,--verbose
 #endif
 

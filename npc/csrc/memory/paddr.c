@@ -21,12 +21,33 @@ paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
 static int pmem_read(int addr, int len){
   word_t aligned_raddr = addr & ~0x3u;  //按4字节对齐
+
+  if(aligned_raddr == 0xa0000048 || aligned_raddr == 0xa000004c){
+    uint64_t time_us = get_time();
+    uint32_t lo = time_us & 0xFFFFFFFF;
+    uint32_t hi = (time_us >> 32) & 0xFFFFFFFF;
+    if(aligned_raddr == 0xa0000048){
+// 分高低32位返回
+       return lo;
+    } else if (aligned_raddr == 0xa000004c) {
+        return hi;
+      }
+  }
   word_t ret = host_read(guest_to_host(aligned_raddr), len);
   return ret;
 }
 
 static void pmem_write(int addr, int len, int wdata, char wmask) {
   word_t aligned_waddr = addr & ~0x3u;
+// 处理串口输出
+  if (aligned_waddr == 0xa00003f8) {
+    // 提取最低字节并输出
+    char c = wdata & 0xff;
+    putchar(c);
+    fflush(stdout); // 确保立即输出
+    return;
+  }
+
   word_t new_wdata;
   if(wmask == 1){
     new_wdata = wdata & 0xFF;
@@ -55,15 +76,17 @@ extern "C"  int paddr_read(int addr, int len) {
 #ifdef CONFIG_MTRACE
     printf(ANSI_FMT("[Read ] ", ANSI_FG_GREEN)"Address: 0x%X | Value_Read:  0x%08X\n", addr, pmem_read(addr, len));
 #endif
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
-  out_of_bound(addr);
-  return 0;
+return pmem_read(addr, len);
+  //if (likely(in_pmem(addr))) return pmem_read(addr, len);
+  //out_of_bound(addr);
+  //return 0;
 }
 
 extern "C"  void paddr_write(int addr, int len, int wdata, char wmask) {
 #ifdef CONFIG_MTRACE
     printf(ANSI_FMT("[Write] ", ANSI_FG_YELLOW)"Address: 0x%X | Value_Write: 0x%08X\n", addr, wdata);
 #endif
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, wdata, wmask); return; }
-  out_of_bound(addr);
+pmem_write(addr, len, wdata, wmask); return;
+  //if (likely(in_pmem(addr))) { pmem_write(addr, len, wdata, wmask); return; }
+  //out_of_bound(addr);
 }

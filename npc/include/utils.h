@@ -22,6 +22,10 @@ typedef struct {
 
 extern NPCState npc_state;
 
+// ----------- timer -----------
+
+uint64_t get_time();
+
 #define MAX_INST_TO_PRINT 16
 #define INT_MAX 2147473647
 // ----------- log -----------

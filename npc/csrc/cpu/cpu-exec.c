@@ -198,7 +198,7 @@ void isa_reg_display(){
   printf("+------------------------------------+\n");
   printf("%-10s | %-10s | %-10s\n", "NPC_REG", "Hex Value", "Dec Value");
   printf("+------------------------------------+\n");
-  printf("%-10s | 0x%08X | %-10u\n", "pc",  cpu.pc, cpu.pc);
+  printf("%-10s | 0x%08X | %-10u\n", "pc",  pc, pc);
   for(i = 0; i < 16; i++){
     printf("%-10s | 0x%08X | %-10u\n", regs[i],  top->rootp->top__DOT__rf__DOT__rf[i], top->rootp->top__DOT__rf__DOT__rf[i]);
   }
